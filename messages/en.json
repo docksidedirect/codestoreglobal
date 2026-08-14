@@ -143,6 +143,14 @@
       "sqlDesc": "Relational design, query optimization, PostgreSQL, MySQL, and NoSQL concepts.",
       "rustDesc": "Systems programming with memory safety. Ownership, lifetimes, and concurrency."
     },
+    "languages": {
+      "htmlDesc": "Build the foundation of the web with semantic markup and modern styling.",
+      "jsDesc": "Master the language of the web. DOM manipulation, ES6+, async programming.",
+      "pythonDesc": "From data science to web backends. Django, Flask, FastAPI, and ML basics.",
+      "tsDesc": "Type-safe JavaScript for enterprise applications. Generics, decorators, advanced types.",
+      "sqlDesc": "Relational design, query optimization, PostgreSQL, MySQL, and NoSQL concepts.",
+      "rustDesc": "Systems programming with memory safety. Ownership, lifetimes, and concurrency."
+    },
     "steps": {
       "badge": "How It Works",
       "heading": "Three Steps to Your Workspace",

@@ -30,13 +30,15 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const API_BASE = typeof window !== "undefined" ? window.location.origin : "";
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchUser = useCallback(async () => {
     try {
-      const res = await fetch("/api/auth/me", {
+      const res = await fetch(`${API_BASE}/api/auth/me`, {
         credentials: "include",
         cache: "no-store",
       });
@@ -68,7 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = useCallback(
     async (email: string, password: string): Promise<User> => {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch(`${API_BASE}/api/auth/login`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -87,15 +89,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       setUser(data.user);
-
-      // MUST return the user so the caller can use it
       return data.user;
     },
     [],
   );
 
   const logout = useCallback(async () => {
-    await fetch("/api/auth/logout", {
+    await fetch(`${API_BASE}/api/auth/logout`, {
       method: "POST",
       credentials: "include",
     });

@@ -24,25 +24,30 @@ const PUBLIC_PATHS = [
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Skip middleware for static files and API routes that don't need protection
+  // ⬇️ CRITICAL: Skip ALL API routes completely
+  if (pathname.startsWith("/api")) {
+    return NextResponse.next();
+  }
+
+  // Skip static files
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/favicon") ||
-    pathname.includes(".") // Skip files with extensions (images, manifest, etc.)
+    pathname.includes(".")
   ) {
     return NextResponse.next();
   }
 
-  // Handle i18n routing first
+  // Handle i18n routing
   const response = intlMiddleware(request);
 
-  // Check if this is a protected route
+  // Protect dashboard/admin routes
   const isPublic = PUBLIC_PATHS.some((path) => pathname.includes(path));
-  const isProtected = !isPublic && (
-    pathname.includes("/dashboard") ||
-    pathname.includes("/admin") ||
-    pathname.includes("/settings")
-  );
+  const isProtected =
+    !isPublic &&
+    (pathname.includes("/dashboard") ||
+      pathname.includes("/admin") ||
+      pathname.includes("/settings"));
 
   if (isProtected) {
     const token = request.cookies.get("token")?.value;
@@ -62,5 +67,6 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next|.*\\..*).*)"],
+  // ⬇️ CRITICAL: Add "api" to the exclusion list
+  matcher: ["/((?!api|_next|.*\\..*).*)"],
 };

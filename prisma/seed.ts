@@ -32,7 +32,7 @@ async function main() {
 
   const superAdmin = await prisma.user.create({
     data: {
-      email: "superadmin@devnexus.io",
+      email: "superadmin@codestoreglobal.io",
       passwordHash: await hash("SuperAdmin2024!"),
       firstName: "System", lastName: "Administrator",
       role: UserRole.SUPERADMIN, isActive: true, emailVerified: true,
@@ -56,18 +56,18 @@ async function main() {
 
   const tenantAdmin = await prisma.user.create({
     data: {
-      email: "admin@demo.devnexus.io",
+      email: "admin@demo.codestoreglobal.io",
       passwordHash: await hash("TenantAdmin2024!"),
       firstName: "Demo", lastName: "Admin",
       role: UserRole.TENANT_ADMIN, tenantId: demoTenant.id,
       isActive: true, emailVerified: true, language: "en",
-      paypalEmail: "admin-paypal@demo.devnexus.io",
+      paypalEmail: "admin-paypal@demo.codestoreglobal.io",
     },
   });
 
   const member1 = await prisma.user.create({
     data: {
-      email: "sarah.chen@demo.devnexus.io",
+      email: "sarah.chen@demo.codestoreglobal.io",
       passwordHash: await hash("Member2024!"),
       firstName: "Sarah", lastName: "Chen",
       role: UserRole.MEMBER, tenantId: demoTenant.id,
@@ -78,7 +78,7 @@ async function main() {
 
   const freelancer1 = await prisma.user.create({
     data: {
-      email: "marcus.weber@demo.devnexus.io",
+      email: "marcus.weber@demo.codestoreglobal.io",
       passwordHash: await hash("Freelancer2024!"),
       firstName: "Marcus", lastName: "Weber",
       role: UserRole.FREELANCER, tenantId: demoTenant.id,
@@ -263,10 +263,10 @@ async function main() {
 
   console.log("\n🎉 Professional DevNexus seeding completed!");
   console.log("\n🔑 Default Credentials:");
-  console.log("   SuperAdmin: superadmin@devnexus.io / SuperAdmin2024!");
-  console.log("   TenantAdmin: admin@demo.devnexus.io / TenantAdmin2024!");
-  console.log("   Member: sarah.chen@demo.devnexus.io / Member2024!");
-  console.log("   Freelancer: marcus.weber@demo.devnexus.io / Freelancer2024!");
+  console.log("   SuperAdmin: superadmin@codestoreglobal.io / SuperAdmin2024!");
+  console.log("   TenantAdmin: admin@demo.codestoreglobal.io / TenantAdmin2024!");
+  console.log("   Member: sarah.chen@demo.codestoreglobal.io / Member2024!");
+  console.log("   Freelancer: marcus.weber@demo.codestoreglobal.io / Freelancer2024!");
 }
 
 main()

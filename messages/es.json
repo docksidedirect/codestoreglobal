@@ -1,0 +1,202 @@
+{
+  "auth": {
+    "signIn": "Iniciar sesión",
+    "signUp": "Crear cuenta",
+    "welcome": "Bienvenido a CODESTORE GLOBAL",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "submit": "Continuar",
+    "loading": "Cargando...",
+    "noAccount": "¿No tienes cuenta? Regístrate",
+    "hasAccount": "¿Ya tienes cuenta? Inicia sesión",
+    "loginFailed": "Correo o contraseña inválidos. Inténtalo de nuevo.",
+    "registerFailed": "Registro fallido. El correo puede estar ya en uso.",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "rememberMe": "Recuérdame"
+  },
+  "dashboard": {
+    "welcome": "Bienvenido de nuevo, {name}",
+    "title": "Panel de control",
+    "analytics": {
+      "revenue": "Ingresos totales",
+      "sales": "Ventas totales",
+      "jobs": "Trabajos activos",
+      "members": "Miembros del equipo"
+    },
+    "quickActions": {
+      "title": "Acciones rápidas",
+      "uploadProduct": "Subir producto",
+      "uploadProductDesc": "Agregar un nuevo componente SaaS al mercado",
+      "createCourse": "Crear curso",
+      "createCourseDesc": "Publicar un nuevo curso técnico para tu comunidad",
+      "postJob": "Publicar trabajo",
+      "postJobDesc": "Contratar freelancers con protección de pago en depósito",
+      "inviteMember": "Invitar miembro",
+      "inviteMemberDesc": "Hacer crecer tu equipo con nuevos miembros"
+    },
+    "recent": {
+      "courses": "Cursos recientes",
+      "products": "Productos recientes",
+      "jobs": "Trabajos recientes",
+      "viewAll": "Ver todo"
+    }
+  },
+  "jobs": {
+    "title": "Ofertas de trabajo",
+    "postJob": "Publicar trabajo",
+    "apply": "Aplicar",
+    "budget": "Presupuesto",
+    "remote": "Remoto",
+    "skills": "Habilidades requeridas",
+    "experience": "Nivel de experiencia",
+    "deadline": "Fecha límite",
+    "applications": "Solicitudes"
+  },
+  "settings": {
+    "title": "Configuración",
+    "profile": "Información del perfil",
+    "save": "Guardar cambios",
+    "language": "Idioma",
+    "theme": "Apariencia",
+    "notifications": "Notificaciones",
+    "billing": "Facturación y suscripción",
+    "security": "Seguridad",
+    "apiKeys": "Claves API"
+  },
+  "navigation": {
+    "dashboard": "Panel",
+    "courses": "Cursos",
+    "marketplace": "Mercado",
+    "jobs": "Trabajos",
+    "chat": "Chat",
+    "forum": "Foro",
+    "settings": "Configuración",
+    "logout": "Cerrar sesión",
+    "login": "Iniciar sesión",
+    "register": "Empezar",
+    "home": "Inicio",
+    "learn": "Aprender a programar"
+  },
+  "forum": {
+    "title": "Título",
+    "newThread": "Nuevo tema",
+    "replies": "Respuestas",
+    "views": "Vistas",
+    "postReply": "Publicar respuesta",
+    "categories": "Categorías",
+    "recentDiscussions": "Discusiones recientes",
+    "pinned": "Fijado",
+    "solution": "Solución",
+    "backToForum": "Volver al foro",
+    "createThread": "Crear tema",
+    "content": "Contenido",
+    "category": "Categoría",
+    "lastActivity": "Última actividad",
+    "noThreads": "Aún no hay discusiones. ¡Sé el primero!",
+    "noReplies": "Aún no hay respuestas. ¡Sé el primero en responder!"
+  },
+  "landing": {
+    "hero": {
+      "badge": "v2.0 Ahora Disponible",
+      "title1": "La Plataforma Multi-Inquilino",
+      "title2": "para Desarrolladores Modernos",
+      "subtitle": "Aloja subespacios de trabajo seguros, publica cursos técnicos, comercia componentes SaaS y opera un mercado de empleos con fideicomiso — todo en una plataforma unificada.",
+      "ctaPrimary": "Comenzar Prueba Gratuita",
+      "ctaSecondary": "Explorar Mercado",
+      "ctaDashboard": "Ir al Panel"
+    },
+    "stats": {
+      "devs": "Desarrolladores Activos",
+      "components": "Componentes SaaS",
+      "courses": "Cursos Publicados",
+      "escrow": "Procesado en Fideicomiso"
+    },
+    "features": {
+      "badge": "Funciones de la Plataforma",
+      "heading": "Todo lo que Necesitas para Construir",
+      "subheading": "Un ecosistema completo para desarrolladores, instructores, freelancers y equipos.",
+      "tenant": "Aislamiento de Inquilinos",
+      "tenantDesc": "Aislamiento estricto de datos basado en subdominios con Prisma y MySQL. Cada espacio de trabajo es completamente seguro.",
+      "courses": "Plataforma de Cursos",
+      "coursesDesc": "Publica y monetiza cursos técnicos con seguimiento de módulos, análisis de progreso y certificados.",
+      "marketplace": "Mercado SaaS",
+      "marketplaceDesc": "Compra y vende componentes, plantillas y servicios API con pagos PayPal integrados.",
+      "jobs": "Trabajos con Fideicomiso",
+      "jobsDesc": "Publica y aplica a empleos con pagos en fideicomiso seguros. Transacciones protegidas para ambas partes.",
+      "forum": "Foro Comunitario",
+      "forumDesc": "Discute cursos, productos y empleos. Obtén ayuda de instructores, freelancers y compañeros.",
+      "i18n": "Multi-Idioma",
+      "i18nDesc": "Soporte i18n completo con layouts RTL. Listo en inglés, árabe, francés, alemán y español."
+    },
+    "learn": {
+      "badge": "Aprender a Programar",
+      "heading": "Domina los Lenguajes de la Tecnología",
+      "subheading": "Desde fundamentos para principiantes hasta programación de sistemas avanzada. Rutas curadas para cada nivel de habilidad.",
+      "browse": "Explorar Cursos",
+      "htmlDesc": "Construye los fundamentos de la web con marcado semántico y estilo moderno.",
+      "jsDesc": "Domina el lenguaje de la web. Manipulación DOM, ES6+, programación asíncrona.",
+      "pythonDesc": "Desde ciencia de datos a backends web. Django, Flask, FastAPI y bases de ML.",
+      "tsDesc": "JavaScript seguro por tipos para aplicaciones empresariales. Genéricos, decoradores, tipos avanzados.",
+      "sqlDesc": "Diseño relacional, optimización de consultas, PostgreSQL, MySQL y conceptos NoSQL.",
+      "rustDesc": "Programación de sistemas con seguridad de memoria. Propiedad, tiempos de vida y concurrencia."
+    },
+    "steps": {
+      "badge": "Cómo Funciona",
+      "heading": "Tres Pasos a Tu Espacio de Trabajo",
+      "subheading": "Comienza en minutos. No se requiere configuración compleja.",
+      "step1Title": "Crea Tu Cuenta",
+      "step1Desc": "Regístrate como desarrollador, instructor o freelancer. Elige tu rol y configura tu perfil en segundos.",
+      "step2Title": "Únete o Crea un Espacio",
+      "step2Desc": "Únete a un espacio de trabajo de inquilino existente o crea el tuyo. Cada espacio está aislado y seguro.",
+      "step3Title": "Construye y Monetiza",
+      "step3Desc": "Publica cursos, vende componentes, publica empleos o aplica a trabajos freelance con protección de fideicomiso."
+    },
+    "testimonials": {
+      "badge": "Confiado por Equipos",
+      "heading": "Construido para Equipos Globales",
+      "subheading": "Soporte de internacionalización completo con layouts RTL y 5 idiomas listos para usar.",
+      "q1": "CODESTORE GLOBAL transformó cómo ofrecemos capacitación técnica. La plataforma de cursos es intuitiva y a nuestros estudiantes les encanta el seguimiento de progreso.",
+      "q2": "El sistema de fideicomiso me da confianza como freelancer. Sé que me pagarán cuando entregue, y los clientes saben que sus fondos están protegidos.",
+      "q3": "Gestionar nuestro espacio de trabajo de desarrolladores con aislamiento de inquilinos significa que nuestros datos permanecen seguros. El mercado genera ingresos reales para nuestro equipo.",
+      "r1": "Instructor Principal",
+      "r2": "Desarrollador Freelance",
+      "r3": "Propietario del Espacio"
+    },
+    "cta": {
+      "heading": "¿Listo para Construir Algo Increíble?",
+      "subheading": "Únete a miles de desarrolladores, instructores y equipos que ya usan CODESTORE GLOBAL para hacer crecer sus comunidades técnicas.",
+      "primary": "Comenzar Gratis",
+      "secondary": "Explorar Mercado",
+      "dashboard": "Ir al Panel"
+    }
+  },
+  "common": {
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "save": "Guardar",
+    "close": "Cerrar",
+    "open": "Abrir",
+    "pending": "Pendiente",
+    "active": "Activo",
+    "completed": "Completado",
+    "approved": "Aprobado",
+    "rejected": "Rechazado",
+    "loading": "Cargando...",
+    "error": "Algo salió mal",
+    "success": "Éxito",
+    "confirm": "¿Estás seguro?",
+    "yes": "Sí",
+    "no": "No",
+    "copy": "Copiar",
+    "share": "Compartir",
+    "download": "Descargar"
+  }
+}

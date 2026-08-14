@@ -1,0 +1,19 @@
+npm install
+npx prisma generate
+npx prisma migrate dev
+npm run db:seed
+npm run dev
+npx tsc --noEmit
+
+http://localhost:3000/ → auto-redirects to /en/
+http://localhost:3000/en/login → login page
+http://localhost:3000/en/marketplace → public marketplace
+
+Then browse to http://localhost:3000/ — it will redirect to /en/ and show the landing page.
+Default login credentials:
+
+Role	Email	Password
+SuperAdmin	superadmin@CodeStoreGlobal.io	SuperAdmin2024!
+TenantAdmin	admin@demo.CodeStoreGlobal.io	TenantAdmin2024!
+Member	sarah.chen@demo.CodeStoreGlobal.io	Member2024!
+Freelancer	marcus.weber@demo.CodeStoreGlobal.io	Freelancer2024!

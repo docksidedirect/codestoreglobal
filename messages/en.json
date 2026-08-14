@@ -1,0 +1,202 @@
+{
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "welcome": "Welcome to CODESTORE GLOBAL",
+    "email": "Email Address",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "submit": "Continue",
+    "loading": "Please wait...",
+    "noAccount": "Don't have an account? Create one",
+    "hasAccount": "Already have an account? Sign in",
+    "loginFailed": "Invalid email or password. Please try again.",
+    "registerFailed": "Registration failed. Email may already be in use.",
+    "forgotPassword": "Forgot password?",
+    "rememberMe": "Remember me"
+  },
+  "dashboard": {
+    "welcome": "Welcome back, {name}",
+    "title": "Dashboard",
+    "analytics": {
+      "revenue": "Total Revenue",
+      "sales": "Total Sales",
+      "jobs": "Active Jobs",
+      "members": "Team Members"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "uploadProduct": "Upload Product",
+      "uploadProductDesc": "Add a new SaaS component to the marketplace",
+      "createCourse": "Create Course",
+      "createCourseDesc": "Publish a new technical course for your community",
+      "postJob": "Post Job",
+      "postJobDesc": "Hire freelancers with escrow payment protection",
+      "inviteMember": "Invite Member",
+      "inviteMemberDesc": "Grow your workspace team with new members"
+    },
+    "recent": {
+      "courses": "Recent Courses",
+      "products": "Recent Products",
+      "jobs": "Recent Jobs",
+      "viewAll": "View All"
+    }
+  },
+  "jobs": {
+    "title": "Job Listings",
+    "postJob": "Post a Job",
+    "apply": "Apply Now",
+    "budget": "Budget",
+    "remote": "Remote",
+    "skills": "Skills Required",
+    "experience": "Experience Level",
+    "deadline": "Deadline",
+    "applications": "Applications"
+  },
+  "settings": {
+    "title": "Settings",
+    "profile": "Profile Information",
+    "save": "Save Changes",
+    "language": "Language",
+    "theme": "Appearance",
+    "notifications": "Notifications",
+    "billing": "Billing & Subscription",
+    "security": "Security",
+    "apiKeys": "API Keys"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "courses": "Courses",
+    "marketplace": "Marketplace",
+    "jobs": "Jobs",
+    "chat": "Chat",
+    "forum": "Forum",
+    "settings": "Settings",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Get Started",
+    "home": "Home",
+    "learn": "Learn Programming"
+  },
+  "forum": {
+    "title": "Title",
+    "newThread": "New Thread",
+    "replies": "Replies",
+    "views": "Views",
+    "postReply": "Post Reply",
+    "categories": "Categories",
+    "recentDiscussions": "Recent Discussions",
+    "pinned": "Pinned",
+    "solution": "Solution",
+    "backToForum": "Back to Forum",
+    "createThread": "Create Thread",
+    "content": "Content",
+    "category": "Category",
+    "lastActivity": "Last Activity",
+    "noThreads": "No discussions yet. Start the first one!",
+    "noReplies": "No replies yet. Be the first to respond!"
+  },
+  "landing": {
+    "hero": {
+      "badge": "v2.0 Now Available",
+      "title1": "The Multi-Tenant Platform",
+      "title2": "for Modern Developers",
+      "subtitle": "Host secure sub-workspaces, publish technical courses, trade SaaS components, and run an escrowed job marketplace — all in one unified platform.",
+      "ctaPrimary": "Start Free Trial",
+      "ctaSecondary": "Explore Marketplace",
+      "ctaDashboard": "Go to Dashboard"
+    },
+    "stats": {
+      "devs": "Active Developers",
+      "components": "SaaS Components",
+      "courses": "Courses Published",
+      "escrow": "Escrow Processed"
+    },
+    "features": {
+      "badge": "Platform Features",
+      "heading": "Everything You Need to Build",
+      "subheading": "A complete ecosystem for developers, instructors, freelancers, and teams.",
+      "tenant": "Tenant Isolation",
+      "tenantDesc": "Strict subdomain-based data isolation with Prisma & MySQL. Each workspace is completely secure.",
+      "courses": "Course Platform",
+      "coursesDesc": "Publish and monetize technical courses with module tracking, progress analytics, and certificates.",
+      "marketplace": "SaaS Marketplace",
+      "marketplaceDesc": "Buy and sell components, templates, and API services with integrated PayPal payments.",
+      "jobs": "Escrow Jobs",
+      "jobsDesc": "Post and apply to jobs with secure escrow payments. Protected transactions for both parties.",
+      "forum": "Community Forum",
+      "forumDesc": "Discuss courses, products, and jobs. Get help from instructors, freelancers, and peers.",
+      "i18n": "Multi-Language",
+      "i18nDesc": "Full i18n support with RTL layouts. English, Arabic, French, German, and Spanish ready."
+    },
+    "learn": {
+      "badge": "Learn Programming",
+      "heading": "Master the Languages of Tech",
+      "subheading": "From beginner fundamentals to advanced systems programming. Curated paths for every skill level.",
+      "browse": "Browse Courses",
+      "htmlDesc": "Build the foundation of the web with semantic markup and modern styling.",
+      "jsDesc": "Master the language of the web. DOM manipulation, ES6+, async programming.",
+      "pythonDesc": "From data science to web backends. Django, Flask, FastAPI, and ML basics.",
+      "tsDesc": "Type-safe JavaScript for enterprise applications. Generics, decorators, advanced types.",
+      "sqlDesc": "Relational design, query optimization, PostgreSQL, MySQL, and NoSQL concepts.",
+      "rustDesc": "Systems programming with memory safety. Ownership, lifetimes, and concurrency."
+    },
+    "steps": {
+      "badge": "How It Works",
+      "heading": "Three Steps to Your Workspace",
+      "subheading": "Get started in minutes. No complex setup required.",
+      "step1Title": "Create Your Account",
+      "step1Desc": "Sign up as a developer, instructor, or freelancer. Choose your role and set up your profile in seconds.",
+      "step2Title": "Join or Create a Workspace",
+      "step2Desc": "Join an existing tenant workspace or create your own. Each workspace is isolated and secure.",
+      "step3Title": "Build & Monetize",
+      "step3Desc": "Publish courses, sell components, post jobs, or apply to freelance gigs with escrow protection."
+    },
+    "testimonials": {
+      "badge": "Trusted by Teams",
+      "heading": "Built for Global Teams",
+      "subheading": "Full internationalization support with RTL layouts and 5 languages ready out of the box.",
+      "q1": "CODESTORE GLOBAL transformed how we deliver technical training. The course platform is intuitive and our students love the progress tracking.",
+      "q2": "The escrow system gives me confidence as a freelancer. I know I'll get paid when I deliver, and clients know their funds are protected.",
+      "q3": "Managing our developer workspace with tenant isolation means our data stays secure. The marketplace generates real revenue for our team.",
+      "r1": "Lead Instructor",
+      "r2": "Freelance Developer",
+      "r3": "Workspace Owner"
+    },
+    "cta": {
+      "heading": "Ready to Build Something Amazing?",
+      "subheading": "Join thousands of developers, instructors, and teams already using CODESTORE GLOBAL to grow their technical communities.",
+      "primary": "Get Started Free",
+      "secondary": "Browse Marketplace",
+      "dashboard": "Go to Dashboard"
+    }
+  },
+  "common": {
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "save": "Save",
+    "close": "Close",
+    "open": "Open",
+    "pending": "Pending",
+    "active": "Active",
+    "completed": "Completed",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "success": "Success",
+    "confirm": "Are you sure?",
+    "yes": "Yes",
+    "no": "No",
+    "copy": "Copy",
+    "share": "Share",
+    "download": "Download"
+  }
+}

@@ -2,16 +2,17 @@
   "name": "dev-nexus-platform",
   "version": "2.0.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate dev",
-    "db:seed": "tsx prisma/seed.ts",
-    "db:studio": "prisma studio"
-  },
+ "scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint": "next lint",
+  "postinstall": "prisma generate",
+  "db:generate": "prisma generate",
+  "db:migrate": "prisma migrate dev",
+  "db:seed": "tsx prisma/seed.ts",
+  "db:studio": "prisma studio"
+},
   "dependencies": {
     "@paypal/checkout-server-sdk": "^1.0.3",
     "@prisma/client": "^5.22.0",

@@ -2,9 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import { prisma } from "@/lib/prisma";
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "fallback-secret"
-);
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 
 export async function GET(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
@@ -26,7 +24,8 @@ export async function GET(request: NextRequest) {
         firstName: true,
         lastName: true,
         role: true,
-        avatarUrl: true, 
+        tenantId: true,
+        avatarUrl: true,
       },
     });
 

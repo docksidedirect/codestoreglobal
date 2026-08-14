@@ -3,37 +3,12 @@ import { SignJWT } from "jose";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
+
 export async function POST(request: NextRequest) {
   try {
-    // 1. Check env vars
-    const secret = process.env.JWT_SECRET;
-    if (!secret) {
-      return NextResponse.json(
-        { error: "JWT_SECRET missing in environment" },
-        { status: 500 }
-      );
-    }
+    const { email, password } = await request.json();
 
-    const dbUrl = process.env.DATABASE_URL;
-    if (!dbUrl) {
-      return NextResponse.json(
-        { error: "DATABASE_URL missing in environment" },
-        { status: 500 }
-      );
-    }
-
-    // 2. Parse body
-    let body: any;
-    try {
-      body = await request.json();
-    } catch {
-      return NextResponse.json(
-        { error: "Invalid JSON body" },
-        { status: 400 }
-      );
-    }
-
-    const { email, password } = body;
     if (!email || !password) {
       return NextResponse.json(
         { error: "Email and password required" },
@@ -41,89 +16,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 3. Test DB connection with a lightweight query
-    let userCount = 0;
-    try {
-      userCount = await prisma.user.count();
-    } catch (dbErr: any) {
-      return NextResponse.json(
-        {
-          error: "Database connection failed",
-          detail: dbErr.message,
-          code: dbErr.code,
-          meta: dbErr.meta,
-        },
-        { status: 500 }
-      );
-    }
-
-    // 4. Find user
-    let user: any;
-    try {
-      user = await prisma.user.findUnique({
-        where: { email: email.toLowerCase().trim() },
-      });
-    } catch (findErr: any) {
-      return NextResponse.json(
-        {
-          error: "User lookup failed",
-          detail: findErr.message,
-          code: findErr.code,
-        },
-        { status: 500 }
-      );
-    }
+    // Fetch full user - passwordHash is the field name
+    const user = await prisma.user.findUnique({
+      where: { email: email.toLowerCase().trim() },
+    });
 
     if (!user) {
       return NextResponse.json(
-        { error: "Invalid credentials", hint: "User not found" },
+        { error: "Invalid credentials" },
         { status: 401 }
       );
     }
 
-    // 5. Inspect user object for password field
-    const userKeys = Object.keys(user);
-    const passwordField =
-      user.password !== undefined
-        ? "password"
-        : user.passwordHash !== undefined
-        ? "passwordHash"
-        : user.hashedPassword !== undefined
-        ? "hashedPassword"
-        : null;
-
-    if (!passwordField) {
-      return NextResponse.json(
-        {
-          error: "Password field not found on user model",
-          availableFields: userKeys,
-        },
-        { status: 500 }
-      );
-    }
-
-    // 6. Compare password
-    let valid = false;
-    try {
-      valid = await bcrypt.compare(password, user[passwordField]);
-    } catch (bcryptErr: any) {
-      return NextResponse.json(
-        {
-          error: "Password comparison failed",
-          detail: bcryptErr.message,
-        },
-        { status: 500 }
-      );
-    }
-
+    // Compare against passwordHash (NOT password)
+    const valid = await bcrypt.compare(password, user.passwordHash);
     if (!valid) {
       return NextResponse.json(
-        { error: "Invalid credentials", hint: "Wrong password" },
+        { error: "Invalid credentials" },
         { status: 401 }
       );
     }
 
-    // 7. Create token
     const token = await new SignJWT({
       userId: user.id,
       email: user.email,
@@ -131,9 +44,8 @@ export async function POST(request: NextRequest) {
     })
       .setProtectedHeader({ alg: "HS256" })
       .setExpirationTime("7d")
-      .sign(new TextEncoder().encode(secret));
+      .sign(JWT_SECRET);
 
-    // 8. Return success
     const response = NextResponse.json({
       user: {
         id: user.id,
@@ -155,13 +67,10 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-  } catch (unexpected: any) {
+  } catch (error: any) {
+    console.error("[LOGIN_ERROR]", error);
     return NextResponse.json(
-      {
-        error: "Unexpected error",
-        message: unexpected.message,
-        stack: unexpected.stack,
-      },
+      { error: "Internal server error", detail: error.message },
       { status: 500 }
     );
   }

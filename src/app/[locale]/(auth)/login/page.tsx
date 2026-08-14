@@ -9,7 +9,11 @@ import { Label } from "@/components/ui/label";
 import { ShieldCheck, ArrowRight, Github, Chrome } from "lucide-react";
 import Link from "next/link";
 
-export default function LoginPage({ params: { locale } }: { params: { locale: string } }) {
+export default function LoginPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
   const t = useTranslations();
   const { login } = useAuth();
   const [email, setEmail] = useState("");
@@ -21,11 +25,20 @@ export default function LoginPage({ params: { locale } }: { params: { locale: st
     e.preventDefault();
     setError(null);
     setLoading(true);
+
     try {
-      await login(email, password);
+      const user = await login(email, password);
+
+      // Hard redirect so middleware runs on the destination
+      if (user.role === "SUPERADMIN") {
+        window.location.href = `/${locale}/admin`;
+      } else if (user.tenantId) {
+        window.location.href = `/${locale}/${user.tenantId}/dashboard`;
+      } else {
+        window.location.href = `/${locale}`;
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
-    } finally {
       setLoading(false);
     }
   }
@@ -37,35 +50,49 @@ export default function LoginPage({ params: { locale } }: { params: { locale: st
         <div className="absolute inset-0 bg-[radial-gradient(#059669_1px,transparent_1px)] [background-size:16px_16px] opacity-10" />
 
         <div className="relative z-10 flex items-center gap-2 font-bold tracking-tight text-xl">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 text-white font-black text-sm">C</span>
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 text-white font-black text-sm">
+            C
+          </span>
           CODESTORE<span className="text-emerald-400">GLOBAL</span>
         </div>
 
         <div className="relative z-10 space-y-4">
           <h1 className="text-3xl font-bold tracking-tight leading-tight">
-            {locale === "ar" ? "اكتشف آلاف الأصول البرمجية الجاهزة للاستخدام." :
-             locale === "fr" ? "Découvrez des milliers d'actifs de code prêts à l'emploi." :
-             locale === "de" ? "Entdecken Sie Tausende einsatzbereiter Code-Assets." :
-             locale === "es" ? "Descubre miles de activos de código listos para usar." :
-             "Discover thousands of ready-to-use code assets."}
+            {locale === "ar"
+              ? "اكتشف آلاف الأصول البرمجية الجاهزة للاستخدام."
+              : locale === "fr"
+                ? "Découvrez des milliers d'actifs de code prêts à l'emploi."
+                : locale === "de"
+                  ? "Entdecken Sie Tausende einsatzbereiter Code-Assets."
+                  : locale === "es"
+                    ? "Descubre miles de activos de código listos para usar."
+                    : "Discover thousands of ready-to-use code assets."}
           </h1>
           <p className="text-sm text-emerald-200/80 leading-relaxed">
-            {locale === "ar" ? "انضم إلى منصتنا متعددة المستأجرين لشراء وبيع ونشر مكونات الويب المتميزة بأمان." :
-             locale === "fr" ? "Rejoignez notre plateforme multi-locataire pour acheter, vendre et déployer des composants web premium en toute sécurité." :
-             locale === "de" ? "Treten Sie unserer Multi-Tenant-Plattform bei, um Premium-Webkomponenten sicher zu kaufen, zu verkaufen und bereitzustellen." :
-             locale === "es" ? "Únete a nuestra plataforma multi-inquilino para comprar, vender y desplegar componentes web premium de forma segura." :
-             "Join our multi-tenant developer platform to buy, sell, and deploy premium web components securely."}
+            {locale === "ar"
+              ? "انضم إلى منصتنا متعددة المستأجرين لشراء وبيع ونشر مكونات الويب المتميزة بأمان."
+              : locale === "fr"
+                ? "Rejoignez notre plateforme multi-locataire pour acheter, vendre et déployer des composants web premium en toute sécurité."
+                : locale === "de"
+                  ? "Treten Sie unserer Multi-Tenant-Plattform bei, um Premium-Webkomponenten sicher zu kaufen, zu verkaufen und bereitzustellen."
+                  : locale === "es"
+                    ? "Únete a nuestra plataforma multi-inquilino para comprar, vender y desplegar componentes web premium de forma segura."
+                    : "Join our multi-tenant developer platform to buy, sell, and deploy premium web components securely."}
           </p>
         </div>
 
         <div className="relative z-10 flex items-center gap-2 text-xs text-emerald-300/70">
           <ShieldCheck className="h-4 w-4 text-emerald-400" />
           <span>
-            {locale === "ar" ? "بيئة مصادقة متعددة المستأجرين آمنة." :
-             locale === "fr" ? "Environnement d'autorisation multi-locataire sécurisé." :
-             locale === "de" ? "Sichere Multi-Tenant-Autorisierungsumgebung." :
-             locale === "es" ? "Entorno de autorización multi-inquilino seguro." :
-             "Secured multi-tenant authorization environment."}
+            {locale === "ar"
+              ? "بيئة مصادقة متعددة المستأجرين آمنة."
+              : locale === "fr"
+                ? "Environnement d'autorisation multi-locataire sécurisé."
+                : locale === "de"
+                  ? "Sichere Multi-Tenant-Autorisierungsumgebung."
+                  : locale === "es"
+                    ? "Entorno de autorización multi-inquilino seguro."
+                    : "Secured multi-tenant authorization environment."}
           </span>
         </div>
       </div>
@@ -76,7 +103,9 @@ export default function LoginPage({ params: { locale } }: { params: { locale: st
           {/* Mobile Only Header */}
           <div className="text-center lg:text-left space-y-2 lg:hidden">
             <div className="inline-flex items-center gap-2 font-bold text-lg text-slate-900 dark:text-white">
-              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-600 text-white font-black text-xs">C</span>
+              <span className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-600 text-white font-black text-xs">
+                C
+              </span>
               CODESTORE
             </div>
           </div>
@@ -92,10 +121,18 @@ export default function LoginPage({ params: { locale } }: { params: { locale: st
 
           {/* Social Logins */}
           <div className="grid grid-cols-2 gap-3">
-            <Button variant="outline" className="w-full gap-2 text-xs font-normal" type="button">
+            <Button
+              variant="outline"
+              className="w-full gap-2 text-xs font-normal"
+              type="button"
+            >
               <Chrome className="h-4 w-4" /> Google
             </Button>
-            <Button variant="outline" className="w-full gap-2 text-xs font-normal" type="button">
+            <Button
+              variant="outline"
+              className="w-full gap-2 text-xs font-normal"
+              type="button"
+            >
               <Github className="h-4 w-4" /> GitHub
             </Button>
           </div>
@@ -103,18 +140,25 @@ export default function LoginPage({ params: { locale } }: { params: { locale: st
           <div className="relative flex py-2 items-center text-xs uppercase text-slate-400">
             <div className="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
             <span className="flex-shrink mx-4 text-slate-400 font-medium">
-              {locale === "ar" ? "أو تابع باستخدام" :
-               locale === "fr" ? "Ou continuez avec" :
-               locale === "de" ? "Oder fortfahren mit" :
-               locale === "es" ? "O continúa con" :
-               "Or continue with"}
+              {locale === "ar"
+                ? "أو تابع باستخدام"
+                : locale === "fr"
+                  ? "Ou continuez avec"
+                  : locale === "de"
+                    ? "Oder fortfahren mit"
+                    : locale === "es"
+                      ? "O continúa con"
+                      : "Or continue with"}
             </span>
             <div className="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
           </div>
 
           <form onSubmit={onSubmit} className="space-y-5">
             <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+              <Label
+                htmlFor="email"
+                className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+              >
                 {t("auth.email")}
               </Label>
               <Input
@@ -130,10 +174,16 @@ export default function LoginPage({ params: { locale } }: { params: { locale: st
 
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <Label
+                  htmlFor="password"
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+                >
                   {t("auth.password")}
                 </Label>
-                <Link href={`/${locale}/forgot-password`} className="text-xs text-emerald-600 dark:text-emerald-400 hover:underline font-medium">
+                <Link
+                  href={`/${locale}/forgot-password`}
+                  className="text-xs text-emerald-600 dark:text-emerald-400 hover:underline font-medium"
+                >
                   {t("auth.forgotPassword")}
                 </Link>
               </div>
@@ -171,7 +221,10 @@ export default function LoginPage({ params: { locale } }: { params: { locale: st
 
           <p className="text-center text-sm text-slate-500 dark:text-slate-400">
             {t("auth.noAccount")}{" "}
-            <Link href={`/${locale}/register`} className="font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">
+            <Link
+              href={`/${locale}/register`}
+              className="font-semibold text-emerald-600 dark:text-emerald-400 hover:underline"
+            >
               {t("auth.signUp")}
             </Link>
           </p>

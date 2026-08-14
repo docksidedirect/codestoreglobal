@@ -1,80 +1,60 @@
 import createMiddleware from "next-intl/middleware";
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
-import { locales, defaultLocale } from "@/i18n/request";
-
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "devnexus-super-secret-key-change-in-production"
-);
-
-async function verifyToken(token: string) {
-  try {
-    const { payload } = await jwtVerify(token, JWT_SECRET, { clockTolerance: 60 });
-    return payload as { userId: string; email: string; role: string; tenantId?: string };
-  } catch {
-    return null;
-  }
-}
-
-const PUBLIC_PATHS = ["/courses", "/marketplace", "/login", "/register", "/forgot-password"];
-
-function isPublicPath(path: string) {
-  return PUBLIC_PATHS.some((p) => path === p || path.startsWith(`${p}/`));
-}
+import { locales } from "./i18n/request";
 
 const intlMiddleware = createMiddleware({
   locales,
-  defaultLocale,
+  defaultLocale: "en",
   localePrefix: "always",
 });
+
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "");
+
+const PUBLIC_PATHS = [
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/api/auth/login",
+  "/api/auth/logout",
+  "/api/auth/me",
+  "/api/test-db",
+];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Skip middleware for static files and API routes that don't need protection
   if (
     pathname.startsWith("/_next") ||
-    pathname.startsWith("/api/") ||
-    pathname.startsWith("/static") ||
-    pathname.startsWith("/favicon")
+    pathname.startsWith("/favicon") ||
+    pathname.includes(".") // Skip files with extensions (images, manifest, etc.)
   ) {
     return NextResponse.next();
   }
 
+  // Handle i18n routing first
   const response = intlMiddleware(request);
-  const locale = pathname.split("/")[1];
-  const pathWithoutLocale = pathname.replace(new RegExp(`^/${locale}`), "") || "/";
 
-  const token = request.cookies.get("devnexus_session")?.value;
-  const user = token ? await verifyToken(token) : null;
+  // Check if this is a protected route
+  const isPublic = PUBLIC_PATHS.some((path) => pathname.includes(path));
+  const isProtected = !isPublic && (
+    pathname.includes("/dashboard") ||
+    pathname.includes("/admin") ||
+    pathname.includes("/settings")
+  );
 
-  const tenantMatch = pathWithoutLocale.match(/^\/([^/]+)(?:\/|$)/);
-  const tenantId = tenantMatch && !tenantMatch[1].startsWith("(") ? tenantMatch[1] : null;
+  if (isProtected) {
+    const token = request.cookies.get("token")?.value;
 
-  if (tenantId && !isPublicPath(pathWithoutLocale)) {
-    if (!user) {
-      return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
+    if (!token) {
+      return NextResponse.redirect(new URL("/en/login", request.url));
     }
-    if (user.role !== "SUPERADMIN" && user.tenantId !== tenantId) {
-      return NextResponse.redirect(
-        new URL(`/${locale}/${user.tenantId || ""}/dashboard`, request.url)
-      );
-    }
-  }
 
-  if (user && (pathWithoutLocale === "/login" || pathWithoutLocale === "/register")) {
-    if (user.role === "SUPERADMIN") {
-      return NextResponse.redirect(new URL(`/${locale}/admin`, request.url));
-    }
-    if (user.tenantId) {
-      return NextResponse.redirect(
-        new URL(`/${locale}/${user.tenantId}/dashboard`, request.url)
-      );
-    }
-  }
-
-  if (pathWithoutLocale.startsWith("/admin") || pathWithoutLocale.startsWith("/approvals")) {
-    if (!user || user.role !== "SUPERADMIN") {
-      return NextResponse.redirect(new URL(`/${locale}/`, request.url));
+    try {
+      await jwtVerify(token, JWT_SECRET, { clockTolerance: 60 });
+    } catch {
+      return NextResponse.redirect(new URL("/en/login", request.url));
     }
   }
 
@@ -82,5 +62,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
+  matcher: ["/((?!_next|.*\\..*).*)"],
 };

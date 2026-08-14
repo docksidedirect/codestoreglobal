@@ -4,11 +4,11 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "devnexus-super-secret-key-change-in-production");
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 
 export async function GET(req: NextRequest, context: { params: { tenantId: string } }) {
   try {
-    const token = req.cookies.get("devnexus_session")?.value;
+    const token = req.cookies.get("token")?.value;
     if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     await jwtVerify(token, JWT_SECRET, { clockTolerance: 60 });
 

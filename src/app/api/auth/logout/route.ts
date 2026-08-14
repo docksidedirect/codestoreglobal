@@ -4,6 +4,6 @@ export const dynamic = "force-dynamic";
 
 export async function POST() {
   const response = NextResponse.json({ success: true });
-  response.cookies.set("devnexus_session", "", { httpOnly: true, maxAge: 0, path: "/" });
+  response.cookies.set("token", "", { httpOnly: true, maxAge: 0, path: "/" });
   return response;
 }

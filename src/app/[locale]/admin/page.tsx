@@ -25,7 +25,7 @@ import Link from "next/link";
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 
 async function getSession() {
-  const token = cookies().get("token")?.value; // ← FIXED: was "devnexus_session"
+  const token = cookies().get("token")?.value; // ← FIXED: was "token"
   if (!token) return null;
   try {
     const { payload } = await jwtVerify(token, JWT_SECRET, {

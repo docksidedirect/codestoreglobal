@@ -5,12 +5,12 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "devnexus-super-secret-key-change-in-production"
+  process.env.JWT_SECRET!
 );
 
 export async function POST(request: NextRequest, context: { params: { id: string } }) {
   try {
-    const token = request.cookies.get("devnexus_session")?.value;
+    const token = request.cookies.get("token")?.value;
     if (!token) {
       return NextResponse.redirect(new URL("/en/login", request.url));
     }

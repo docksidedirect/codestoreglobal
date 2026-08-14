@@ -1,7 +1,7 @@
 {
   "auth": {
     "signIn": "Se connecter",
-    "signUp": "Créer un compte",
+    "signUp": "S'inscrire",
     "welcome": "Bienvenue sur CODESTORE GLOBAL",
     "email": "Adresse e-mail",
     "password": "Mot de passe",
@@ -9,8 +9,8 @@
     "firstName": "Prénom",
     "lastName": "Nom",
     "submit": "Continuer",
-    "loading": "Chargement...",
-    "noAccount": "Pas de compte ? Inscrivez-vous",
+    "loading": "Veuillez patienter...",
+    "noAccount": "Pas encore de compte ? Créez-en un",
     "hasAccount": "Déjà un compte ? Connectez-vous",
     "loginFailed": "E-mail ou mot de passe invalide. Veuillez réessayer.",
     "registerFailed": "L'inscription a échoué. L'e-mail est peut-être déjà utilisé.",
@@ -29,13 +29,13 @@
     "quickActions": {
       "title": "Actions rapides",
       "uploadProduct": "Télécharger un produit",
-      "uploadProductDesc": "Ajouter un nouveau composant SaaS au marché",
+      "uploadProductDesc": "Ajoutez un nouveau composant SaaS sur la marketplace",
       "createCourse": "Créer un cours",
-      "createCourseDesc": "Publier un nouveau cours technique pour votre communauté",
+      "createCourseDesc": "Publiez un nouveau cours technique pour votre communauté",
       "postJob": "Publier une offre",
-      "postJobDesc": "Embaucher des freelances avec protection de paiement séquestre",
+      "postJobDesc": "Recrutez des freelances avec protection de paiement en escrow",
       "inviteMember": "Inviter un membre",
-      "inviteMemberDesc": "Développer votre équipe avec de nouveaux membres"
+      "inviteMemberDesc": "Faites grandir votre équipe avec de nouveaux membres"
     },
     "recent": {
       "courses": "Cours récents",
@@ -62,14 +62,14 @@
     "language": "Langue",
     "theme": "Apparence",
     "notifications": "Notifications",
-    "billing": "Facturation et abonnement",
+    "billing": "Facturation & Abonnement",
     "security": "Sécurité",
     "apiKeys": "Clés API"
   },
   "navigation": {
     "dashboard": "Tableau de bord",
     "courses": "Cours",
-    "marketplace": "Marché",
+    "marketplace": "Marketplace",
     "jobs": "Emplois",
     "chat": "Chat",
     "forum": "Forum",
@@ -78,20 +78,20 @@
     "login": "Connexion",
     "register": "Commencer",
     "home": "Accueil",
-    "learn": "Apprendre la programmation"
+    "learn": "Apprendre à programmer"
   },
   "forum": {
     "title": "Titre",
-    "newThread": "Nouveau sujet",
+    "newThread": "Nouvelle discussion",
     "replies": "Réponses",
     "views": "Vues",
-    "postReply": "Publier une réponse",
+    "postReply": "Répondre",
     "categories": "Catégories",
     "recentDiscussions": "Discussions récentes",
     "pinned": "Épinglé",
     "solution": "Solution",
     "backToForum": "Retour au forum",
-    "createThread": "Créer un sujet",
+    "createThread": "Créer une discussion",
     "content": "Contenu",
     "category": "Catégorie",
     "lastActivity": "Dernière activité",
@@ -100,77 +100,85 @@
   },
   "landing": {
     "hero": {
-      "badge": "v2.0 Maintenant Disponible",
-      "title1": "La Plateforme Multi-Locataire",
-      "title2": "pour les Développeurs Modernes",
-      "subtitle": "Hébergez des sous-espaces de travail sécurisés, publiez des cours techniques, échangez des composants SaaS et gérez une place de marché d'emplois avec séquestre — tout dans une plateforme unifiée.",
-      "ctaPrimary": "Commencer l'Essai Gratuit",
-      "ctaSecondary": "Explorer la Place de Marché",
-      "ctaDashboard": "Aller au Tableau de Bord"
+      "badge": "v2.0 Disponible",
+      "title1": "La plateforme multi-locataire",
+      "title2": "pour les développeurs modernes",
+      "subtitle": "Hébergez des sous-espaces sécurisés, publiez des cours techniques, échangez des composants SaaS et gérez une marketplace d'emplois en escrow — tout sur une seule plateforme.",
+      "ctaPrimary": "Essai gratuit",
+      "ctaSecondary": "Explorer la marketplace",
+      "ctaDashboard": "Aller au tableau de bord"
     },
     "stats": {
-      "devs": "Développeurs Actifs",
+      "devs": "Développeurs actifs",
       "components": "Composants SaaS",
-      "courses": "Cours Publiés",
-      "escrow": "Traité en Séquestre"
+      "courses": "Cours publiés",
+      "escrow": "Escrow traité"
     },
     "features": {
       "badge": "Fonctionnalités",
-      "heading": "Tout ce dont Vous Avez Besoin",
+      "heading": "Tout ce dont vous avez besoin pour construire",
       "subheading": "Un écosystème complet pour développeurs, instructeurs, freelances et équipes.",
-      "tenant": "Isolation des Locataires",
-      "tenantDesc": "Isolation stricte des données basée sur les sous-domaines avec Prisma et MySQL. Chaque espace de travail est complètement sécurisé.",
-      "courses": "Plateforme de Cours",
+      "tenant": "Isolation des locataires",
+      "tenantDesc": "Isolation stricte des données basée sur les sous-domaines avec Prisma & MySQL. Chaque espace de travail est totalement sécurisé.",
+      "courses": "Plateforme de cours",
       "coursesDesc": "Publiez et monétisez des cours techniques avec suivi des modules, analyses de progression et certificats.",
-      "marketplace": "Place de Marché SaaS",
+      "marketplace": "Marketplace SaaS",
       "marketplaceDesc": "Achetez et vendez des composants, modèles et services API avec des paiements PayPal intégrés.",
-      "jobs": "Emplois avec Séquestre",
-      "jobsDesc": "Publiez et postulez à des emplois avec des paiements séquestre sécurisés. Transactions protégées pour les deux parties.",
-      "forum": "Forum Communautaire",
+      "jobs": "Emplois en escrow",
+      "jobsDesc": "Publiez et postulez à des offres avec des paiements escrow sécurisés. Transactions protégées pour les deux parties.",
+      "forum": "Forum communautaire",
       "forumDesc": "Discutez des cours, produits et emplois. Obtenez de l'aide d'instructeurs, freelances et pairs.",
-      "i18n": "Multi-Langue",
-      "i18nDesc": "Support i18n complet avec layouts RTL. Prêt en anglais, arabe, français, allemand et espagnol."
+      "i18n": "Multi-langue",
+      "i18nDesc": "Support i18n complet avec mises en page RTL. Anglais, arabe, français, allemand et espagnol prêts à l'emploi."
     },
     "learn": {
-      "badge": "Apprendre la Programmation",
-      "heading": "Maîtrisez les Langages de la Tech",
-      "subheading": "Des fondamentaux pour débutants à la programmation système avancée. Parcours organisés pour chaque niveau.",
-      "browse": "Parcourir les Cours",
+      "badge": "Apprendre à programmer",
+      "heading": "Maîtrisez les langages de la tech",
+      "subheading": "Des fondamentaux pour débutants à la programmation système avancée. Des parcours adaptés à chaque niveau.",
+      "browse": "Parcourir les cours",
       "htmlDesc": "Construisez les fondations du web avec un balisage sémantique et un style moderne.",
-      "jsDesc": "Maîtrisez le langage du web. Manipulation DOM, ES6+, programmation asynchrone.",
-      "pythonDesc": "De la science des données aux backends web. Django, Flask, FastAPI et bases du ML.",
+      "jsDesc": "Maîtrisez le langage du web. Manipulation du DOM, ES6+, programmation asynchrone.",
+      "pythonDesc": "De la data science aux backends web. Django, Flask, FastAPI et bases du ML.",
+      "tsDesc": "JavaScript typé pour les applications d'entreprise. Génériques, décorateurs, types avancés.",
+      "sqlDesc": "Conception relationnelle, optimisation de requêtes, PostgreSQL, MySQL et concepts NoSQL.",
+      "rustDesc": "Programmation système avec sécurité mémoire. Propriété, durées de vie et concurrence."
+    },
+    "languages": {
+      "htmlDesc": "Construisez les fondations du web avec un balisage sémantique et un style moderne.",
+      "jsDesc": "Maîtrisez le langage du web. Manipulation du DOM, ES6+, programmation asynchrone.",
+      "pythonDesc": "De la data science aux backends web. Django, Flask, FastAPI et bases du ML.",
       "tsDesc": "JavaScript typé pour les applications d'entreprise. Génériques, décorateurs, types avancés.",
       "sqlDesc": "Conception relationnelle, optimisation de requêtes, PostgreSQL, MySQL et concepts NoSQL.",
       "rustDesc": "Programmation système avec sécurité mémoire. Propriété, durées de vie et concurrence."
     },
     "steps": {
-      "badge": "Comment Ça Marche",
-      "heading": "Trois Étapes vers Votre Espace de Travail",
+      "badge": "Comment ça marche",
+      "heading": "Trois étapes pour votre espace de travail",
       "subheading": "Commencez en quelques minutes. Aucune configuration complexe requise.",
-      "step1Title": "Créez Votre Compte",
+      "step1Title": "Créez votre compte",
       "step1Desc": "Inscrivez-vous en tant que développeur, instructeur ou freelance. Choisissez votre rôle et configurez votre profil en quelques secondes.",
-      "step2Title": "Rejoignez ou Créez un Espace",
-      "step2Desc": "Rejoignez un espace de travail locataire existant ou créez le vôtre. Chaque espace est isolé et sécurisé.",
-      "step3Title": "Construisez & Monétisez",
-      "step3Desc": "Publiez des cours, vendez des composants, publiez des offres ou postulez à des missions avec protection séquestre."
+      "step2Title": "Rejoignez ou créez un espace de travail",
+      "step2Desc": "Rejoignez un espace de travail existant ou créez le vôtre. Chaque espace est isolé et sécurisé.",
+      "step3Title": "Construisez & monétisez",
+      "step3Desc": "Publiez des cours, vendez des composants, publiez des offres ou postulez à des missions freelance avec protection escrow."
     },
     "testimonials": {
-      "badge": "Approuvé par les Équipes",
-      "heading": "Conçu pour les Équipes Mondiales",
-      "subheading": "Support internationalisation complet avec layouts RTL et 5 langues prêtes à l'emploi.",
+      "badge": "Approuvé par les équipes",
+      "heading": "Conçu pour les équipes mondiales",
+      "subheading": "Support d'internationalisation complet avec mises en page RTL et 5 langues prêtes à l'emploi.",
       "q1": "CODESTORE GLOBAL a transformé notre façon de dispenser la formation technique. La plateforme de cours est intuitive et nos étudiants adorent le suivi de progression.",
-      "q2": "Le système de séquestre me donne confiance en tant que freelance. Je sais que je serai payé quand je livre, et les clients savent que leurs fonds sont protégés.",
-      "q3": "Gérer notre espace de travail développeur avec isolation des locataires signifie que nos données restent sécurisées. La place de marché génère des revenus réels pour notre équipe.",
-      "r1": "Instructeur Principal",
-      "r2": "Développeur Freelance",
-      "r3": "Propriétaire d'Espace"
+      "q2": "Le système d'escrow me donne confiance en tant que freelance. Je sais que je serai payé à la livraison, et les clients savent que leurs fonds sont protégés.",
+      "q3": "Gérer notre espace de travail développeur avec isolation des locataires signifie que nos données restent sécurisées. La marketplace génère des revenus réels pour notre équipe.",
+      "r1": "Instructeur principal",
+      "r2": "Développeur freelance",
+      "r3": "Propriétaire d'espace de travail"
     },
     "cta": {
-      "heading": "Prêt à Construire Quelque Chose d'Incroyable ?",
-      "subheading": "Rejoignez des milliers de développeurs, instructeurs et équipes qui utilisent déjà CODESTORE GLOBAL pour développer leurs communautés techniques.",
-      "primary": "Commencer Gratuitement",
-      "secondary": "Explorer la Place de Marché",
-      "dashboard": "Aller au Tableau de Bord"
+      "heading": "Prêt à construire quelque chose d'incroyable ?",
+      "subheading": "Rejoignez des milliers de développeurs, instructeurs et équipes qui utilisent déjà CODESTORE GLOBAL pour faire croître leurs communautés techniques.",
+      "primary": "Commencer gratuitement",
+      "secondary": "Parcourir la marketplace",
+      "dashboard": "Aller au tableau de bord"
     }
   },
   "common": {

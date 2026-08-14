@@ -1,7 +1,7 @@
 {
   "auth": {
     "signIn": "Anmelden",
-    "signUp": "Konto erstellen",
+    "signUp": "Registrieren",
     "welcome": "Willkommen bei CODESTORE GLOBAL",
     "email": "E-Mail-Adresse",
     "password": "Passwort",
@@ -9,11 +9,11 @@
     "firstName": "Vorname",
     "lastName": "Nachname",
     "submit": "Weiter",
-    "loading": "Wird geladen...",
-    "noAccount": "Kein Konto? Registrieren",
+    "loading": "Bitte warten...",
+    "noAccount": "Noch kein Konto? Erstellen Sie eines",
     "hasAccount": "Bereits ein Konto? Anmelden",
     "loginFailed": "Ungültige E-Mail oder Passwort. Bitte versuchen Sie es erneut.",
-    "registerFailed": "Registrierung fehlgeschlagen. E-Mail ist möglicherweise bereits in Verwendung.",
+    "registerFailed": "Registrierung fehlgeschlagen. E-Mail wird möglicherweise bereits verwendet.",
     "forgotPassword": "Passwort vergessen?",
     "rememberMe": "Angemeldet bleiben"
   },
@@ -21,7 +21,7 @@
     "welcome": "Willkommen zurück, {name}",
     "title": "Dashboard",
     "analytics": {
-      "revenue": "Gesamteinnahmen",
+      "revenue": "Gesamtumsatz",
       "sales": "Gesamtverkäufe",
       "jobs": "Aktive Jobs",
       "members": "Teammitglieder"
@@ -29,13 +29,13 @@
     "quickActions": {
       "title": "Schnellaktionen",
       "uploadProduct": "Produkt hochladen",
-      "uploadProductDesc": "Neue SaaS-Komponente zum Marktplatz hinzufügen",
+      "uploadProductDesc": "Fügen Sie eine neue SaaS-Komponente zum Marketplace hinzu",
       "createCourse": "Kurs erstellen",
-      "createCourseDesc": "Neuen technischen Kurs für Ihre Community veröffentlichen",
-      "postJob": "Job posten",
-      "postJobDesc": "Freelancer mit Treuhandschutz einstellen",
+      "createCourseDesc": "Veröffentlichen Sie einen neuen technischen Kurs für Ihre Community",
+      "postJob": "Job veröffentlichen",
+      "postJobDesc": "Stellen Sie Freelancer mit Escrow-Zahlungsschutz ein",
       "inviteMember": "Mitglied einladen",
-      "inviteMemberDesc": "Ihr Team mit neuen Mitgliedern erweitern"
+      "inviteMemberDesc": "Erweitern Sie Ihr Workspace-Team mit neuen Mitgliedern"
     },
     "recent": {
       "courses": "Neueste Kurse",
@@ -46,13 +46,13 @@
   },
   "jobs": {
     "title": "Stellenangebote",
-    "postJob": "Job posten",
-    "apply": "Bewerben",
+    "postJob": "Job veröffentlichen",
+    "apply": "Jetzt bewerben",
     "budget": "Budget",
     "remote": "Remote",
     "skills": "Erforderliche Fähigkeiten",
     "experience": "Erfahrungsstufe",
-    "deadline": "Frist",
+    "deadline": "Deadline",
     "applications": "Bewerbungen"
   },
   "settings": {
@@ -69,7 +69,7 @@
   "navigation": {
     "dashboard": "Dashboard",
     "courses": "Kurse",
-    "marketplace": "Marktplatz",
+    "marketplace": "Marketplace",
     "jobs": "Jobs",
     "chat": "Chat",
     "forum": "Forum",
@@ -78,17 +78,17 @@
     "login": "Anmelden",
     "register": "Loslegen",
     "home": "Startseite",
-    "learn": "Programmierung lernen"
+    "learn": "Programmieren lernen"
   },
   "forum": {
     "title": "Titel",
     "newThread": "Neues Thema",
     "replies": "Antworten",
     "views": "Aufrufe",
-    "postReply": "Antwort posten",
+    "postReply": "Antworten",
     "categories": "Kategorien",
-    "recentDiscussions": "Aktuelle Diskussionen",
-    "pinned": "Angepinnt",
+    "recentDiscussions": "Neueste Diskussionen",
+    "pinned": "Angeheftet",
     "solution": "Lösung",
     "backToForum": "Zurück zum Forum",
     "createThread": "Thema erstellen",
@@ -100,76 +100,84 @@
   },
   "landing": {
     "hero": {
-      "badge": "v2.0 Jetzt Verfügbar",
+      "badge": "v2.0 Jetzt verfügbar",
       "title1": "Die Multi-Tenant-Plattform",
-      "title2": "für Moderne Entwickler",
-      "subtitle": "Hosten Sie sichere Unterarbeitsbereiche, veröffentlichen Sie technische Kurse, handeln Sie mit SaaS-Komponenten und betreiben Sie einen Treuhand-Jobmarkt — alles in einer einheitlichen Plattform.",
-      "ctaPrimary": "Kostenlos Starten",
-      "ctaSecondary": "Marktplatz Erkunden",
+      "title2": "für moderne Entwickler",
+      "subtitle": "Hosten Sie sichere Sub-Workspaces, veröffentlichen Sie technische Kurse, handeln Sie mit SaaS-Komponenten und betreiben Sie einen escrow-geschützten Job-Marketplace — alles auf einer einheitlichen Plattform.",
+      "ctaPrimary": "Kostenlos testen",
+      "ctaSecondary": "Marketplace erkunden",
       "ctaDashboard": "Zum Dashboard"
     },
     "stats": {
       "devs": "Aktive Entwickler",
       "components": "SaaS-Komponenten",
       "courses": "Veröffentlichte Kurse",
-      "escrow": "Treuhand Verarbeitet"
+      "escrow": "Escrow verarbeitet"
     },
     "features": {
-      "badge": "Plattform-Funktionen",
-      "heading": "Alles, was Sie zum Bauen Brauchen",
+      "badge": "Plattformfunktionen",
+      "heading": "Alles, was Sie zum Bauen brauchen",
       "subheading": "Ein komplettes Ökosystem für Entwickler, Dozenten, Freelancer und Teams.",
-      "tenant": "Mandanten-Isolation",
-      "tenantDesc": "Strikte subdomänenbasierte Datenisolation mit Prisma und MySQL. Jeder Arbeitsbereich ist vollständig sicher.",
+      "tenant": "Tenant-Isolation",
+      "tenantDesc": "Strikte subdomänenbasierte Datenisolation mit Prisma & MySQL. Jeder Workspace ist vollständig sicher.",
       "courses": "Kursplattform",
       "coursesDesc": "Veröffentlichen und monetarisieren Sie technische Kurse mit Modulverfolgung, Fortschrittsanalysen und Zertifikaten.",
-      "marketplace": "SaaS-Marktplatz",
+      "marketplace": "SaaS-Marketplace",
       "marketplaceDesc": "Kaufen und verkaufen Sie Komponenten, Vorlagen und API-Dienste mit integrierten PayPal-Zahlungen.",
-      "jobs": "Treuhand-Jobs",
-      "jobsDesc": "Stellen Sie aus und bewerben Sie sich mit sicheren Treuhandzahlungen. Geschützte Transaktionen für beide Parteien.",
+      "jobs": "Escrow-Jobs",
+      "jobsDesc": "Stellen Sie aus und bewerben Sie sich auf Jobs mit sicheren Escrow-Zahlungen. Geschützte Transaktionen für beide Parteien.",
       "forum": "Community-Forum",
-      "forumDesc": "Diskutieren Sie Kurse, Produkte und Jobs. Holen Sie sich Hilfe von Dozenten, Freelancern und Kollegen.",
+      "forumDesc": "Diskutieren Sie über Kurse, Produkte und Jobs. Holen Sie sich Hilfe von Dozenten, Freelancern und Kollegen.",
       "i18n": "Mehrsprachig",
-      "i18nDesc": "Volle i18n-Unterstützung mit RTL-Layouts. Bereit auf Englisch, Arabisch, Französisch, Deutsch und Spanisch."
+      "i18nDesc": "Volle i18n-Unterstützung mit RTL-Layouts. Englisch, Arabisch, Französisch, Deutsch und Spanisch sofort einsatzbereit."
     },
     "learn": {
-      "badge": "Programmierung Lernen",
-      "heading": "Beherrschen Sie die Sprachen der Tech",
-      "subheading": "Von Anfänger-Grundlagen bis zur fortgeschrittenen Systemprogrammierung. Kuratierte Pfade für jeden Fähigkeitsstand.",
-      "browse": "Kurse Durchsuchen",
+      "badge": "Programmieren lernen",
+      "heading": "Beherrschen Sie die Sprachen der Tech-Welt",
+      "subheading": "Von Anfänger-Grundlagen bis zur fortgeschrittenen Systemprogrammierung. Kuratierte Pfade für jeden Skill-Level.",
+      "browse": "Kurse durchsuchen",
       "htmlDesc": "Bauen Sie das Fundament des Webs mit semantischem Markup und modernem Styling.",
       "jsDesc": "Beherrschen Sie die Sprache des Webs. DOM-Manipulation, ES6+, asynchrone Programmierung.",
-      "pythonDesc": "Von Data Science zu Web-Backends. Django, Flask, FastAPI und ML-Grundlagen.",
-      "tsDesc": "Typ-sicheres JavaScript für Unternehmensanwendungen. Generics, Decorators, fortgeschrittene Typen.",
+      "pythonDesc": "Von Data Science bis Web-Backends. Django, Flask, FastAPI und ML-Grundlagen.",
+      "tsDesc": "Typensicheres JavaScript für Enterprise-Anwendungen. Generics, Decorators, erweiterte Typen.",
+      "sqlDesc": "Relationales Design, Query-Optimierung, PostgreSQL, MySQL und NoSQL-Konzepte.",
+      "rustDesc": "Systemprogrammierung mit Speichersicherheit. Ownership, Lifetimes und Nebenläufigkeit."
+    },
+    "languages": {
+      "htmlDesc": "Bauen Sie das Fundament des Webs mit semantischem Markup und modernem Styling.",
+      "jsDesc": "Beherrschen Sie die Sprache des Webs. DOM-Manipulation, ES6+, asynchrone Programmierung.",
+      "pythonDesc": "Von Data Science bis Web-Backends. Django, Flask, FastAPI und ML-Grundlagen.",
+      "tsDesc": "Typensicheres JavaScript für Enterprise-Anwendungen. Generics, Decorators, erweiterte Typen.",
       "sqlDesc": "Relationales Design, Query-Optimierung, PostgreSQL, MySQL und NoSQL-Konzepte.",
       "rustDesc": "Systemprogrammierung mit Speichersicherheit. Ownership, Lifetimes und Nebenläufigkeit."
     },
     "steps": {
-      "badge": "Wie Es Funktioniert",
-      "heading": "Drei Schritte zu Ihrem Arbeitsbereich",
+      "badge": "So funktioniert's",
+      "heading": "Drei Schritte zu Ihrem Workspace",
       "subheading": "Starten Sie in Minuten. Keine komplexe Einrichtung erforderlich.",
-      "step1Title": "Erstellen Sie Ihr Konto",
-      "step1Desc": "Melden Sie sich als Entwickler, Dozent oder Freelancer an. Wählen Sie Ihre Rolle und richten Sie Ihr Profil in Sekunden ein.",
-      "step2Title": "Beitreten oder Erstellen",
-      "step2Desc": "Treten Sie einem bestehenden Mandanten-Arbeitsbereich bei oder erstellen Sie Ihren eigenen. Jeder Arbeitsbereich ist isoliert und sicher.",
-      "step3Title": "Bauen & Monetarisieren",
-      "step3Desc": "Veröffentlichen Sie Kurse, verkaufen Sie Komponenten, stellen Sie aus oder bewerben Sie sich mit Treuhandschutz."
+      "step1Title": "Konto erstellen",
+      "step1Desc": "Registrieren Sie sich als Entwickler, Dozent oder Freelancer. Wählen Sie Ihre Rolle und richten Sie Ihr Profil in Sekunden ein.",
+      "step2Title": "Workspace beitreten oder erstellen",
+      "step2Desc": "Treten Sie einem bestehenden Tenant-Workspace bei oder erstellen Sie Ihren eigenen. Jeder Workspace ist isoliert und sicher.",
+      "step3Title": "Bauen & monetarisieren",
+      "step3Desc": "Veröffentlichen Sie Kurse, verkaufen Sie Komponenten, schalten Sie Jobs oder bewerben Sie sich auf Freelance-Gigs mit Escrow-Schutz."
     },
     "testimonials": {
-      "badge": "Von Teams Vertraut",
-      "heading": "Für Globale Teams Gebaut",
+      "badge": "Von Teams vertraut",
+      "heading": "Für globale Teams gebaut",
       "subheading": "Volle Internationalisierungsunterstützung mit RTL-Layouts und 5 sofort einsatzbereiten Sprachen.",
-      "q1": "CODESTORE GLOBAL hat verändert, wie wir technisches Training anbieten. Die Kursplattform ist intuitiv und unsere Studenten lieben die Fortschrittsverfolgung.",
-      "q2": "Das Treuhandsystem gibt mir als Freelancer Vertrauen. Ich weiß, dass ich bezahlt werde, wenn ich liefere, und Kunden wissen, dass ihre Mittel geschützt sind.",
-      "q3": "Die Verwaltung unseres Entwickler-Arbeitsbereichs mit Mandanten-Isolation bedeutet, dass unsere Daten sicher bleiben. Der Marktplatz generiert echte Einnahmen für unser Team.",
+      "q1": "CODESTORE GLOBAL hat verändert, wie wir technische Schulungen anbieten. Die Kursplattform ist intuitiv und unsere Studenten lieben die Fortschrittsverfolgung.",
+      "q2": "Das Escrow-System gibt mir als Freelancer Sicherheit. Ich weiß, dass ich bei Lieferung bezahlt werde, und Kunden wissen, dass ihre Gelder geschützt sind.",
+      "q3": "Die Verwaltung unseres Entwickler-Workspaces mit Tenant-Isolation bedeutet, dass unsere Daten sicher bleiben. Der Marketplace generiert echte Einnahmen für unser Team.",
       "r1": "Leitender Dozent",
       "r2": "Freelance-Entwickler",
-      "r3": "Arbeitsbereich-Besitzer"
+      "r3": "Workspace-Besitzer"
     },
     "cta": {
-      "heading": "Bereit, Etwas Erstaunliches zu Bauen?",
-      "subheading": "Schließen Sie sich Tausenden von Entwicklern, Dozenten und Teams an, die CODESTORE GLOBAL bereits nutzen, um ihre technischen Communities zu wachsen.",
-      "primary": "Kostenlos Starten",
-      "secondary": "Marktplatz Durchsuchen",
+      "heading": "Bereit, etwas Erstaunliches zu bauen?",
+      "subheading": "Schließen Sie sich Tausenden von Entwicklern, Dozenten und Teams an, die CODESTORE GLOBAL bereits nutzen, um ihre technischen Communities auszubauen.",
+      "primary": "Kostenlos starten",
+      "secondary": "Marketplace durchsuchen",
       "dashboard": "Zum Dashboard"
     }
   },

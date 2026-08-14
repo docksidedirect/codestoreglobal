@@ -10,12 +10,6 @@ export const metadata: Metadata = {
   title: "CODESTORE GLOBAL — Multi-Tenant Developer Platform",
   description:
     "Host secure sub-workspaces, publish technical courses, trade SaaS components, and run an escrowed job marketplace — all in one unified platform.",
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
-  },
-  manifest: "/site.webmanifest",
 };
 
 export default async function LocaleLayout({

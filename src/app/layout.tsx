@@ -11,12 +11,26 @@ export const metadata: Metadata = {
     default: "CODESTORE GLOBAL - Multi-Tenant Developer Platform",
     template: "%s | CODESTORE GLOBAL",
   },
-  description: "Host secure sub-workspaces, publish technical courses, trade SaaS components, and run an escrowed job marketplace. The complete platform for modern developers.",
+  description:
+    "Host secure sub-workspaces, publish technical courses, trade SaaS components, and run an escrowed job marketplace. The complete platform for modern developers.",
   keywords: [
-    "developer platform", "multi-tenant", "SaaS marketplace", "code marketplace",
-    "developer courses", "freelance jobs", "escrow payments", "web components",
-    "Next.js", "Prisma", "TypeScript", "developer community", "programming courses",
-    "code templates", "API services", "developer tools", "tenant isolation",
+    "developer platform",
+    "multi-tenant",
+    "SaaS marketplace",
+    "code marketplace",
+    "developer courses",
+    "freelance jobs",
+    "escrow payments",
+    "web components",
+    "Next.js",
+    "Prisma",
+    "TypeScript",
+    "developer community",
+    "programming courses",
+    "code templates",
+    "API services",
+    "developer tools",
+    "tenant isolation",
   ],
   authors: [{ name: "CODESTORE GLOBAL", url: "https://codestore.global" }],
   creator: "CODESTORE GLOBAL",
@@ -32,7 +46,8 @@ export const metadata: Metadata = {
     url: "https://codestore.global",
     siteName: "CODESTORE GLOBAL",
     title: "CODESTORE GLOBAL - Multi-Tenant Developer Platform",
-    description: "Host secure sub-workspaces, publish technical courses, trade SaaS components, and run an escrowed job marketplace.",
+    description:
+      "Host secure sub-workspaces, publish technical courses, trade SaaS components, and run an escrowed job marketplace.",
     images: [
       {
         url: "https://codestore.global/og-default.jpg",
@@ -45,13 +60,10 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "CODESTORE GLOBAL - Multi-Tenant Developer Platform",
-    description: "Host secure sub-workspaces, publish technical courses, trade SaaS components, and run an escrowed job marketplace.",
+    description:
+      "Host secure sub-workspaces, publish technical courses, trade SaaS components, and run an escrowed job marketplace.",
     images: ["https://codestore.global/og-default.jpg"],
     creator: "@codestoreglobal",
-  },
-  verification: {
-    google: "YOUR_GOOGLE_VERIFICATION_CODE",
-    yandex: "YOUR_YANDEX_VERIFICATION_CODE",
   },
   alternates: {
     canonical: "https://codestore.global",
@@ -66,7 +78,6 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-    nocache: false,
     googleBot: {
       index: true,
       follow: true,
@@ -79,19 +90,18 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
-    other: [
-      { rel: "icon", type: "image/png", sizes: "32x32", url: "/favicon-32x32.png" },
-      { rel: "icon", type: "image/png", sizes: "16x16", url: "/favicon-16x16.png" },
-      { rel: "manifest", url: "/site.webmanifest" },
-    ],
   },
   manifest: "/site.webmanifest",
   category: "technology",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html suppressHydrationWarning>
       <body className={inter.className}>
         <AuthProvider>{children}</AuthProvider>
       </body>

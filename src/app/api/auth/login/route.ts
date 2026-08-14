@@ -9,6 +9,13 @@ export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
 
+    if (!email || !password) {
+      return NextResponse.json(
+        { success: false, error: "Email and password required" },
+        { status: 400 }
+      );
+    }
+
     const user = await prisma.user.findUnique({
       where: { email: email.toLowerCase().trim() },
     });
@@ -50,17 +57,18 @@ export async function POST(request: NextRequest) {
       },
     });
 
-response.cookies.set("token", token, {
-  httpOnly: true,
-  secure: true,
-  sameSite: "lax",
-  maxAge: 60 * 60 * 24 * 7,
-  path: "/",
-  domain: ".codestoreglobal.com", // ← Add this
-});
+    response.cookies.set("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7,
+      path: "/",
+      domain: ".codestoreglobal.com",
+    });
 
     return response;
   } catch (error: any) {
+    console.error("[LOGIN_ERROR]", error);
     return NextResponse.json(
       { success: false, error: "Server error", detail: error.message },
       { status: 500 }

@@ -8,7 +8,10 @@ export async function GET(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
 
   if (!token) {
-    return NextResponse.json({ success: false, user: null }, { status: 401 });
+    return NextResponse.json(
+      { success: false, user: null },
+      { status: 401 }
+    );
   }
 
   try {
@@ -30,11 +33,17 @@ export async function GET(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ success: false, user: null }, { status: 401 });
+      return NextResponse.json(
+        { success: false, user: null },
+        { status: 401 }
+      );
     }
 
     return NextResponse.json({ success: true, user });
   } catch {
-    return NextResponse.json({ success: false, user: null }, { status: 401 });
+    return NextResponse.json(
+      { success: false, user: null },
+      { status: 401 }
+    );
   }
 }

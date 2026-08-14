@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
@@ -79,24 +80,24 @@ enum TransactionStatus {
 }
 
 model User {
-  id              String    @id @default(cuid()) @db.VarChar(30)
-  email           String    @unique
-  passwordHash    String    @map("password_hash")
-  firstName       String    @map("first_name")
-  lastName        String    @map("last_name")
-  avatarUrl       String?   @map("avatar_url")
-  bio             String?   @db.Text
-  role            UserRole  @default(MEMBER)
-  isActive        Boolean   @default(true) @map("is_active")
-  emailVerified   Boolean   @default(false) @map("email_verified")
-  language        String    @default("en")
-  timezone        String    @default("UTC")
-  paypalEmail     String?   @map("paypal_email")
-  githubUrl       String?   @map("github_url")
-  linkedinUrl     String?   @map("linkedin_url")
-  portfolioUrl    String?   @map("portfolio_url")
-  createdAt       DateTime  @default(now()) @map("created_at")
-  updatedAt       DateTime  @updatedAt @map("updated_at")
+  id            String   @id @default(cuid()) @db.VarChar(30)
+  email         String   @unique
+  passwordHash  String   @map("password_hash")
+  firstName     String   @map("first_name")
+  lastName      String   @map("last_name")
+  avatarUrl     String?  @map("avatar_url")
+  bio           String?  @db.Text
+  role          UserRole @default(MEMBER)
+  isActive      Boolean  @default(true) @map("is_active")
+  emailVerified Boolean  @default(false) @map("email_verified")
+  language      String   @default("en")
+  timezone      String   @default("UTC")
+  paypalEmail   String?  @map("paypal_email")
+  githubUrl     String?  @map("github_url")
+  linkedinUrl   String?  @map("linkedin_url")
+  portfolioUrl  String?  @map("portfolio_url")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
   tenantId String? @map("tenant_id") @db.VarChar(30)
   tenant   Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
@@ -122,41 +123,41 @@ model User {
 }
 
 model Tenant {
-  id                String           @id @default(cuid()) @db.VarChar(30)
-  name              String
-  slug              String           @unique
-  subdomain         String           @unique
-  description       String?          @db.Text
-  industry          String?
-  companySize       String?          @map("company_size")
-  foundedYear       Int?             @map("founded_year")
-  websiteUrl        String?          @map("website_url")
-  logoUrl           String?          @map("logo_url")
-  bannerUrl         String?          @map("banner_url")
-  status            TenantStatus     @default(PENDING_APPROVAL)
-  subscriptionTier  SubscriptionTier @default(FREE) @map("subscription_tier")
-  subscriptionEndsAt DateTime?       @map("subscription_ends_at")
-  paypalMerchantId  String?          @map("paypal_merchant_id")
-  verificationDocUrl String?         @map("verification_doc_url")
-  taxId             String?          @map("tax_id")
-  billingAddress    String?          @map("billing_address") @db.Text
-  isVerified        Boolean          @default(false) @map("is_verified")
-  socialLinks       Json?            @map("social_links")
-  createdAt         DateTime         @default(now()) @map("created_at")
-  updatedAt         DateTime         @updatedAt @map("updated_at")
+  id                 String           @id @default(cuid()) @db.VarChar(30)
+  name               String
+  slug               String           @unique
+  subdomain          String           @unique
+  description        String?          @db.Text
+  industry           String?
+  companySize        String?          @map("company_size")
+  foundedYear        Int?             @map("founded_year")
+  websiteUrl         String?          @map("website_url")
+  logoUrl            String?          @map("logo_url")
+  bannerUrl          String?          @map("banner_url")
+  status             TenantStatus     @default(PENDING_APPROVAL)
+  subscriptionTier   SubscriptionTier @default(FREE) @map("subscription_tier")
+  subscriptionEndsAt DateTime?        @map("subscription_ends_at")
+  paypalMerchantId   String?          @map("paypal_merchant_id")
+  verificationDocUrl String?          @map("verification_doc_url")
+  taxId              String?          @map("tax_id")
+  billingAddress     String?          @map("billing_address") @db.Text
+  isVerified         Boolean          @default(false) @map("is_verified")
+  socialLinks        Json?            @map("social_links")
+  createdAt          DateTime         @default(now()) @map("created_at")
+  updatedAt          DateTime         @updatedAt @map("updated_at")
 
-  ownerId       String         @map("owner_id") @db.VarChar(30)
-  owner         User           @relation("TenantOwner", fields: [ownerId], references: [id], onDelete: Cascade)
-  members       User[]
-  courses       Course[]
-  products      Product[]
-  jobListings   JobListing[]
-  chatRooms     ChatRoom[]
-  invites       TenantInvite[]
-  notifications Notification[]
-  auditLogs     AuditLog[]
+  ownerId         String          @map("owner_id") @db.VarChar(30)
+  owner           User            @relation("TenantOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members         User[]
+  courses         Course[]
+  products        Product[]
+  jobListings     JobListing[]
+  chatRooms       ChatRoom[]
+  invites         TenantInvite[]
+  notifications   Notification[]
+  auditLogs       AuditLog[]
   forumCategories ForumCategory[]
-  forumThreads  ForumThread[]
+  forumThreads    ForumThread[]
 
   @@index([slug])
   @@index([subdomain])
@@ -166,49 +167,49 @@ model Tenant {
 }
 
 model TenantInvite {
-  id        String   @id @default(cuid()) @db.VarChar(30)
-  email     String   @db.VarChar(100)
-  token     String   @unique
-  role      UserRole @default(MEMBER)
-  expiresAt DateTime @map("expires_at")
+  id        String    @id @default(cuid()) @db.VarChar(30)
+  email     String    @db.VarChar(100)
+  token     String    @unique
+  role      UserRole  @default(MEMBER)
+  expiresAt DateTime  @map("expires_at")
   usedAt    DateTime? @map("used_at")
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime  @default(now()) @map("created_at")
 
-  tenantId  String   @map("tenant_id") @db.VarChar(30)
-  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  invitedBy String   @map("invited_by") @db.VarChar(30)
-  sender    User     @relation("InviteSender", fields: [invitedBy], references: [id], onDelete: Cascade)
+  tenantId  String @map("tenant_id") @db.VarChar(30)
+  tenant    Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  invitedBy String @map("invited_by") @db.VarChar(30)
+  sender    User   @relation("InviteSender", fields: [invitedBy], references: [id], onDelete: Cascade)
 
   @@unique([tenantId, email])
   @@map("tenant_invites")
 }
 
 model Course {
-  id            String   @id @default(cuid()) @db.VarChar(30)
-  title         String
-  slug          String   @db.VarChar(100)
-  description   String   @db.Text
-  thumbnailUrl  String?  @map("thumbnail_url")
-  price         Decimal  @db.Decimal(10, 2)
-  currency      String   @default("USD")
-  isPublished   Boolean  @default(false) @map("is_published")
-  moduleCount   Int      @default(0) @map("module_count")
-  durationMinutes Int    @default(0) @map("duration_minutes")
-  difficulty    String   @default("BEGINNER")
-  rating        Decimal? @db.Decimal(3, 2)
-  enrollCount   Int      @default(0) @map("enroll_count")
-  tags          Json?            @default("[]")
-  prerequisites Json?            @default("[]")
-  learningOutcomes Json?         @map("learning_outcomes") @default("[]")
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id               String   @id @default(cuid()) @db.VarChar(30)
+  title            String
+  slug             String   @db.VarChar(100)
+  description      String   @db.Text
+  thumbnailUrl     String?  @map("thumbnail_url")
+  price            Decimal  @db.Decimal(10, 2)
+  currency         String   @default("USD")
+  isPublished      Boolean  @default(false) @map("is_published")
+  moduleCount      Int      @default(0) @map("module_count")
+  durationMinutes  Int      @default(0) @map("duration_minutes")
+  difficulty       String   @default("BEGINNER")
+  rating           Decimal? @db.Decimal(3, 2)
+  enrollCount      Int      @default(0) @map("enroll_count")
+  tags             Json?    @default("[]")
+  prerequisites    Json?    @default("[]")
+  learningOutcomes Json?    @default("[]") @map("learning_outcomes")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
 
-  tenantId      String   @map("tenant_id") @db.VarChar(30)
-  tenant        Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  instructorId  String   @map("instructor_id") @db.VarChar(30)
-  instructor    User     @relation("CourseInstructor", fields: [instructorId], references: [id], onDelete: Cascade)
-  modules       CourseModule[]
-  reviews       Review[]
+  tenantId     String         @map("tenant_id") @db.VarChar(30)
+  tenant       Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  instructorId String         @map("instructor_id") @db.VarChar(30)
+  instructor   User           @relation("CourseInstructor", fields: [instructorId], references: [id], onDelete: Cascade)
+  modules      CourseModule[]
+  reviews      Review[]
 
   @@unique([tenantId, slug])
   @@index([tenantId])
@@ -217,17 +218,17 @@ model Course {
 }
 
 model CourseModule {
-  id          String   @id @default(cuid()) @db.VarChar(30)
-  title       String
-  description String?  @db.Text
-  orderIndex  Int      @map("order_index")
-  durationMinutes Int  @default(0) @map("duration_minutes")
-  isPreview   Boolean  @default(false) @map("is_preview")
-  videoUrl    String?  @map("video_url")
-  createdAt   DateTime @default(now()) @map("created_at")
+  id              String   @id @default(cuid()) @db.VarChar(30)
+  title           String
+  description     String?  @db.Text
+  orderIndex      Int      @map("order_index")
+  durationMinutes Int      @default(0) @map("duration_minutes")
+  isPreview       Boolean  @default(false) @map("is_preview")
+  videoUrl        String?  @map("video_url")
+  createdAt       DateTime @default(now()) @map("created_at")
 
-  courseId    String   @map("course_id") @db.VarChar(30)
-  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId String @map("course_id") @db.VarChar(30)
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@index([courseId])
   @@map("course_modules")
@@ -236,29 +237,29 @@ model CourseModule {
 model Product {
   id          String          @id @default(cuid()) @db.VarChar(30)
   name        String
-  slug        String   @db.VarChar(100)
+  slug        String          @db.VarChar(100)
   description String          @db.Text
   shortDesc   String?         @map("short_desc")
   category    ProductCategory
   price       Decimal         @db.Decimal(10, 2)
   currency    String          @default("USD")
-  imageUrls   Json?            @map("image_urls") @default("[]")
+  imageUrls   Json?           @default("[]") @map("image_urls")
   downloadUrl String?         @map("download_url")
   demoUrl     String?         @map("demo_url")
   isActive    Boolean         @default(true) @map("is_active")
   salesCount  Int             @default(0) @map("sales_count")
   rating      Decimal?        @db.Decimal(3, 2)
-  tags        Json?            @default("[]")
+  tags        Json?           @default("[]")
   version     String?         @default("1.0.0")
   changelog   String?         @db.Text
   createdAt   DateTime        @default(now()) @map("created_at")
   updatedAt   DateTime        @updatedAt @map("updated_at")
 
-  tenantId    String          @map("tenant_id") @db.VarChar(30)
-  tenant      Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  sellerId    String          @map("seller_id") @db.VarChar(30)
-  seller      User            @relation("ProductSeller", fields: [sellerId], references: [id], onDelete: Cascade)
-  reviews     Review[]
+  tenantId String   @map("tenant_id") @db.VarChar(30)
+  tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  sellerId String   @map("seller_id") @db.VarChar(30)
+  seller   User     @relation("ProductSeller", fields: [sellerId], references: [id], onDelete: Cascade)
+  reviews  Review[]
 
   @@unique([tenantId, slug])
   @@index([tenantId])
@@ -286,32 +287,32 @@ model Review {
 }
 
 model JobListing {
-  id              String    @id @default(cuid()) @db.VarChar(30)
-  title           String
-  slug            String   @db.VarChar(100)
-  description     String    @db.Text
-  requirements    String    @db.Text
+  id               String    @id @default(cuid()) @db.VarChar(30)
+  title            String
+  slug             String    @db.VarChar(100)
+  description      String    @db.Text
+  requirements     String    @db.Text
   responsibilities String?   @db.Text
-  budgetMin       Decimal?  @db.Decimal(10, 2) @map("budget_min")
-  budgetMax       Decimal?  @db.Decimal(10, 2) @map("budget_max")
-  currency        String    @default("USD")
-  status          JobStatus @default(OPEN)
-  escrowAmount    Decimal?  @db.Decimal(10, 2) @map("escrow_amount")
-  escrowReleased  Boolean   @default(false) @map("escrow_released")
-  paypalOrderId   String?   @map("paypal_order_id")
-  location        String?
-  isRemote        Boolean   @default(true) @map("is_remote")
-  skillsRequired  Json?         @map("skills_required") @default("[]")
-  experienceLevel String?   @map("experience_level")
-  deadline        DateTime?
-  createdAt       DateTime  @default(now()) @map("created_at")
-  updatedAt       DateTime  @updatedAt @map("updated_at")
+  budgetMin        Decimal?  @map("budget_min") @db.Decimal(10, 2)
+  budgetMax        Decimal?  @map("budget_max") @db.Decimal(10, 2)
+  currency         String    @default("USD")
+  status           JobStatus @default(OPEN)
+  escrowAmount     Decimal?  @map("escrow_amount") @db.Decimal(10, 2)
+  escrowReleased   Boolean   @default(false) @map("escrow_released")
+  paypalOrderId    String?   @map("paypal_order_id")
+  location         String?
+  isRemote         Boolean   @default(true) @map("is_remote")
+  skillsRequired   Json?     @default("[]") @map("skills_required")
+  experienceLevel  String?   @map("experience_level")
+  deadline         DateTime?
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
 
-  tenantId        String    @map("tenant_id") @db.VarChar(30)
-  tenant          Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  postedById      String    @map("posted_by_id") @db.VarChar(30)
-  postedBy        User      @relation("JobPoster", fields: [postedById], references: [id], onDelete: Cascade)
-  applications    JobApplication[]
+  tenantId     String           @map("tenant_id") @db.VarChar(30)
+  tenant       Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  postedById   String           @map("posted_by_id") @db.VarChar(30)
+  postedBy     User             @relation("JobPoster", fields: [postedById], references: [id], onDelete: Cascade)
+  applications JobApplication[]
 
   @@unique([tenantId, slug])
   @@index([tenantId])
@@ -321,19 +322,19 @@ model JobListing {
 }
 
 model JobApplication {
-  id          String   @id @default(cuid()) @db.VarChar(30)
-  coverLetter String   @db.Text @map("cover_letter")
-  proposedRate Decimal? @db.Decimal(10, 2) @map("proposed_rate")
-  currency    String   @default("USD")
-  status      String   @default("PENDING")
-  attachments Json?            @default("[]")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  id           String   @id @default(cuid()) @db.VarChar(30)
+  coverLetter  String   @map("cover_letter") @db.Text
+  proposedRate Decimal? @map("proposed_rate") @db.Decimal(10, 2)
+  currency     String   @default("USD")
+  status       String   @default("PENDING")
+  attachments  Json?    @default("[]")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
-  jobId       String   @map("job_id") @db.VarChar(30)
+  jobId       String     @map("job_id") @db.VarChar(30)
   job         JobListing @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  applicantId String   @map("applicant_id") @db.VarChar(30)
-  applicant   User     @relation("ApplicantUser", fields: [applicantId], references: [id], onDelete: Cascade)
+  applicantId String     @map("applicant_id") @db.VarChar(30)
+  applicant   User       @relation("ApplicantUser", fields: [applicantId], references: [id], onDelete: Cascade)
 
   @@unique([jobId, applicantId])
   @@index([jobId])
@@ -341,15 +342,15 @@ model JobApplication {
 }
 
 model ChatRoom {
-  id          String   @id @default(cuid()) @db.VarChar(30)
-  name        String?
-  type        ChatType @default(DIRECT)
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  id        String   @id @default(cuid()) @db.VarChar(30)
+  name      String?
+  type      ChatType @default(DIRECT)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  tenantId    String   @map("tenant_id") @db.VarChar(30)
-  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  messages    ChatMessage[]
+  tenantId     String            @map("tenant_id") @db.VarChar(30)
+  tenant       Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  messages     ChatMessage[]
   participants ChatParticipant[]
 
   @@index([tenantId])
@@ -369,15 +370,15 @@ model ChatParticipant {
 }
 
 model ChatMessage {
-  id        String   @id @default(cuid()) @db.VarChar(30)
-  content   String   @db.Text
-  roomId    String   @map("room_id") @db.VarChar(30)
-  room      ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  senderId  String   @map("sender_id") @db.VarChar(30)
-  sender    User     @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
-  attachments Json?            @default("[]")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id          String   @id @default(cuid()) @db.VarChar(30)
+  content     String   @db.Text
+  roomId      String   @map("room_id") @db.VarChar(30)
+  room        ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  senderId    String   @map("sender_id") @db.VarChar(30)
+  sender      User     @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  attachments Json?    @default("[]")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
   @@index([roomId])
   @@index([senderId])
@@ -394,10 +395,10 @@ model Notification {
   metadata  Json?
   createdAt DateTime         @default(now()) @map("created_at")
 
-  userId    String           @map("user_id") @db.VarChar(30)
-  user      User             @relation("NotificationUser", fields: [userId], references: [id], onDelete: Cascade)
-  tenantId  String?          @map("tenant_id") @db.VarChar(30)
-  tenant    Tenant?          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userId   String  @map("user_id") @db.VarChar(30)
+  user     User    @relation("NotificationUser", fields: [userId], references: [id], onDelete: Cascade)
+  tenantId String? @map("tenant_id") @db.VarChar(30)
+  tenant   Tenant? @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([isRead])
@@ -409,8 +410,8 @@ model PlatformTransaction {
   paypalOrderId   String            @unique @map("paypal_order_id")
   paypalCaptureId String?           @map("paypal_capture_id")
   amount          Decimal           @db.Decimal(10, 2)
-  platformFee     Decimal           @db.Decimal(10, 2) @map("platform_fee")
-  sellerPayout    Decimal           @db.Decimal(10, 2) @map("seller_payout")
+  platformFee     Decimal           @map("platform_fee") @db.Decimal(10, 2)
+  sellerPayout    Decimal           @map("seller_payout") @db.Decimal(10, 2)
   currency        String            @default("USD")
   status          TransactionStatus @default(PENDING)
   type            TransactionType
@@ -438,10 +439,10 @@ model AuditLog {
   userAgent String?  @map("user_agent")
   createdAt DateTime @default(now()) @map("created_at")
 
-  userId    String?  @map("user_id") @db.VarChar(30)
-  user      User?    @relation("AuditUser", fields: [userId], references: [id], onDelete: SetNull)
-  tenantId  String?  @map("tenant_id") @db.VarChar(30)
-  tenant    Tenant?  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userId   String? @map("user_id") @db.VarChar(30)
+  user     User?   @relation("AuditUser", fields: [userId], references: [id], onDelete: SetNull)
+  tenantId String? @map("tenant_id") @db.VarChar(30)
+  tenant   Tenant? @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@index([tenantId])
   @@index([action])
@@ -462,9 +463,9 @@ model ForumCategory {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  tenantId    String   @map("tenant_id") @db.VarChar(30)
-  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  threads     ForumThread[]
+  tenantId String        @map("tenant_id") @db.VarChar(30)
+  tenant   Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  threads  ForumThread[]
 
   @@unique([tenantId, slug])
   @@index([tenantId])
@@ -473,25 +474,25 @@ model ForumCategory {
 }
 
 model ForumThread {
-  id          String   @id @default(cuid()) @db.VarChar(30)
-  title       String
-  slug        String   @db.VarChar(100)
-  content     String   @db.Text
-  isPinned    Boolean  @default(false) @map("is_pinned")
-  isLocked    Boolean  @default(false) @map("is_locked")
-  viewCount   Int      @default(0) @map("view_count")
-  postCount   Int      @default(0) @map("post_count")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  id        String   @id @default(cuid()) @db.VarChar(30)
+  title     String
+  slug      String   @db.VarChar(100)
+  content   String   @db.Text
+  isPinned  Boolean  @default(false) @map("is_pinned")
+  isLocked  Boolean  @default(false) @map("is_locked")
+  viewCount Int      @default(0) @map("view_count")
+  postCount Int      @default(0) @map("post_count")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  tenantId    String   @map("tenant_id") @db.VarChar(30)
-  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  categoryId  String   @map("category_id") @db.VarChar(30)
-  category    ForumCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  authorId    String   @map("author_id") @db.VarChar(30)
-  author      User     @relation("ThreadAuthor", fields: [authorId], references: [id], onDelete: Cascade)
-  posts       ForumPost[]
-  votes       ForumVote[]
+  tenantId   String        @map("tenant_id") @db.VarChar(30)
+  tenant     Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  categoryId String        @map("category_id") @db.VarChar(30)
+  category   ForumCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  authorId   String        @map("author_id") @db.VarChar(30)
+  author     User          @relation("ThreadAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  posts      ForumPost[]
+  votes      ForumVote[]
 
   @@unique([tenantId, slug])
   @@index([tenantId])
@@ -502,17 +503,17 @@ model ForumThread {
 }
 
 model ForumPost {
-  id        String   @id @default(cuid()) @db.VarChar(30)
-  content   String   @db.Text
-  isSolution Boolean @default(false) @map("is_solution")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id         String   @id @default(cuid()) @db.VarChar(30)
+  content    String   @db.Text
+  isSolution Boolean  @default(false) @map("is_solution")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
 
-  threadId  String   @map("thread_id") @db.VarChar(30)
-  thread    ForumThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
-  authorId  String   @map("author_id") @db.VarChar(30)
-  author    User     @relation("PostAuthor", fields: [authorId], references: [id], onDelete: Cascade)
-  votes     ForumVote[]
+  threadId String      @map("thread_id") @db.VarChar(30)
+  thread   ForumThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  authorId String      @map("author_id") @db.VarChar(30)
+  author   User        @relation("PostAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  votes    ForumVote[]
 
   @@index([threadId])
   @@index([authorId])
@@ -521,15 +522,15 @@ model ForumPost {
 
 model ForumVote {
   id        String   @id @default(cuid()) @db.VarChar(30)
-  type      String   // "UP" | "DOWN"
+  type      String // "UP" | "DOWN"
   createdAt DateTime @default(now()) @map("created_at")
 
-  userId    String   @map("user_id") @db.VarChar(30)
-  user      User     @relation("VoteAuthor", fields: [userId], references: [id], onDelete: Cascade)
-  threadId  String?  @map("thread_id") @db.VarChar(30)
-  thread    ForumThread? @relation(fields: [threadId], references: [id], onDelete: Cascade)
-  postId    String?  @map("post_id") @db.VarChar(30)
-  post      ForumPost?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId   String       @map("user_id") @db.VarChar(30)
+  user     User         @relation("VoteAuthor", fields: [userId], references: [id], onDelete: Cascade)
+  threadId String?      @map("thread_id") @db.VarChar(30)
+  thread   ForumThread? @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  postId   String?      @map("post_id") @db.VarChar(30)
+  post     ForumPost?   @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([userId, threadId])
   @@unique([userId, postId])

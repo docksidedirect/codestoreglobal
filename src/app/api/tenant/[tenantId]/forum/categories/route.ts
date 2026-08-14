@@ -2,15 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "devnexus-super-secret-key-change-in-production");
 
-export async function GET(req: NextRequest, { params }: { params: { tenantId: string } }) {
+export async function GET(req: NextRequest, context: { params: { tenantId: string } }) {
   try {
     const token = req.cookies.get("devnexus_session")?.value;
     if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     await jwtVerify(token, JWT_SECRET, { clockTolerance: 60 });
+
     const categories = await prisma.forumCategory.findMany({
-      where: { tenantId: params.tenantId, isActive: true },
+      where: { tenantId: context.params.tenantId, isActive: true },
       orderBy: { orderIndex: "asc" },
       include: {
         _count: { select: { threads: true } },
@@ -23,14 +26,15 @@ export async function GET(req: NextRequest, { params }: { params: { tenantId: st
   }
 }
 
-export async function POST(req: NextRequest, { params }: { params: { tenantId: string } }) {
+export async function POST(req: NextRequest, context: { params: { tenantId: string } }) {
   try {
     const token = req.cookies.get("devnexus_session")?.value;
     if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const { payload } = await jwtVerify(token, JWT_SECRET, { clockTolerance: 60 });
+    await jwtVerify(token, JWT_SECRET, { clockTolerance: 60 });
+
     const { name, slug, description, icon, color } = await req.json();
     const cat = await prisma.forumCategory.create({
-      data: { name, slug, description, icon, color, tenantId: params.tenantId },
+      data: { name, slug, description, icon, color, tenantId: context.params.tenantId },
     });
     return NextResponse.json({ success: true, category: cat });
   } catch (e) {

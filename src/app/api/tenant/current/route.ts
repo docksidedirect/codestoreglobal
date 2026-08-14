@@ -4,20 +4,25 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "devnexus-super-secret-key-change-in-production");
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 
 export async function GET(req: NextRequest) {
   try {
-    const token = req.cookies.get("devnexus_session")?.value;
-    if (!token) return NextResponse.json({ success: false }, { status: 401 });
+    const token = req.cookies.get("token")?.value;
+    if (!token) return NextResponse.json({ tenant: null }, { status: 401 });
 
     const { payload } = await jwtVerify(token, JWT_SECRET, { clockTolerance: 60 });
-    if (!payload.tenantId) return NextResponse.json({ success: false }, { status: 400 });
+    const userId = payload.userId as string;
 
-    const tenant = await prisma.tenant.findUnique({ where: { id: payload.tenantId as string } });
-    if (!tenant) return NextResponse.json({ success: false }, { status: 404 });
-    return NextResponse.json({ success: true, tenant });
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: { tenant: true },
+    });
+
+    if (!user) return NextResponse.json({ tenant: null }, { status: 404 });
+
+    return NextResponse.json({ success: true, tenant: user.tenant });
   } catch {
-    return NextResponse.json({ success: false }, { status: 401 });
+    return NextResponse.json({ tenant: null }, { status: 401 });
   }
 }

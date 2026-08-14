@@ -3,86 +3,165 @@ import { SignJWT } from "jose";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
-
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { email, password } = body;
-
-    if (!email || !password) {
+    // 1. Check env vars
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
       return NextResponse.json(
-        { error: "Email and password are required" },
+        { error: "JWT_SECRET missing in environment" },
+        { status: 500 }
+      );
+    }
+
+    const dbUrl = process.env.DATABASE_URL;
+    if (!dbUrl) {
+      return NextResponse.json(
+        { error: "DATABASE_URL missing in environment" },
+        { status: 500 }
+      );
+    }
+
+    // 2. Parse body
+    let body: any;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid JSON body" },
         { status: 400 }
       );
     }
 
-    // Fetch full user — no select block so TypeScript won't complain
-    const user = await prisma.user.findUnique({
-      where: { email: email.toLowerCase().trim() },
-    });
+    const { email, password } = body;
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: "Email and password required" },
+        { status: 400 }
+      );
+    }
+
+    // 3. Test DB connection with a lightweight query
+    let userCount = 0;
+    try {
+      userCount = await prisma.user.count();
+    } catch (dbErr: any) {
+      return NextResponse.json(
+        {
+          error: "Database connection failed",
+          detail: dbErr.message,
+          code: dbErr.code,
+          meta: dbErr.meta,
+        },
+        { status: 500 }
+      );
+    }
+
+    // 4. Find user
+    let user: any;
+    try {
+      user = await prisma.user.findUnique({
+        where: { email: email.toLowerCase().trim() },
+      });
+    } catch (findErr: any) {
+      return NextResponse.json(
+        {
+          error: "User lookup failed",
+          detail: findErr.message,
+          code: findErr.code,
+        },
+        { status: 500 }
+      );
+    }
 
     if (!user) {
       return NextResponse.json(
-        { error: "Invalid email or password" },
+        { error: "Invalid credentials", hint: "User not found" },
         { status: 401 }
       );
     }
 
-    // Check if password field exists on this model
-    const userPassword = (user as any).password || (user as any).passwordHash || (user as any).hashedPassword;
-    
-    if (!userPassword) {
+    // 5. Inspect user object for password field
+    const userKeys = Object.keys(user);
+    const passwordField =
+      user.password !== undefined
+        ? "password"
+        : user.passwordHash !== undefined
+        ? "passwordHash"
+        : user.hashedPassword !== undefined
+        ? "hashedPassword"
+        : null;
+
+    if (!passwordField) {
       return NextResponse.json(
-        { error: "Invalid email or password" },
-        { status: 401 }
+        {
+          error: "Password field not found on user model",
+          availableFields: userKeys,
+        },
+        { status: 500 }
       );
     }
 
-    const valid = await bcrypt.compare(password, userPassword);
+    // 6. Compare password
+    let valid = false;
+    try {
+      valid = await bcrypt.compare(password, user[passwordField]);
+    } catch (bcryptErr: any) {
+      return NextResponse.json(
+        {
+          error: "Password comparison failed",
+          detail: bcryptErr.message,
+        },
+        { status: 500 }
+      );
+    }
+
     if (!valid) {
       return NextResponse.json(
-        { error: "Invalid email or password" },
+        { error: "Invalid credentials", hint: "Wrong password" },
         { status: 401 }
       );
     }
 
+    // 7. Create token
     const token = await new SignJWT({
       userId: user.id,
       email: user.email,
-      role: (user as any).role,
+      role: user.role,
     })
       .setProtectedHeader({ alg: "HS256" })
       .setExpirationTime("7d")
-      .setIssuedAt()
-      .sign(JWT_SECRET);
+      .sign(new TextEncoder().encode(secret));
 
-    // Build response user object without password
-    const userResponse = {
-      id: user.id,
-      email: user.email,
-      firstName: (user as any).firstName,
-      lastName: (user as any).lastName,
-      role: (user as any).role,
-      tenantId: (user as any).tenantId,
-      avatarUrl: (user as any).avatarUrl,
-    };
-
-    const response = NextResponse.json({ user: userResponse });
+    // 8. Return success
+    const response = NextResponse.json({
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+        tenantId: user.tenantId,
+        avatarUrl: user.avatarUrl,
+      },
+    });
 
     response.cookies.set("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 7,
       path: "/",
     });
 
     return response;
-  } catch (error) {
-    console.error("[LOGIN_ERROR]", error);
+  } catch (unexpected: any) {
     return NextResponse.json(
-      { error: "Internal server error" },
+      {
+        error: "Unexpected error",
+        message: unexpected.message,
+        stack: unexpected.stack,
+      },
       { status: 500 }
     );
   }

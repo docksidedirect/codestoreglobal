@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  ReactNode,
+} from "react";
 
 interface User {
   id: string;
@@ -29,12 +36,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchUser = useCallback(async () => {
     try {
-      const res = await fetch("/api/auth/me", { credentials: "include" });
-      if (!res.ok) throw new Error("Unauthorized");
+      const res = await fetch("/api/auth/me", {
+        credentials: "include",
+        // Prevent caching the 401
+        cache: "no-store",
+      });
+
+      // 401 is normal when not logged in — don't throw
+      if (res.status === 401) {
+        setUser(null);
+        return;
+      }
+
+      if (!res.ok) {
+        setUser(null);
+        return;
+      }
+
       const data = await res.json();
-      if (data.success) setUser(data.user);
-      else setUser(null);
+
+      // Handle both response shapes: { user } or { success, user }
+      if (data?.user) {
+        setUser(data.user);
+      } else {
+        setUser(null);
+      }
     } catch {
+      // Network error or JSON parse error
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -52,10 +80,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
+
     if (!res.ok) {
-      const err = await res.json();
+      const err = await res.json().catch(() => ({}));
       throw new Error(err.error || "Login failed");
     }
+
     const data = await res.json();
     setUser(data.user);
 
@@ -69,7 +99,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const logout = useCallback(async () => {
-    await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+    await fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    });
     setUser(null);
     window.location.href = "/en/login";
   }, []);
@@ -80,7 +113,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [fetchUser]);
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, isAuthenticated: !!user, login, logout, refreshUser }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isLoading,
+        isAuthenticated: !!user,
+        login,
+        logout,
+        refreshUser,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

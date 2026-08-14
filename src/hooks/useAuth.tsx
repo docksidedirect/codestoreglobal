@@ -8,6 +8,7 @@ import {
   useEffect,
   ReactNode,
 } from "react";
+import { useRouter } from "next/navigation";
 
 interface User {
   id: string;
@@ -31,6 +32,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -38,11 +40,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const res = await fetch("/api/auth/me", {
         credentials: "include",
-        // Prevent caching the 401
         cache: "no-store",
       });
 
-      // 401 is normal when not logged in — don't throw
       if (res.status === 401) {
         setUser(null);
         return;
@@ -55,14 +55,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const data = await res.json();
 
-      // Handle both response shapes: { user } or { success, user }
-      if (data?.user) {
+      if (data?.success && data?.user) {
+        setUser(data.user);
+      } else if (data?.user) {
         setUser(data.user);
       } else {
         setUser(null);
       }
     } catch {
-      // Network error or JSON parse error
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -73,30 +73,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     fetchUser();
   }, [fetchUser]);
 
-  const login = useCallback(async (email: string, password: string) => {
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+  const login = useCallback(
+    async (email: string, password: string) => {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || "Login failed");
-    }
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Login failed");
+      }
 
-    const data = await res.json();
-    setUser(data.user);
+      const data = await res.json();
 
-    if (data.user.role === "SUPERADMIN") {
-      window.location.href = "/en/admin";
-    } else if (data.user.tenantId) {
-      window.location.href = `/en/${data.user.tenantId}/dashboard`;
-    } else {
-      window.location.href = "/en";
-    }
-  }, []);
+      if (!data.user) {
+        throw new Error("Invalid response from server");
+      }
+
+      setUser(data.user);
+
+      // Refresh router state before navigating
+      router.refresh();
+
+      if (data.user.role === "SUPERADMIN") {
+        router.push("/en/admin");
+      } else if (data.user.tenantId) {
+        router.push(`/en/${data.user.tenantId}/dashboard`);
+      } else {
+        router.push("/en");
+      }
+    },
+    [router],
+  );
 
   const logout = useCallback(async () => {
     await fetch("/api/auth/logout", {
@@ -104,8 +115,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       credentials: "include",
     });
     setUser(null);
-    window.location.href = "/en/login";
-  }, []);
+    router.refresh();
+    router.push("/en/login");
+  }, [router]);
 
   const refreshUser = useCallback(async () => {
     setIsLoading(true);

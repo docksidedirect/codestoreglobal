@@ -51,12 +51,13 @@ export async function POST(request: NextRequest) {
     });
 
     response.cookies.set("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7,
-      path: "/",
-    });
+  httpOnly: true,
+  secure: true,
+  sameSite: "lax",
+  maxAge: 60 * 60 * 24 * 7,
+  path: "/",
+  domain: ".codestoreglobal.com", // ← Add this
+});
 
     return response;
   } catch (error: any) {

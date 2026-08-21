@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     const sellerId = payload.userId as string;
 
     const body = await request.json();
-    const { name, description, price, category, tenantId } = body;
+    const { name, description, shortDesc, price, category, tenantId, downloadUrl, demoUrl, imageUrls } = body;
 
     if (!name?.trim() || !description?.trim() || !price || !category || !tenantId) {
       return NextResponse.json(
@@ -69,11 +69,15 @@ export async function POST(request: NextRequest) {
         name: name.trim(),
         slug,
         description: description.trim(),
+        shortDesc: shortDesc?.trim() || null,
         price: priceNum,
         currency: "USD",
         category: category as ProductCategory,
         tenantId,
         sellerId,
+        downloadUrl: downloadUrl?.trim() || null,
+        demoUrl: demoUrl?.trim() || null,
+        imageUrls: imageUrls || [],
       },
     });
 

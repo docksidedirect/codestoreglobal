@@ -27,11 +27,32 @@ export default function NewProductPage({
   const { locale, tenantId } = params;
   const router = useRouter();
   const [name, setName] = useState("");
+  const [shortDesc, setShortDesc] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
+  const [downloadUrl, setDownloadUrl] = useState("");
+  const [demoUrl, setDemoUrl] = useState("");
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  function handleImageAdd(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (!files) return;
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageUrls((prev) => [...prev, reader.result as string]);
+      };
+      reader.readAsDataURL(file);
+    });
+    e.target.value = "";
+  }
+
+  function removeImage(idx: number) {
+    setImageUrls((prev) => prev.filter((_, i) => i !== idx));
+  }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -45,9 +66,13 @@ export default function NewProductPage({
         body: JSON.stringify({
           name,
           description,
+          shortDesc,
           price,
           category,
           tenantId,
+          downloadUrl,
+          demoUrl,
+          imageUrls,
         }),
       });
 
@@ -89,6 +114,14 @@ export default function NewProductPage({
               />
             </div>
             <div>
+              <Label>Short Description</Label>
+              <Input
+                value={shortDesc}
+                onChange={(e) => setShortDesc(e.target.value)}
+                placeholder="Brief tagline shown on cards"
+              />
+            </div>
+            <div>
               <Label>Description</Label>
               <textarea
                 required
@@ -126,6 +159,54 @@ export default function NewProductPage({
                 onChange={(e) => setPrice(e.target.value)}
               />
             </div>
+            <div>
+              <Label>Download URL</Label>
+              <Input
+                type="url"
+                value={downloadUrl}
+                onChange={(e) => setDownloadUrl(e.target.value)}
+                placeholder="https://..."
+              />
+            </div>
+            <div>
+              <Label>Demo URL</Label>
+              <Input
+                type="url"
+                value={demoUrl}
+                onChange={(e) => setDemoUrl(e.target.value)}
+                placeholder="https://..."
+              />
+            </div>
+
+            <div>
+              <Label>Product Images</Label>
+              <Input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleImageAdd}
+                className="mt-1"
+              />
+              <div className="grid grid-cols-3 gap-2 mt-2">
+                {imageUrls.map((url, i) => (
+                  <div key={i} className="relative group">
+                    <img
+                      src={url}
+                      alt=""
+                      className="h-24 w-full object-cover rounded-md border"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(i)}
+                      className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {error && (
               <div className="text-sm text-red-500 font-medium">{error}</div>
             )}

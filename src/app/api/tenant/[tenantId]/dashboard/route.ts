@@ -6,17 +6,27 @@ export const dynamic = "force-dynamic";
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { tenantId: string } }
-) {
+interface RouteParams {
+  params: Promise<{ tenantId: string }> | { tenantId: string };
+}
+
+export async function GET(req: NextRequest, { params }: RouteParams) {
   try {
     const token = req.cookies.get("token")?.value;
     if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const { payload } = await jwtVerify(token, JWT_SECRET, { clockTolerance: 60 });
     const userId = payload.userId as string;
-    const tenantId = params.tenantId;
+
+    // Next.js 15+ Route Parameter Safety Check
+    const resolvedParams = params instanceof Promise || (params && typeof (params as any).then === "function")
+      ? await params
+      : params;
+    const tenantId = resolvedParams?.tenantId;
+
+    if (!tenantId) {
+      return NextResponse.json({ error: "Missing Tenant ID Mapping" }, { status: 400 });
+    }
 
     // Look up user to check tenant access
     const user = await prisma.user.findUnique({
@@ -47,7 +57,7 @@ export async function GET(
         where: { tenantId, isActive: true },
         orderBy: { createdAt: "desc" },
         take: 5,
-        select: { id: true, name: true, price: true, category: true },
+        select: { id: true, name: true, price: true, category: true, imageUrls: true },
       }),
       prisma.jobListing.findMany({
         where: { tenantId },
@@ -73,7 +83,7 @@ export async function GET(
       },
     });
   } catch (e) {
-    console.error(e);
+    console.error("Dashboard API Error:", e);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

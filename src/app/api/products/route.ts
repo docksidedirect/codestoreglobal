@@ -93,3 +93,47 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+// ... existing code ends with the POST catch block };
+
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const category = searchParams.get("category");
+    const limit = parseInt(searchParams.get("limit") || "12");
+
+    // Dynamic filtering block
+    const whereClause: any = {
+      isActive: true, // adjust to match your model's column naming conventions (e.g. isPublished)
+    };
+
+    if (category) {
+      whereClause.category = category as ProductCategory;
+    }
+
+    const products = await prisma.product.findMany({
+      where: whereClause,
+      orderBy: { createdAt: "desc" },
+      take: limit,
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        shortDesc: true,
+        price: true,
+        category: true,
+        tenantId: true,
+        // ✅ CRUCIAL FIX: Return image references to the global storefront feed grid
+        imageUrls: true, 
+      },
+    });
+
+    return NextResponse.json({ success: true, products }, { status: 200 });
+  } catch (error: any) {
+    console.error("[PRODUCTS_FETCH_ERROR]", error);
+    return NextResponse.json(
+      { success: false, error: "Server error", detail: error.message },
+      { status: 500 }
+    );
+  }
+}

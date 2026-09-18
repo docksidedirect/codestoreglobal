@@ -103,11 +103,13 @@ export function PublicHeader() {
               <>
                 {user ? (
                   <>
-                    <Link href={dashboardHref}>
-                      <Button variant="outline" size="sm" className="gap-1.5">
-                        <LayoutDashboard className="h-4 w-4" /> Dashboard
-                      </Button>
-                    </Link>
+                    {(user.role === "SUPERADMIN" || user.tenantId) && (
+                      <Link href={dashboardHref}>
+                        <Button variant="outline" size="sm" className="gap-1.5">
+                          <LayoutDashboard className="h-4 w-4" /> Dashboard
+                        </Button>
+                      </Link>
+                    )}
                     <Button size="sm" variant="ghost" onClick={handleLogout}>
                       <LogOut className="h-4 w-4" />
                     </Button>

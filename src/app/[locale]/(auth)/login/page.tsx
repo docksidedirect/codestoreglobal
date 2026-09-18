@@ -128,13 +128,15 @@ export default function LoginPage({
             >
               <Chrome className="h-4 w-4" /> Google
             </Button>
-            <Button
-              variant="outline"
-              className="w-full gap-2 text-xs font-normal"
-              type="button"
-            >
-              <Github className="h-4 w-4" /> GitHub
-            </Button>
+            <a href={`/api/auth/github?locale=${locale}`} className="w-full">
+              <Button
+                variant="outline"
+                className="w-full gap-2 text-xs font-normal"
+                type="button"
+              >
+                <Github className="h-4 w-4" /> GitHub
+              </Button>
+            </a>
           </div>
 
           <div className="relative flex py-2 items-center text-xs uppercase text-slate-400">

@@ -24,15 +24,6 @@ const PUBLIC_PATHS = [
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-    // Force canonical www host so the auth cookie is always present
-  const host = request.headers.get("host") || "";
-  if (host === "codestoreglobal.com") {
-    const url = request.nextUrl.clone();
-    url.host = "www.codestoreglobal.com";
-    url.protocol = "https";
-    return NextResponse.redirect(url, 301);
-  }
-
   // ⬇️ CRITICAL: Skip ALL API routes completely
   if (pathname.startsWith("/api")) {
     return NextResponse.next();

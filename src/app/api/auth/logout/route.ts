@@ -4,6 +4,5 @@ export const dynamic = "force-dynamic";
 
 export async function POST() {
   const response = NextResponse.json({ success: true });
-  response.cookies.set("token", "", { httpOnly: true, maxAge: 0, path: "/" });
-  return response;
+  response.cookies.set("token", "", { httpOnly: true, maxAge: 0, path: "/", domain: ".codestoreglobal.com" });  return response;
 }

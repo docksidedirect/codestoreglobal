@@ -213,7 +213,9 @@ export default function LandingPage({
                   </Button>
                 </Link>
               ) : (
-                <Link href={`/${locale}/register`}>
+                <Link
+                  href={user ? `/${locale}/marketplace` : `/${locale}/register`}
+                >
                   <Button
                     size="lg"
                     className="h-12 px-8 text-base bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100 shadow-xl shadow-slate-900/20 dark:shadow-white/10"
@@ -471,7 +473,11 @@ export default function LandingPage({
                       </Button>
                     </Link>
                   ) : (
-                    <Link href={`/${locale}/register`}>
+                    <Link
+                      href={
+                        user ? `/${locale}/marketplace` : `/${locale}/register`
+                      }
+                    >
                       <Button
                         size="lg"
                         className="h-12 px-8 text-base bg-white text-violet-700 hover:bg-violet-50 shadow-lg"

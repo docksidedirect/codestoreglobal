@@ -121,13 +121,15 @@ export default function LoginPage({
 
           {/* Social Logins */}
           <div className="grid grid-cols-2 gap-3">
-            <Button
-              variant="outline"
-              className="w-full gap-2 text-xs font-normal"
-              type="button"
-            >
-              <Chrome className="h-4 w-4" /> Google
-            </Button>
+            <a href={`/api/auth/google?locale=${locale}`} className="w-full">
+              <Button
+                variant="outline"
+                className="w-full gap-2 text-xs font-normal"
+                type="button"
+              >
+                <Chrome className="h-4 w-4" /> Google
+              </Button>
+            </a>
             <a href={`/api/auth/github?locale=${locale}`} className="w-full">
               <Button
                 variant="outline"

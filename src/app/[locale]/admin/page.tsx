@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { PublicHeader } from "@/components/public-header";
 import {
   CheckCircle,
   XCircle,
@@ -77,199 +78,220 @@ export default async function AdminDashboardPage({
   const totalRevenue = Number(totalTransactions._sum.amount ?? 0);
 
   return (
-    <div className="min-h-screen bg-muted/40 p-4 sm:p-6 lg:p-8">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-2 flex items-center gap-3">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 text-sm font-bold text-white">
-            C
-          </div>
-          <h1 className="text-xl font-bold sm:text-2xl lg:text-3xl">
-            CODESTORE GLOBAL Admin
+    <>
+      {/* Header was missing on this page — PublicHeader now rendered here */}
+      <PublicHeader />
+
+      <div className="min-h-screen bg-muted/40 p-4 sm:p-6 lg:p-8">
+        <div className="mx-auto max-w-7xl">
+          {/* Slim heading — big logo block removed, header already shows the brand */}
+          <h1 className="mb-1 text-xl font-bold sm:text-2xl">
+            Admin Dashboard
           </h1>
-        </div>
-        <p className="mb-8 text-muted-foreground">
-          Platform overview and workspace management.
-        </p>
+          <p className="mb-6 text-sm text-muted-foreground sm:mb-8">
+            Platform overview and workspace management.
+          </p>
 
-        {/* Stats */}
-        <div className="mb-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          <Card>
-            <CardContent className="p-4 sm:p-6">
-              <div className="flex items-center justify-between gap-2">
-                <div className="min-w-0">
-                  <p className="truncate text-xs text-muted-foreground sm:text-sm">
-                    Workspaces
-                  </p>
-                  <p className="text-xl font-bold sm:text-2xl">
-                    {allTenants.length + pendingTenants.length}
-                  </p>
-                </div>
-                <Building2 className="h-6 w-6 shrink-0 text-muted-foreground sm:h-8 sm:w-8" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-4 sm:p-6">
-              <div className="flex items-center justify-between gap-2">
-                <div className="min-w-0">
-                  <p className="truncate text-xs text-muted-foreground sm:text-sm">
-                    Users
-                  </p>
-                  <p className="text-xl font-bold sm:text-2xl">{totalUsers}</p>
-                </div>
-                <Users className="h-6 w-6 shrink-0 text-muted-foreground sm:h-8 sm:w-8" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-4 sm:p-6">
-              <div className="flex items-center justify-between gap-2">
-                <div className="min-w-0">
-                  <p className="truncate text-xs text-muted-foreground sm:text-sm">
-                    Revenue
-                  </p>
-                  <p className="truncate text-xl font-bold sm:text-2xl">
-                    {formatCurrency(totalRevenue)}
-                  </p>
-                </div>
-                <DollarSign className="h-6 w-6 shrink-0 text-muted-foreground sm:h-8 sm:w-8" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-4 sm:p-6">
-              <div className="flex items-center justify-between gap-2">
-                <div className="min-w-0">
-                  <p className="truncate text-xs text-muted-foreground sm:text-sm">
-                    Pending
-                  </p>
-                  <p className="text-xl font-bold sm:text-2xl">
-                    {pendingTenants.length}
-                  </p>
-                </div>
-                <Badge
-                  variant={
-                    pendingTenants.length > 0 ? "destructive" : "secondary"
-                  }
-                  className="shrink-0 whitespace-nowrap text-xs"
-                >
-                  {pendingTenants.length > 0 ? "Action Needed" : "All Clear"}
-                </Badge>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Pending Verifications */}
-        <h2 className="mb-4 text-xl font-semibold">Pending Verifications</h2>
-        <div className="mb-8 grid gap-4">
-          {pendingTenants.length === 0 ? (
+          {/* Stats */}
+          <div className="mb-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
             <Card>
-              <CardContent className="py-8 text-center text-muted-foreground">
-                No pending approvals.
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="truncate text-xs text-muted-foreground sm:text-sm">
+                      Workspaces
+                    </p>
+                    <p className="text-xl font-bold sm:text-2xl">
+                      {allTenants.length + pendingTenants.length}
+                    </p>
+                  </div>
+                  <Building2 className="h-6 w-6 shrink-0 text-muted-foreground sm:h-8 sm:w-8" />
+                </div>
               </CardContent>
             </Card>
-          ) : (
-            pendingTenants.map((t) => (
-              <Card key={t.id}>
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0">
-                      <CardTitle className="text-lg">{t.name}</CardTitle>
-                      <CardDescription className="break-all">
-                        Owner: {t.owner.firstName} {t.owner.lastName} ·{" "}
-                        {t.owner.email}
-                      </CardDescription>
-                    </div>
-                    <Badge variant="secondary" className="shrink-0">
-                      {t.subdomain}.codestore.io
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="text-sm text-muted-foreground">
-                      Submitted {formatDate(t.createdAt)} · Industry:{" "}
-                      {t.industry || "N/A"}
-                    </div>
-                    <div className="flex gap-2">
-                      <form
-                        action={`/api/admin/approvals/${t.id}/approve`}
-                        method="POST"
-                      >
-                        <Button type="submit" size="sm" className="gap-1">
-                          <CheckCircle className="h-4 w-4" /> Approve
-                        </Button>
-                      </form>
-                      <form
-                        action={`/api/admin/approvals/${t.id}/reject`}
-                        method="POST"
-                      >
-                        <Button
-                          type="submit"
-                          size="sm"
-                          variant="destructive"
-                          className="gap-1"
-                        >
-                          <XCircle className="h-4 w-4" /> Reject
-                        </Button>
-                      </form>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
-          )}
-        </div>
 
-        {/* Active Workspaces */}
-        <h2 className="mb-4 text-xl font-semibold">Active Workspaces</h2>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {allTenants.map((t) => (
-            <Card key={t.id}>
-              <CardHeader className="pb-3">
+            <Card>
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center justify-between gap-2">
-                  <CardTitle className="min-w-0 truncate text-base">
-                    {t.name}
-                  </CardTitle>
-                  <Badge variant="outline" className="shrink-0">
-                    {t.subscriptionTier}
+                  <div className="min-w-0">
+                    <p className="truncate text-xs text-muted-foreground sm:text-sm">
+                      Users
+                    </p>
+                    <p className="text-xl font-bold sm:text-2xl">
+                      {totalUsers}
+                    </p>
+                  </div>
+                  <Users className="h-6 w-6 shrink-0 text-muted-foreground sm:h-8 sm:w-8" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="truncate text-xs text-muted-foreground sm:text-sm">
+                      Revenue
+                    </p>
+                    <p className="truncate text-xl font-bold sm:text-2xl">
+                      {formatCurrency(totalRevenue)}
+                    </p>
+                  </div>
+                  <DollarSign className="h-6 w-6 shrink-0 text-muted-foreground sm:h-8 sm:w-8" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="truncate text-xs text-muted-foreground sm:text-sm">
+                      Pending
+                    </p>
+                    <p className="text-xl font-bold sm:text-2xl">
+                      {pendingTenants.length}
+                    </p>
+                  </div>
+                  <Badge
+                    variant={
+                      pendingTenants.length > 0 ? "destructive" : "secondary"
+                    }
+                    className="shrink-0 whitespace-nowrap text-xs"
+                  >
+                    {pendingTenants.length > 0 ? "Action Needed" : "All Clear"}
                   </Badge>
                 </div>
-                <CardDescription className="text-xs">
-                  Owner: {t.owner.firstName} {t.owner.lastName}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="mb-4 grid grid-cols-3 gap-2 text-center text-sm">
-                  <div>
-                    <div className="font-bold">{t._count.members}</div>
-                    <div className="text-xs text-muted-foreground">Members</div>
-                  </div>
-                  <div>
-                    <div className="font-bold">{t._count.courses}</div>
-                    <div className="text-xs text-muted-foreground">Courses</div>
-                  </div>
-                  <div>
-                    <div className="font-bold">{t._count.products}</div>
-                    <div className="text-xs text-muted-foreground">
-                      Products
-                    </div>
-                  </div>
-                </div>
-                <Link href={`/${params.locale}/${t.id}/dashboard`}>
-                  <Button variant="outline" size="sm" className="w-full gap-1">
-                    <ExternalLink className="h-3 w-3" /> View Dashboard
-                  </Button>
-                </Link>
               </CardContent>
             </Card>
-          ))}
+          </div>
+
+          {/* Pending Verifications */}
+          <h2 className="mb-4 text-lg font-semibold sm:text-xl">
+            Pending Verifications
+          </h2>
+          <div className="mb-8 grid gap-4">
+            {pendingTenants.length === 0 ? (
+              <Card>
+                <CardContent className="py-8 text-center text-sm text-muted-foreground">
+                  No pending approvals.
+                </CardContent>
+              </Card>
+            ) : (
+              pendingTenants.map((t) => (
+                <Card key={t.id}>
+                  <CardHeader className="pb-3">
+                    <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-2">
+                      <div className="min-w-0">
+                        <CardTitle className="text-base sm:text-lg">
+                          {t.name}
+                        </CardTitle>
+                        <CardDescription className="break-all text-xs sm:text-sm">
+                          Owner: {t.owner.firstName} {t.owner.lastName} ·{" "}
+                          {t.owner.email}
+                        </CardDescription>
+                      </div>
+                      <Badge
+                        variant="secondary"
+                        className="w-fit shrink-0 truncate"
+                      >
+                        {t.subdomain}.codestore.io
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="text-xs text-muted-foreground sm:text-sm">
+                        Submitted {formatDate(t.createdAt)} · Industry:{" "}
+                        {t.industry || "N/A"}
+                      </div>
+                      <div className="flex gap-2">
+                        <form
+                          action={`/api/admin/approvals/${t.id}/approve`}
+                          method="POST"
+                        >
+                          <Button type="submit" size="sm" className="gap-1">
+                            <CheckCircle className="h-4 w-4" /> Approve
+                          </Button>
+                        </form>
+                        <form
+                          action={`/api/admin/approvals/${t.id}/reject`}
+                          method="POST"
+                        >
+                          <Button
+                            type="submit"
+                            size="sm"
+                            variant="destructive"
+                            className="gap-1"
+                          >
+                            <XCircle className="h-4 w-4" /> Reject
+                          </Button>
+                        </form>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
+          </div>
+
+          {/* Active Workspaces */}
+          <h2 className="mb-4 text-lg font-semibold sm:text-xl">
+            Active Workspaces
+          </h2>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {allTenants.map((t) => (
+              <Card key={t.id}>
+                <CardHeader className="pb-3">
+                  {/* Fixed: stack title + badge on mobile so badge never gets pushed off-screen */}
+                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
+                    <CardTitle className="break-words text-base sm:text-lg">
+                      {t.name}
+                    </CardTitle>
+                    <Badge variant="outline" className="w-fit shrink-0">
+                      {t.subscriptionTier}
+                    </Badge>
+                  </div>
+                  <CardDescription className="text-xs">
+                    Owner: {t.owner.firstName} {t.owner.lastName}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="mb-4 grid grid-cols-3 gap-2 text-center text-sm">
+                    <div>
+                      <div className="font-bold">{t._count.members}</div>
+                      <div className="text-xs text-muted-foreground">
+                        Members
+                      </div>
+                    </div>
+                    <div>
+                      <div className="font-bold">{t._count.courses}</div>
+                      <div className="text-xs text-muted-foreground">
+                        Courses
+                      </div>
+                    </div>
+                    <div>
+                      <div className="font-bold">{t._count.products}</div>
+                      <div className="text-xs text-muted-foreground">
+                        Products
+                      </div>
+                    </div>
+                  </div>
+                  <Link href={`/${params.locale}/${t.id}/dashboard`}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full gap-1"
+                    >
+                      <ExternalLink className="h-3 w-3" /> View Dashboard
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

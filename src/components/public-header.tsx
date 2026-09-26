@@ -57,21 +57,22 @@ export function PublicHeader() {
   return (
     <header className="sticky top-0 z-50 border-b bg-white dark:bg-slate-950">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-16 items-center justify-between gap-2">
+          {/* Logo — fixed: shrink-0 + nowrap + text hidden below 420px */}
           <Link
             href={`/${locale}`}
-            className="flex items-center gap-2.5"
+            className="flex shrink-0 items-center gap-2.5"
             onClick={() => setMobileOpen(false)}
           >
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 text-white">
               <Zap className="h-5 w-5" />
             </div>
-            <span className="text-lg font-bold text-slate-900 dark:text-white">
+            <span className="hidden whitespace-nowrap text-lg font-bold text-slate-900 min-[420px]:inline dark:text-white">
               CODESTORE GLOBAL
             </span>
           </Link>
 
-          {/* Desktop nav — unchanged */}
+          {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
             {navLinks.map((link) => (
               <Link
@@ -88,7 +89,7 @@ export function PublicHeader() {
             ))}
           </nav>
 
-          {/* Desktop controls — unchanged, just wrapped to hide on mobile */}
+          {/* Desktop controls */}
           <div className="hidden md:flex items-center gap-3">
             <div className="relative">
               <select
@@ -136,9 +137,9 @@ export function PublicHeader() {
             )}
           </div>
 
-          {/* Mobile hamburger */}
+          {/* Mobile hamburger — fixed: shrink-0 */}
           <button
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-700 md:hidden dark:border-slate-700 dark:text-slate-300"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 text-slate-700 md:hidden dark:border-slate-700 dark:text-slate-300"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
             aria-expanded={mobileOpen}
@@ -152,9 +153,9 @@ export function PublicHeader() {
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile menu — fixed: max height + scrollable */}
       {mobileOpen && (
-        <div className="border-t border-slate-200 bg-white md:hidden dark:border-slate-800 dark:bg-slate-950">
+        <div className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-slate-200 bg-white md:hidden dark:border-slate-800 dark:bg-slate-950">
           <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
             {/* Nav links */}
             <nav className="flex flex-col">
@@ -190,7 +191,7 @@ export function PublicHeader() {
               <Globe className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
             </div>
 
-            {/* Auth — Sign In is always reachable here */}
+            {/* Auth */}
             {!authLoading && (
               <div className="mt-3 flex flex-col gap-2 border-t border-slate-200 pt-3 dark:border-slate-800">
                 {user ? (

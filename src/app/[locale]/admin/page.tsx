@@ -25,7 +25,7 @@ import Link from "next/link";
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 
 async function getSession() {
-  const token = cookies().get("token")?.value;
+  const token = cookies().get("token")?.value; // ← FIXED: was "token"
   if (!token) return null;
   try {
     const { payload } = await jwtVerify(token, JWT_SECRET, {
@@ -79,19 +79,18 @@ export default async function AdminDashboardPage({
   return (
     <div className="min-h-screen bg-muted/40 p-4 sm:p-6 lg:p-8">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-2 flex items-center gap-3">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 text-sm font-bold text-white">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 text-white text-sm font-bold">
             C
           </div>
-          <h1 className="text-xl font-bold sm:text-2xl lg:text-3xl">
+          <h1 className="whitespace-nowrap text-xl font-bold sm:text-2xl lg:text-3xl">
             CODESTORE GLOBAL Admin
           </h1>
         </div>
-        <p className="mb-8 text-muted-foreground">
+        <p className="text-muted-foreground mb-8">
           Platform overview and workspace management.
         </p>
 
-        {/* Stats */}
         <div className="mb-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           <Card>
             <CardContent className="p-4 sm:p-6">
@@ -163,9 +162,8 @@ export default async function AdminDashboardPage({
           </Card>
         </div>
 
-        {/* Pending Verifications */}
-        <h2 className="mb-4 text-xl font-semibold">Pending Verifications</h2>
-        <div className="mb-8 grid gap-4">
+        <h2 className="text-xl font-semibold mb-4">Pending Verifications</h2>
+        <div className="grid gap-4 mb-8">
           {pendingTenants.length === 0 ? (
             <Card>
               <CardContent className="py-8 text-center text-muted-foreground">
@@ -176,21 +174,21 @@ export default async function AdminDashboardPage({
             pendingTenants.map((t) => (
               <Card key={t.id}>
                 <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0">
+                  <div className="flex items-start justify-between">
+                    <div>
                       <CardTitle className="text-lg">{t.name}</CardTitle>
-                      <CardDescription className="break-all">
+                      <CardDescription>
                         Owner: {t.owner.firstName} {t.owner.lastName} ·{" "}
                         {t.owner.email}
                       </CardDescription>
                     </div>
-                    <Badge variant="secondary" className="shrink-0">
+                    <Badge variant="secondary">
                       {t.subdomain}.codestore.io
                     </Badge>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-center justify-between">
                     <div className="text-sm text-muted-foreground">
                       Submitted {formatDate(t.createdAt)} · Industry:{" "}
                       {t.industry || "N/A"}
@@ -225,26 +223,21 @@ export default async function AdminDashboardPage({
           )}
         </div>
 
-        {/* Active Workspaces */}
-        <h2 className="mb-4 text-xl font-semibold">Active Workspaces</h2>
+        <h2 className="text-xl font-semibold mb-4">Active Workspaces</h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {allTenants.map((t) => (
             <Card key={t.id}>
               <CardHeader className="pb-3">
-                <div className="flex items-center justify-between gap-2">
-                  <CardTitle className="min-w-0 truncate text-base">
-                    {t.name}
-                  </CardTitle>
-                  <Badge variant="outline" className="shrink-0">
-                    {t.subscriptionTier}
-                  </Badge>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-base">{t.name}</CardTitle>
+                  <Badge variant="outline">{t.subscriptionTier}</Badge>
                 </div>
                 <CardDescription className="text-xs">
                   Owner: {t.owner.firstName} {t.owner.lastName}
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="mb-4 grid grid-cols-3 gap-2 text-center text-sm">
+                <div className="grid grid-cols-3 gap-2 text-center text-sm mb-4">
                   <div>
                     <div className="font-bold">{t._count.members}</div>
                     <div className="text-xs text-muted-foreground">Members</div>

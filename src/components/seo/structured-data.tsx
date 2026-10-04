@@ -3,7 +3,15 @@
 import Script from "next/script";
 
 interface StructuredDataProps {
-  type: "WebSite" | "WebPage" | "Organization" | "Product" | "Course" | "JobPosting" | "BreadcrumbList" | "FAQPage";
+  type:
+    | "WebSite"
+    | "WebPage"
+    | "Organization"
+    | "Product"
+    | "Course"
+    | "JobPosting"
+    | "BreadcrumbList"
+    | "FAQPage";
   data: Record<string, any>;
 }
 
@@ -29,9 +37,10 @@ export function OrganizationSchema() {
       type="Organization"
       data={{
         name: "CODESTORE GLOBAL",
-        url: "https://codestore.global",
-        logo: "https://codestore.global/logo.png",
-        description: "Multi-tenant developer platform for courses, SaaS marketplace, escrow jobs, and community forums.",
+        url: "https://codestoreglobal.com",
+        logo: "https://codestoreglobal.com/logo.png",
+        description:
+          "Multi-tenant developer platform for courses, SaaS marketplace, escrow jobs, and community forums.",
         sameAs: [
           "https://twitter.com/codestoreglobal",
           "https://github.com/codestoreglobal",
@@ -40,7 +49,7 @@ export function OrganizationSchema() {
         contactPoint: {
           "@type": "ContactPoint",
           contactType: "customer support",
-          email: "support@codestore.global",
+          email: "support@codestoreglobal.com",
         },
       }}
     />
@@ -52,11 +61,20 @@ export function WebSiteSchema({ locale }: { locale: string }) {
     <StructuredData
       type="WebSite"
       data={{
-        name: locale === "ar" ? "CODESTORE GLOBAL - منصة المطورين" : locale === "fr" ? "CODESTORE GLOBAL - Plateforme Développeurs" : locale === "de" ? "CODESTORE GLOBAL - Entwicklerplattform" : locale === "es" ? "CODESTORE GLOBAL - Plataforma de Desarrolladores" : "CODESTORE GLOBAL - Developer Platform",
-        url: `https://codestore.global/${locale}`,
+        name:
+          locale === "ar"
+            ? "CODESTORE GLOBAL - منصة المطورين"
+            : locale === "fr"
+              ? "CODESTORE GLOBAL - Plateforme Développeurs"
+              : locale === "de"
+                ? "CODESTORE GLOBAL - Entwicklerplattform"
+                : locale === "es"
+                  ? "CODESTORE GLOBAL - Plataforma de Desarrolladores"
+                  : "CODESTORE GLOBAL - Developer Platform",
+        url: `https://codestoreglobal.com/${locale}`,
         potentialAction: {
           "@type": "SearchAction",
-          target: `https://codestore.global/${locale}/search?q={search_term_string}`,
+          target: `https://codestoreglobal.com/${locale}/search?q={search_term_string}`,
           "query-input": "required name=search_term_string",
         },
       }}
@@ -64,7 +82,11 @@ export function WebSiteSchema({ locale }: { locale: string }) {
   );
 }
 
-export function BreadcrumbSchema({ items }: { items: { name: string; url: string }[] }) {
+export function BreadcrumbSchema({
+  items,
+}: {
+  items: { name: string; url: string }[];
+}) {
   return (
     <StructuredData
       type="BreadcrumbList"

@@ -32,13 +32,20 @@ export function generateOpenGraph(config: OpenGraphConfig): Metadata {
       type,
       images: image
         ? [{ url: image, width: 1200, height: 630, alt: title }]
-        : [{ url: "https://codestore.global/og-default.jpg", width: 1200, height: 630, alt: title }],
+        : [
+            {
+              url: "https://codestoreglobal.com/og-default.jpg",
+              width: 1200,
+              height: 630,
+              alt: title,
+            },
+          ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: image ? [image] : ["https://codestore.global/og-default.jpg"],
+      images: image ? [image] : ["https://codestoreglobal.com/og-default.jpg"],
       creator: "@codestoreglobal",
     },
     alternates: {

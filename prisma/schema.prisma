@@ -69,6 +69,15 @@ enum TransactionType {
   ESCROW_RELEASE
   REFUND
   PLATFORM_FEE
+  JOB_FEATURE_FEE
+  JOB_COMMISSION
+}
+
+enum CommissionStatus {
+  UNPAID
+  INVOICED
+  PAID
+  WAIVED
 }
 
 enum TransactionStatus {
@@ -287,26 +296,32 @@ model Review {
 }
 
 model JobListing {
-  id               String    @id @default(cuid()) @db.VarChar(30)
+  id               String           @id @default(cuid()) @db.VarChar(30)
   title            String
-  slug             String    @db.VarChar(100)
-  description      String    @db.Text
-  requirements     String    @db.Text
-  responsibilities String?   @db.Text
-  budgetMin        Decimal?  @map("budget_min") @db.Decimal(10, 2)
-  budgetMax        Decimal?  @map("budget_max") @db.Decimal(10, 2)
-  currency         String    @default("USD")
-  status           JobStatus @default(OPEN)
-  escrowAmount     Decimal?  @map("escrow_amount") @db.Decimal(10, 2)
-  escrowReleased   Boolean   @default(false) @map("escrow_released")
-  paypalOrderId    String?   @map("paypal_order_id")
+  slug             String           @db.VarChar(100)
+  description      String           @db.Text
+  requirements     String           @db.Text
+  responsibilities String?          @db.Text
+  budgetMin        Decimal?         @map("budget_min") @db.Decimal(10, 2)
+  budgetMax        Decimal?         @map("budget_max") @db.Decimal(10, 2)
+  currency         String           @default("USD")
+  status           JobStatus        @default(OPEN)
+  escrowAmount     Decimal?         @map("escrow_amount") @db.Decimal(10, 2)
+  escrowReleased   Boolean          @default(false) @map("escrow_released")
+  paypalOrderId    String?          @map("paypal_order_id")
   location         String?
-  isRemote         Boolean   @default(true) @map("is_remote")
-  skillsRequired   Json?     @default("[]") @map("skills_required")
-  experienceLevel  String?   @map("experience_level")
+  isRemote         Boolean          @default(true) @map("is_remote")
+  skillsRequired   Json?            @default("[]") @map("skills_required")
+  experienceLevel  String?          @map("experience_level")
   deadline         DateTime?
-  createdAt        DateTime  @default(now()) @map("created_at")
-  updatedAt        DateTime  @updatedAt @map("updated_at")
+  featured         Boolean          @default(false) @map("featured")
+  featuredUntil    DateTime?        @map("featured_until")
+  featuredFee      Decimal?         @map("featured_fee") @db.Decimal(10, 2)
+  commissionRate   Decimal          @default(10.00) @map("commission_rate") @db.Decimal(10, 2)
+  commissionAmount Decimal?         @map("commission_amount") @db.Decimal(10, 2)
+  commissionStatus CommissionStatus @default(UNPAID) @map("commission_status")
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
 
   tenantId     String           @map("tenant_id") @db.VarChar(30)
   tenant       Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
@@ -318,6 +333,7 @@ model JobListing {
   @@index([tenantId])
   @@index([status])
   @@index([createdAt])
+  @@index([featured, featuredUntil])
   @@map("job_listings")
 }
 

@@ -132,7 +132,7 @@ async function main() {
 
   // ─── Jobs ───
   const jobs = [
-    { title: "Senior Full-Stack Engineer (Next.js/Prisma)", slug: "senior-fullstack-engineer", description: "Join our core platform team building the next generation of multi-tenant developer tools.", requirements: "5+ years experience with React/Next.js. Deep knowledge of MySQL and Prisma.", budgetMin: 8000, budgetMax: 12000, skillsRequired: JSON.stringify(["Next.js", "Prisma", "MySQL", "TypeScript", "WebSockets"]), remote: true, location: "Global", exp: "Senior" },
+    { title: "Senior Full-Stack Engineer (Next.js/Prisma)", slug: "senior-fullstack-engineer", description: "Join our core platform team building the next generation of multi-tenant developer tools.", requirements: "5+ years experience with React/Next.js. Deep knowledge of MySQL and Prisma.", budgetMin: 8000, budgetMax: 12000, skillsRequired: JSON.stringify(["Next.js", "Prisma", "MySQL", "TypeScript", "WebSockets"]), remote: true, location: "Global", exp: "Senior", featured: true, featuredFee: 19.00 },
     { title: "DevOps Engineer - Kubernetes Platform", slug: "devops-engineer-k8s", description: "Design and maintain our multi-tenant Kubernetes infrastructure.", requirements: "Strong experience with Kubernetes, Helm, Terraform, and CI/CD pipelines.", budgetMin: 7000, budgetMax: 10000, skillsRequired: JSON.stringify(["Kubernetes", "Terraform", "Helm", "GitOps", "AWS"]), remote: true, location: "US/EU", exp: "Mid-Level" },
     { title: "UI/UX Designer for SaaS Dashboards", slug: "uiux-designer-saas", description: "Create beautiful, intuitive dashboard interfaces for our multi-tenant platform.", requirements: "Portfolio demonstrating SaaS dashboard design. Proficiency in Figma and design systems.", budgetMin: 4000, budgetMax: 6000, skillsRequired: JSON.stringify(["Figma", "Design Systems", "User Research", "Prototyping"]), remote: true, location: "Remote", exp: "Mid-Level" },
     { title: "Technical Writer - API Documentation", slug: "technical-writer-api", description: "Write comprehensive API documentation, tutorials, and guides for our developer platform.", requirements: "Experience with OpenAPI/Swagger, Markdown, and developer documentation.", budgetMin: 3000, budgetMax: 4500, skillsRequired: JSON.stringify(["Technical Writing", "OpenAPI", "Markdown", "Developer Advocacy"]), remote: true, location: "Any", exp: "Junior" },
@@ -145,6 +145,10 @@ async function main() {
         budgetMin: j.budgetMin, budgetMax: j.budgetMax, skillsRequired: j.skillsRequired,
         experienceLevel: j.exp, currency: "USD", status: JobStatus.OPEN,
         isRemote: j.remote, location: j.location,
+        featured: (j as any).featured || false,
+        featuredUntil: (j as any).featured ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) : null,
+        featuredFee: (j as any).featuredFee || null,
+        commissionAmount: j.budgetMax ? Number((Number(j.budgetMax) * 0.10).toFixed(2)) : null,
         tenantId: demoTenant.id, postedById: tenantAdmin.id,
       },
     });

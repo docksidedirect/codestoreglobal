@@ -12,7 +12,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://codestore.global"),
+  metadataBase: new URL("https://codestoreglobal.com"),
   title: {
     default: "CODESTORE GLOBAL - Multi-Tenant Developer Platform",
     template: "%s | CODESTORE GLOBAL",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     "developer tools",
     "tenant isolation",
   ],
-  authors: [{ name: "CODESTORE GLOBAL", url: "https://codestore.global" }],
+  authors: [{ name: "CODESTORE GLOBAL", url: "https://codestoreglobal.com" }],
   creator: "CODESTORE GLOBAL",
   publisher: "CODESTORE GLOBAL",
   formatDetection: {
@@ -49,14 +49,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://codestore.global",
+    url: "https://codestoreglobal.com",
     siteName: "CODESTORE GLOBAL",
     title: "CODESTORE GLOBAL - Multi-Tenant Developer Platform",
     description:
       "Host secure sub-workspaces, publish technical courses, trade SaaS components, and run an escrowed job marketplace.",
     images: [
       {
-        url: "https://codestore.global/og-default.jpg",
+        url: "https://codestoreglobal.com/og-default.jpg",
         width: 1200,
         height: 630,
         alt: "CODESTORE GLOBAL - Developer Platform",
@@ -68,17 +68,17 @@ export const metadata: Metadata = {
     title: "CODESTORE GLOBAL - Multi-Tenant Developer Platform",
     description:
       "Host secure sub-workspaces, publish technical courses, trade SaaS components, and run an escrowed job marketplace.",
-    images: ["https://codestore.global/og-default.jpg"],
+    images: ["https://codestoreglobal.com/og-default.jpg"],
     creator: "@codestoreglobal",
   },
   alternates: {
-    canonical: "https://codestore.global",
+    canonical: "https://codestoreglobal.com",
     languages: {
-      "en-US": "https://codestore.global/en",
-      "ar-SA": "https://codestore.global/ar",
-      "fr-FR": "https://codestore.global/fr",
-      "de-DE": "https://codestore.global/de",
-      "es-ES": "https://codestore.global/es",
+      "en-US": "https://codestoreglobal.com/en",
+      "ar-SA": "https://codestoreglobal.com/ar",
+      "fr-FR": "https://codestoreglobal.com/fr",
+      "de-DE": "https://codestoreglobal.com/de",
+      "es-ES": "https://codestoreglobal.com/es",
     },
   },
   robots: {

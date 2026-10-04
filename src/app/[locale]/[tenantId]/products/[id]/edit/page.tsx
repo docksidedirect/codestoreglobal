@@ -19,6 +19,34 @@ const CATEGORIES = [
   { value: "COURSE_BUNDLE", label: "Course Bundle" },
 ] as const;
 
+
+// Compress image to max 1280px JPEG before base64 (~5MB photo → ~150-400KB)
+function fileToDataUrl(file: File, maxDim = 1280, quality = 0.8): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        canvas.getContext("2d")!.drawImage(img, 0, 0, canvas.width, canvas.height);
+        URL.revokeObjectURL(url);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      } catch (err) {
+        URL.revokeObjectURL(url);
+        reject(err);
+      }
+    };
+    img.onerror = (err) => {
+      URL.revokeObjectURL(url);
+      reject(err);
+    };
+    img.src = url;
+  });
+}
+
 export default function EditProductPage({ params }: { params: { locale: string; tenantId: string; id: string } }) {
   const { locale, tenantId, id } = params;
   const router = useRouter();
@@ -41,14 +69,18 @@ export default function EditProductPage({ params }: { params: { locale: string; 
       .finally(() => setLoading(false));
   }, [id]);
 
-  function handleImageAdd(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleImageAdd(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
     if (!files) return;
-    Array.from(files).forEach((file) => {
-      const reader = new FileReader();
-      reader.onloadend = () => setForm((prev) => ({ ...prev, imageUrls: [...prev.imageUrls, reader.result as string] }));
-      reader.readAsDataURL(file);
-    });
+    setError("");
+    try {
+      const compressed = await Promise.all(
+        Array.from(files).map((f) => fileToDataUrl(f))
+      );
+      setForm((prev) => ({ ...prev, imageUrls: [...prev.imageUrls, ...compressed] }));
+    } catch {
+      setError("Failed to process one or more images. Please try different files.");
+    }
     e.target.value = "";
   }
 
@@ -58,7 +90,13 @@ export default function EditProductPage({ params }: { params: { locale: string; 
     e.preventDefault(); setError(""); setSaving(true);
     try {
       const res = await fetch(`/api/products/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
-      const data = await res.json();
+      const text = await res.text();
+      let data: any = {};
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error(`Server error ${res.status}: ${text.slice(0, 150) || res.statusText}`);
+      }
       if (!res.ok || !data.success) throw new Error(data.error || "Update failed");
       router.push(`/${locale}/${tenantId}/products/${id}`); router.refresh();
     } catch (err: any) { setError(err.message); } finally { setSaving(false); }
@@ -69,7 +107,13 @@ export default function EditProductPage({ params }: { params: { locale: string; 
     setDeleting(true);
     try {
       const res = await fetch(`/api/products/${id}`, { method: "DELETE" });
-      const data = await res.json();
+      const text = await res.text();
+      let data: any = {};
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error(`Server error ${res.status}: ${text.slice(0, 150) || res.statusText}`);
+      }
       if (!res.ok || !data.success) throw new Error(data.error || "Delete failed");
       router.push(`/${locale}/${tenantId}/marketplace`); router.refresh();
     } catch (err: any) { setError(err.message); } finally { setDeleting(false); }

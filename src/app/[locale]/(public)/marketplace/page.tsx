@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ChevronRight, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { generateOpenGraph } from "@/components/seo/open-graph";
+import { MARKETPLACE_CATEGORIES } from "@/lib/marketplace-categories";
 import { BreadcrumbSchema } from "@/components/seo/structured-data";
 
 export const revalidate = 60;
@@ -32,7 +33,7 @@ export async function generateMetadata({
   return generateOpenGraph({
     title: titles[locale] || titles.en,
     description: descriptions[locale] || descriptions.en,
-    url: `https://codestore.global/${locale}/marketplace`,
+    url: `https://codestoreglobal.com/${locale}/marketplace`,
     locale,
     type: "website",
   });
@@ -55,10 +56,10 @@ export default async function MarketplacePage({
   });
 
   const breadcrumbItems = [
-    { name: "Home", url: `https://codestore.global/${locale}` },
+    { name: "Home", url: `https://codestoreglobal.com/${locale}` },
     {
       name: "Marketplace",
-      url: `https://codestore.global/${locale}/marketplace`,
+      url: `https://codestoreglobal.com/${locale}/marketplace`,
     },
   ];
 
@@ -87,6 +88,19 @@ export default async function MarketplacePage({
             Buy and sell components, templates, API services, and developer
             tools from verified creators.
           </p>
+        </div>
+
+        {/* Category internal links for SEO */}
+        <div className="flex flex-wrap gap-2 mb-10">
+          {MARKETPLACE_CATEGORIES.map((c) => (
+            <Link
+              key={c.value}
+              href={`/${locale}/marketplace/category/${c.slug}`}
+              className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-sm text-slate-600 hover:border-violet-300 hover:text-violet-600 transition-colors dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-violet-400"
+            >
+              {(c.labels as any)[locale] || c.labels.en}
+            </Link>
+          ))}
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

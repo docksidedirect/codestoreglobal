@@ -3,9 +3,9 @@ export const revalidate = 0;
 
 import { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
+import { locales, MARKETPLACE_CATEGORIES } from "@/lib/marketplace-categories";
 
-const locales = ["en", "ar", "fr", "de", "es"];
-const baseUrl = "https://codestore.global";
+const baseUrl = "https://codestoreglobal.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [courses, products, jobs] = await Promise.all([
@@ -64,6 +64,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: job.updatedAt,
         changeFrequency: "daily",
         priority: 0.6,
+      });
+    }
+  }
+
+  // Marketplace category pages (programmatic SEO)
+  for (const category of MARKETPLACE_CATEGORIES) {
+    for (const locale of locales) {
+      sitemapEntries.push({
+        url: `${baseUrl}/${locale}/marketplace/category/${category.slug}`,
+        lastModified: new Date(),
+        changeFrequency: "daily",
+        priority: 0.8,
       });
     }
   }

@@ -1,0 +1,50 @@
+CODESTORE GLOBAL — ENHANCED BUILD (2026-10-04)
+==============================================
+
+WHAT'S NEW IN THIS BUILD
+------------------------
+1. SEO: Product pages with Product + FAQPage JSON-LD, real OG images, related products
+2. SEO: Programmatic category pages  /[locale]/marketplace/category/[slug]  (7 categories x 5 locales)
+3. SEO: Public jobs board  /[locale]/jobs  +  /[locale]/jobs/[slug]  with JobPosting schema
+4. SEO: sitemap.xml now includes all category pages; all sitemap URLs resolve (jobs pages exist now)
+5. MONETIZATION: Featured job postings ($19 / 7 days) — badge, top sorting, expiry countdown
+6. MONETIZATION: Platform commission tracking on jobs (10% of max budget, UNPAID/INVOICED/PAID/WAIVED)
+7. FIX: Product image upload compression (no more 413 "Request Entity Too Large")
+8. FIX: Safe API error handling (no more "Unexpected token 'R'... is not valid JSON")
+
+LOCAL REBUILD (Windows PowerShell)
+----------------------------------
+cd codestoreglobal
+npm install
+npx prisma generate
+npx prisma migrate deploy
+npx prisma db seed          (optional - adds a featured job sample)
+npm run build
+npm run start
+
+DEPLOY (Coolify / Vercel)
+-------------------------
+1. Push this folder to your repo (or upload to Coolify via Git)
+2. Coolify: redeploy the app -> build runs automatically (npm install + prisma generate in build)
+3. Run migrations ONCE on the server:
+     npx prisma migrate deploy
+   (or apply prisma/migrations/20261004000000_jobs_monetization/migration.sql manually in MySQL)
+4. Vercel (if frontend is there): env vars must be set in Vercel dashboard, then REDEPLOY
+
+VERIFY AFTER DEPLOY
+-------------------
+1. https://codestoreglobal.com/en/marketplace/category/templates        -> category page with copy
+2. https://codestoreglobal.com/en/jobs                                 -> public jobs board
+3. https://codestoreglobal.com/sitemap.xml                             -> includes /marketplace/category/... URLs
+4. Create a job with "Feature this job" checked -> amber Featured badge on tenant + public boards
+5. Upload a 5MB product image -> succeeds (compressed client-side)
+6. Submit sitemap.xml in Google Search Console
+
+NOTES
+-----
+- Featured fee ($19) is recorded on the job row (featuredFee) for manual PayPal collection.
+  Automated billing hook: charge on POST /api/tenant/[tenantId]/jobs when featured=true.
+- Commission (10% of budgetMax) is stored per job (commissionAmount + commissionStatus).
+  Mark jobs PAID via admin script or future admin UI.
+- product slugs are unique per tenant, not globally; the public detail page uses findFirst.
+  Fine for launch - enforce global slug uniqueness later if SEO duplicates appear.

@@ -47,7 +47,7 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: "https://codestore.global/sitemap.xml",
-    host: "https://codestore.global",
+    sitemap: "https://codestoreglobal.com/sitemap.xml",
+    host: "https://codestoreglobal.com",
   };
 }

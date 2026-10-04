@@ -102,6 +102,17 @@ export function PublicFooter() {
           </div>
         </div>
       </div>
+      <div className="text-center py-4 bg-[#0a0a0a] border-t border-[#1a1a1a]">
+        <a
+          href="https://wanis.online"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs text-gray-500 hover:text-[#A8FF00] transition-colors"
+        >
+          Powered by <span className="text-[#A8FF00] font-semibold">WANIS</span>{" "}
+          Business Software
+        </a>
+      </div>
     </footer>
   );
 }

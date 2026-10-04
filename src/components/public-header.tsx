@@ -11,7 +11,6 @@ import {
   Globe2,
   Menu,
   X,
-  Zap,
   ArrowUpRight,
 } from "lucide-react";
 
@@ -69,8 +68,12 @@ export function PublicHeader() {
             className="flex shrink-0 items-center gap-2.5"
             onClick={() => setMobileOpen(false)}
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-cyan-500 text-white shadow-lg shadow-violet-500/20">
-              <Zap className="h-5 w-5" />
+            <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl bg-white shadow-lg shadow-cyan-500/20">
+              <img
+                src="/favicon.png"
+                alt="CODESTORE GLOBAL"
+                className="h-full w-full object-cover"
+              />
             </span>
             <span className="hidden text-[15px] font-bold tracking-tight text-slate-950 min-[420px]:inline dark:text-white">
               CODESTORE <span className="text-violet-600">GLOBAL</span>

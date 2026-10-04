@@ -1,68 +1,34 @@
 import { prisma } from "@/lib/prisma";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import {
-  ArrowLeft,
-  Briefcase,
-  MapPin,
-  ChevronRight,
-  Flame,
-} from "lucide-react";
+import { ArrowLeft, Briefcase, MapPin, ChevronRight, Flame } from "lucide-react";
 import Link from "next/link";
 import { generateOpenGraph } from "@/components/seo/open-graph";
-import {
-  BreadcrumbSchema,
-  StructuredData,
-} from "@/components/seo/structured-data";
+import { BreadcrumbSchema, StructuredData } from "@/components/seo/structured-data";
 
 export const revalidate = 60;
 
 const locales = ["en", "ar", "fr", "de", "es"];
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export async function generateMetadata({ params }: { params: { locale: string } }) {
   const { locale } = params;
   const t: Record<string, { title: string; desc: string }> = {
-    en: {
-      title: "Freelance Developer Jobs — Remote & Contract | CODESTORE GLOBAL",
-      desc: "Browse open freelance jobs for developers: remote contracts, fixed-budget projects, and full-time roles from verified companies. Apply directly and get paid through secure escrow.",
-    },
-    ar: {
-      title: "وظائف مطورين مستقلين — عن بعد وتعاقدية | CODESTORE GLOBAL",
-      desc: "تصفح وظائف المطورين المستقلين المفتوحة: عقود عن بعد ومشاريع بميزانية ثابتة ووظائف بدوام كامل من شركات موثقة.",
-    },
-    fr: {
-      title:
-        "Emplois Freelance Développeurs — À distance & Contrat | CODESTORE GLOBAL",
-      desc: "Parcourez les offres freelance pour développeurs : contrats à distance, projets au forfait et postes à temps plein d'entreprises vérifiées.",
-    },
-    de: {
-      title: "Freelance-Entwickler-Jobs — Remote & Vertrag | CODESTORE GLOBAL",
-      desc: "Durchsuchen Sie offene Freelance-Jobs für Entwickler: Remote-Verträge, Festpreisprojekte und Vollzeitstellen von verifizierten Unternehmen.",
-    },
-    es: {
-      title:
-        "Trabajos Freelance para Desarrolladores — Remoto y Contrato | CODESTORE GLOBAL",
-      desc: "Explora empleos freelance para desarrolladores: contratos remotos, proyectos de precio fijo y puestos de tiempo completo de empresas verificadas.",
-    },
+    en: { title: "Freelance Developer Jobs — Remote & Contract | CODESTORE GLOBAL", desc: "Browse open freelance jobs for developers: remote contracts, fixed-budget projects, and full-time roles from verified companies. Apply directly and get paid through secure escrow." },
+    ar: { title: "وظائف مطورين مستقلين — عن بعد وتعاقدية | CODESTORE GLOBAL", desc: "تصفح وظائف المطورين المستقلين المفتوحة: عقود عن بعد ومشاريع بميزانية ثابتة ووظائف بدوام كامل من شركات موثقة." },
+    fr: { title: "Emplois Freelance Développeurs — À distance & Contrat | CODESTORE GLOBAL", desc: "Parcourez les offres freelance pour développeurs : contrats à distance, projets au forfait et postes à temps plein d'entreprises vérifiées." },
+    de: { title: "Freelance-Entwickler-Jobs — Remote & Vertrag | CODESTORE GLOBAL", desc: "Durchsuchen Sie offene Freelance-Jobs für Entwickler: Remote-Verträge, Festpreisprojekte und Vollzeitstellen von verifizierten Unternehmen." },
+    es: { title: "Trabajos Freelance para Desarrolladores — Remoto y Contrato | CODESTORE GLOBAL", desc: "Explora empleos freelance para desarrolladores: contratos remotos, proyectos de precio fijo y puestos de tiempo completo de empresas verificadas." },
   };
   const m = t[locale] || t.en;
   return generateOpenGraph({
     title: m.title,
     description: m.desc,
-    url: `https://codestoreglobal.com/${locale}/jobs`,
+    url: `https://codestore.global/${locale}/jobs`,
     locale,
   });
 }
 
-export default async function PublicJobsPage({
-  params,
-}: {
-  params: { locale: string };
-}) {
+export default async function PublicJobsPage({ params }: { params: { locale: string } }) {
   const { locale } = params;
 
   const now = new Date();
@@ -76,18 +42,13 @@ export default async function PublicJobsPage({
     },
   });
 
-  const activeFeatured = jobs.filter(
-    (j) => j.featured && (!j.featuredUntil || j.featuredUntil > now),
-  );
+  const activeFeatured = jobs.filter((j) => j.featured && (!j.featuredUntil || j.featuredUntil > now));
   const rest = jobs.filter((j) => !activeFeatured.includes(j));
   const sorted = [...activeFeatured, ...rest];
 
   const titles: Record<string, string> = {
-    en: "Freelance Developer Jobs",
-    ar: "وظائف المطورين المستقلين",
-    fr: "Emplois Freelance Développeurs",
-    de: "Freelance-Jobs für Entwickler",
-    es: "Trabajos Freelance",
+    en: "Freelance Developer Jobs", ar: "وظائف المطورين المستقلين",
+    fr: "Emplois Freelance Développeurs", de: "Freelance-Jobs für Entwickler", es: "Trabajos Freelance",
   };
   const subtitles: Record<string, string> = {
     en: "Remote contracts, fixed-budget projects, and full-time roles from verified companies. Payments protected by escrow.",
@@ -98,8 +59,8 @@ export default async function PublicJobsPage({
   };
 
   const breadcrumbItems = [
-    { name: "Home", url: `https://codestoreglobal.com/${locale}` },
-    { name: "Jobs", url: `https://codestoreglobal.com/${locale}/jobs` },
+    { name: "Home", url: `https://codestore.global/${locale}` },
+    { name: "Jobs", url: `https://codestore.global/${locale}/jobs` },
   ];
 
   return (
@@ -110,7 +71,7 @@ export default async function PublicJobsPage({
         data={{
           name: titles[locale] || titles.en,
           description: subtitles[locale] || subtitles.en,
-          url: `https://codestoreglobal.com/${locale}/jobs`,
+          url: `https://codestore.global/${locale}/jobs`,
         }}
       />
 
@@ -124,8 +85,7 @@ export default async function PublicJobsPage({
 
         <div className="mb-10">
           <Badge variant="outline" className="mb-3 text-xs font-medium">
-            {sorted.length}{" "}
-            {sorted.length === 1 ? "open position" : "open positions"}
+            {sorted.length} {sorted.length === 1 ? "open position" : "open positions"}
           </Badge>
           <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-3">
             {titles[locale] || titles.en}
@@ -143,11 +103,8 @@ export default async function PublicJobsPage({
         ) : (
           <div className="space-y-4">
             {sorted.map((job) => {
-              const isFeatured =
-                job.featured && (!job.featuredUntil || job.featuredUntil > now);
-              const skills = (
-                Array.isArray(job.skillsRequired) ? job.skillsRequired : []
-              ).filter((s): s is string => typeof s === "string");
+              const isFeatured = job.featured && (!job.featuredUntil || job.featuredUntil > now);
+              const skills = (Array.isArray(job.skillsRequired) ? job.skillsRequired : []).filter((s): s is string => typeof s === "string");
 
               return (
                 <Link
@@ -155,13 +112,11 @@ export default async function PublicJobsPage({
                   href={`/${locale}/jobs/${job.slug}`}
                   className="group block"
                 >
-                  <div
-                    className={`rounded-xl border bg-white p-5 shadow-sm transition-all hover:shadow-lg hover:-translate-y-0.5 dark:bg-slate-900 ${
-                      isFeatured
-                        ? "border-amber-300 dark:border-amber-700 ring-1 ring-amber-200 dark:ring-amber-900"
-                        : "border-slate-200 dark:border-slate-800"
-                    }`}
-                  >
+                  <div className={`rounded-xl border bg-white p-5 shadow-sm transition-all hover:shadow-lg hover:-translate-y-0.5 dark:bg-slate-900 ${
+                    isFeatured
+                      ? "border-amber-300 dark:border-amber-700 ring-1 ring-amber-200 dark:ring-amber-900"
+                      : "border-slate-200 dark:border-slate-800"
+                  }`}>
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -170,14 +125,8 @@ export default async function PublicJobsPage({
                               <Flame className="h-3 w-3" /> Featured
                             </Badge>
                           )}
-                          <Badge variant="secondary" className="text-xs">
-                            {job.status}
-                          </Badge>
-                          {job.isRemote && (
-                            <Badge variant="outline" className="text-xs">
-                              Remote
-                            </Badge>
-                          )}
+                          <Badge variant="secondary" className="text-xs">{job.status}</Badge>
+                          {job.isRemote && <Badge variant="outline" className="text-xs">Remote</Badge>}
                         </div>
                         <h2 className="text-lg font-semibold text-slate-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors line-clamp-1">
                           {job.title}
@@ -187,8 +136,7 @@ export default async function PublicJobsPage({
                         </p>
                         <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
                           <span className="flex items-center gap-1">
-                            <MapPin className="h-3.5 w-3.5" />{" "}
-                            {job.location || "Remote"}
+                            <MapPin className="h-3.5 w-3.5" /> {job.location || "Remote"}
                           </span>
                           <span>{job.tenant.name}</span>
                           <span>{formatDate(job.createdAt)}</span>
@@ -199,22 +147,14 @@ export default async function PublicJobsPage({
                         {skills.length > 0 && (
                           <div className="mt-3 flex flex-wrap gap-1.5">
                             {skills.slice(0, 6).map((s) => (
-                              <Badge
-                                key={s}
-                                variant="outline"
-                                className="text-xs"
-                              >
-                                {s}
-                              </Badge>
+                              <Badge key={s} variant="outline" className="text-xs">{s}</Badge>
                             ))}
                           </div>
                         )}
                       </div>
                       <div className="text-right shrink-0">
                         <p className="text-lg font-bold text-slate-900 dark:text-white">
-                          {job.budgetMin
-                            ? `${formatCurrency(Number(job.budgetMin))}${job.budgetMax ? ` – ${formatCurrency(Number(job.budgetMax))}` : "+"}`
-                            : "Negotiable"}
+                          {job.budgetMin ? `${formatCurrency(Number(job.budgetMin))}${job.budgetMax ? ` – ${formatCurrency(Number(job.budgetMax))}` : "+"}` : "Negotiable"}
                         </p>
                         <span className="mt-2 inline-flex items-center gap-0.5 text-sm font-medium text-violet-600 dark:text-violet-400">
                           View <ChevronRight className="h-4 w-4" />

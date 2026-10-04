@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,8 @@ import {
   Menu,
   X,
   LayoutDashboard,
+  ShieldCheck,
+  ArrowLeft,
 } from "lucide-react";
 import { getInitials } from "@/lib/utils";
 import Link from "next/link";
@@ -31,6 +33,21 @@ const localeFlags: Record<string, string> = {
   de: "🇩🇪",
   es: "🇪🇸",
 };
+
+function BackButton() {
+  const router = useRouter();
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      aria-label="Go back"
+      onClick={() => router.back()}
+      className="shrink-0 text-muted-foreground hover:text-foreground"
+    >
+      <ArrowLeft className="h-5 w-5" />
+    </Button>
+  );
+}
 
 export function TenantHeader({
   tenantId,
@@ -57,6 +74,9 @@ export function TenantHeader({
   return (
     <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-16 items-center justify-between gap-2 px-4 lg:px-8">
+        {/* Back arrow — visible on every workspace page */}
+        <BackButton />
+
         {/* Logo — shrink-0 so it never wraps or squeezes the controls */}
         <Link
           href={`/${locale}/${tenantId}/dashboard`}
@@ -87,6 +107,14 @@ export function TenantHeader({
             </select>
             <Globe className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
           </div>
+
+          {user?.role === "SUPERADMIN" && (
+            <Button variant="outline" size="sm" asChild className="gap-1.5 border-violet-300 text-violet-700 hover:bg-violet-50 dark:border-violet-700 dark:text-violet-300 dark:hover:bg-violet-950">
+              <Link href={`/${locale}/admin`}>
+                <ShieldCheck className="h-4 w-4" /> Admin
+              </Link>
+            </Button>
+          )}
 
           <Button variant="ghost" size="icon" className="relative">
             <Bell className="h-5 w-5" />

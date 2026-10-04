@@ -33,9 +33,9 @@ DEPLOY (Coolify / Vercel)
 
 VERIFY AFTER DEPLOY
 -------------------
-1. https://codestoreglobal.com/en/marketplace/category/templates        -> category page with copy
-2. https://codestoreglobal.com/en/jobs                                 -> public jobs board
-3. https://codestoreglobal.com/sitemap.xml                             -> includes /marketplace/category/... URLs
+1. https://codestore.global/en/marketplace/category/templates        -> category page with copy
+2. https://codestore.global/en/jobs                                 -> public jobs board
+3. https://codestore.global/sitemap.xml                             -> includes /marketplace/category/... URLs
 4. Create a job with "Feature this job" checked -> amber Featured badge on tenant + public boards
 5. Upload a 5MB product image -> succeeds (compressed client-side)
 6. Submit sitemap.xml in Google Search Console

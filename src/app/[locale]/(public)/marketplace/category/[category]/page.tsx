@@ -5,20 +5,15 @@ import { ArrowLeft, ShoppingBag, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { generateOpenGraph } from "@/components/seo/open-graph";
-import {
-  BreadcrumbSchema,
-  StructuredData,
-} from "@/components/seo/structured-data";
-import {
-  getCategoryBySlug,
-  MARKETPLACE_CATEGORIES,
-} from "@/lib/marketplace-categories";
+import { BreadcrumbSchema, StructuredData } from "@/components/seo/structured-data";
+import { getCategoryBySlug, MARKETPLACE_CATEGORIES } from "@/lib/marketplace-categories";
 
 export const revalidate = 60;
 
 interface Params {
   params: { locale: string; category: string };
 }
+
 
 export async function generateMetadata({ params }: Params) {
   const { locale, category: categorySlug } = params;
@@ -34,11 +29,7 @@ export async function generateMetadata({ params }: Params) {
     es: "Mercado CODESTORE GLOBAL",
   };
   const action: Record<string, string> = {
-    en: "Buy",
-    ar: "اشترِ",
-    fr: "Achetez",
-    de: "Kaufen",
-    es: "Compra",
+    en: "Buy", ar: "اشترِ", fr: "Achetez", de: "Kaufen", es: "Compra",
   };
 
   return generateOpenGraph({
@@ -72,14 +63,8 @@ export default async function CategoryPage({ params }: Params) {
 
   const breadcrumbItems = [
     { name: "Home", url: `https://codestore.global/${locale}` },
-    {
-      name: "Marketplace",
-      url: `https://codestore.global/${locale}/marketplace`,
-    },
-    {
-      name: label,
-      url: `https://codestore.global/${locale}/marketplace/category/${categorySlug}`,
-    },
+    { name: "Marketplace", url: `https://codestore.global/${locale}/marketplace` },
+    { name: label, url: `https://codestore.global/${locale}/marketplace/category/${categorySlug}` },
   ];
 
   return (
@@ -91,11 +76,7 @@ export default async function CategoryPage({ params }: Params) {
           name: label,
           description: intro,
           url: `https://codestore.global/${locale}/marketplace/category/${categorySlug}`,
-          isPartOf: {
-            "@type": "WebSite",
-            name: "CODESTORE GLOBAL",
-            url: "https://codestore.global",
-          },
+          isPartOf: { "@type": "WebSite", name: "CODESTORE GLOBAL", url: "https://codestore.global" },
         }}
       />
       <StructuredData
@@ -132,26 +113,19 @@ export default async function CategoryPage({ params }: Params) {
         </Link>
 
         <div className="mb-10 max-w-3xl">
-          <Badge variant="outline" className="mb-3 text-xs font-medium">
-            {totalCount} {totalCount === 1 ? "product" : "products"}
-          </Badge>
+          <Badge variant="outline" className="mb-3 text-xs font-medium">{totalCount} {totalCount === 1 ? "product" : "products"}</Badge>
           <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-4">
             {label}
           </h1>
           {/* Unique localized copy — the core of programmatic SEO */}
-          <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-            {intro}
-          </p>
+          <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">{intro}</p>
         </div>
 
         {products.length === 0 ? (
           <div className="text-center py-20 text-slate-500 dark:text-slate-400">
             <ShoppingBag className="h-12 w-12 mx-auto mb-4 text-slate-300 dark:text-slate-700" />
             <p>No products in this category yet. Check back soon.</p>
-            <Link
-              href={`/${locale}/marketplace`}
-              className="mt-4 inline-block text-violet-600 dark:text-violet-400 hover:underline"
-            >
+            <Link href={`/${locale}/marketplace`} className="mt-4 inline-block text-violet-600 dark:text-violet-400 hover:underline">
               Browse all products
             </Link>
           </div>
@@ -160,9 +134,7 @@ export default async function CategoryPage({ params }: Params) {
             {products.map((product) => {
               const rawImages = product.imageUrls as string[] | null;
               const productImgSrc =
-                Array.isArray(rawImages) && rawImages.length > 0
-                  ? rawImages[0]
-                  : null;
+                Array.isArray(rawImages) && rawImages.length > 0 ? rawImages[0] : null;
 
               return (
                 <Link
@@ -188,9 +160,7 @@ export default async function CategoryPage({ params }: Params) {
                           {formatCurrency(Number(product.price))}
                         </span>
                         {product.salesCount > 0 && (
-                          <span className="text-xs text-slate-500 dark:text-slate-400">
-                            {product.salesCount} sales
-                          </span>
+                          <span className="text-xs text-slate-500 dark:text-slate-400">{product.salesCount} sales</span>
                         )}
                       </div>
                       <h2 className="text-base font-semibold text-slate-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors mb-2">
@@ -200,10 +170,7 @@ export default async function CategoryPage({ params }: Params) {
                         {product.shortDesc || product.description}
                       </p>
                       <div className="mt-auto flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                        <span>
-                          by {product.seller?.firstName || "Seller"}{" "}
-                          {product.seller?.lastName || ""}
-                        </span>
+                        <span>by {product.seller?.firstName || "Seller"} {product.seller?.lastName || ""}</span>
                         <span className="flex items-center gap-0.5 font-medium text-violet-600 dark:text-violet-400 opacity-0 group-hover:opacity-100 transition-opacity">
                           View Details <ChevronRight className="h-3 w-3" />
                         </span>

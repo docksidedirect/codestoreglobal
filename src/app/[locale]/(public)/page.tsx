@@ -166,7 +166,7 @@ export default function LandingPage({
         : `/${locale}/login`;
 
   const breadcrumbItems = [
-    { name: "Home", url: `https://codestoreglobal.com/${locale}` },
+    { name: "Home", url: `https://codestore.global/${locale}` },
   ];
 
   return (

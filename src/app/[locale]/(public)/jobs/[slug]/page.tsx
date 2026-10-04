@@ -2,21 +2,11 @@ import { prisma } from "@/lib/prisma";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  ArrowLeft,
-  MapPin,
-  Briefcase,
-  Calendar,
-  Users,
-  Sparkles,
-} from "lucide-react";
+import { ArrowLeft, MapPin, Briefcase, Calendar, Users, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { generateOpenGraph } from "@/components/seo/open-graph";
-import {
-  BreadcrumbSchema,
-  StructuredData,
-} from "@/components/seo/structured-data";
+import { BreadcrumbSchema, StructuredData } from "@/components/seo/structured-data";
 
 export const revalidate = 60;
 
@@ -28,22 +18,12 @@ export async function generateMetadata({ params }: Params) {
   const { locale, slug } = params;
   const job = await prisma.jobListing.findFirst({
     where: { slug },
-    select: {
-      title: true,
-      description: true,
-      budgetMin: true,
-      budgetMax: true,
-      location: true,
-      isRemote: true,
-      skillsRequired: true,
-    },
+    select: { title: true, description: true, budgetMin: true, budgetMax: true, location: true, isRemote: true, skillsRequired: true },
   });
 
   if (!job) return {};
 
-  const skills = (Array.isArray(job.skillsRequired) ? job.skillsRequired : [])
-    .slice(0, 5)
-    .join(", ");
+  const skills = (Array.isArray(job.skillsRequired) ? job.skillsRequired : []).slice(0, 5).join(", ");
   const title = `${job.title} — ${job.isRemote ? "Remote" : job.location || "Remote"} | CODESTORE GLOBAL Jobs`;
   const description = `${job.description.slice(0, 110)}${skills ? ` Skills: ${skills}.` : ""} ${job.budgetMin ? `Budget: ${formatCurrency(Number(job.budgetMin))}${job.budgetMax ? `–${formatCurrency(Number(job.budgetMax))}` : "+"}.` : ""}`;
 
@@ -68,14 +48,9 @@ export default async function PublicJobDetailPage({ params }: Params) {
 
   if (!job) notFound();
 
-  const isFeatured =
-    job.featured && (!job.featuredUntil || job.featuredUntil > new Date());
-  const skills = (
-    Array.isArray(job.skillsRequired) ? job.skillsRequired : []
-  ).filter((s): s is string => typeof s === "string");
-  const validThrough = (
-    job.deadline || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-  ).toISOString();
+  const isFeatured = job.featured && (!job.featuredUntil || job.featuredUntil > new Date());
+  const skills = (Array.isArray(job.skillsRequired) ? job.skillsRequired : []).filter((s): s is string => typeof s === "string");
+  const validThrough = (job.deadline || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)).toISOString();
 
   const breadcrumbItems = [
     { name: "Home", url: `https://codestore.global/${locale}` },
@@ -92,11 +67,7 @@ export default async function PublicJobDetailPage({ params }: Params) {
         data={{
           title: job.title,
           description: `${job.description}\n\nRequirements: ${job.requirements || "See description."}`,
-          identifier: {
-            "@type": "PropertyValue",
-            name: "CODESTORE GLOBAL",
-            value: job.id,
-          },
+          identifier: { "@type": "PropertyValue", name: "CODESTORE GLOBAL", value: job.id },
           datePosted: job.createdAt.toISOString(),
           validThrough,
           hiringOrganization: {
@@ -110,19 +81,13 @@ export default async function PublicJobDetailPage({ params }: Params) {
             ? {
                 applicantLocationRequirements: {
                   "@type": "Country",
-                  name:
-                    job.location && job.location !== "Remote"
-                      ? job.location
-                      : "Worldwide",
+                  name: job.location && job.location !== "Remote" ? job.location : "Worldwide",
                 },
               }
             : {
                 jobLocation: {
                   "@type": "Place",
-                  address: {
-                    "@type": "PostalAddress",
-                    addressLocality: job.location || "Not specified",
-                  },
+                  address: { "@type": "PostalAddress", addressLocality: job.location || "Not specified" },
                 },
               }),
           baseSalary: job.budgetMin
@@ -166,55 +131,31 @@ export default async function PublicJobDetailPage({ params }: Params) {
           </h1>
 
           <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-500 dark:text-slate-400 mb-8">
-            <span className="flex items-center gap-1.5">
-              <Briefcase className="h-4 w-4" /> {job.tenant.name}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <MapPin className="h-4 w-4" />{" "}
-              {job.isRemote
-                ? `Remote${job.location && job.location !== "Remote" ? ` (${job.location})` : ""}`
-                : job.location}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Calendar className="h-4 w-4" /> Posted{" "}
-              {formatDate(job.createdAt)}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Users className="h-4 w-4" /> {job._count.applications} applicants
-            </span>
+            <span className="flex items-center gap-1.5"><Briefcase className="h-4 w-4" /> {job.tenant.name}</span>
+            <span className="flex items-center gap-1.5"><MapPin className="h-4 w-4" /> {job.isRemote ? `Remote${job.location && job.location !== "Remote" ? ` (${job.location})` : ""}` : job.location}</span>
+            <span className="flex items-center gap-1.5"><Calendar className="h-4 w-4" /> Posted {formatDate(job.createdAt)}</span>
+            <span className="flex items-center gap-1.5"><Users className="h-4 w-4" /> {job._count.applications} applicants</span>
           </div>
 
           <div className="prose-sm space-y-8">
             <section>
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                About this job
-              </h2>
-              <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
-                {job.description}
-              </p>
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">About this job</h2>
+              <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">{job.description}</p>
             </section>
 
             {job.requirements && (
               <section>
-                <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                  Requirements
-                </h2>
-                <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
-                  {job.requirements}
-                </p>
+                <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Requirements</h2>
+                <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">{job.requirements}</p>
               </section>
             )}
 
             {skills.length > 0 && (
               <section>
-                <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">
-                  Skills
-                </h2>
+                <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">Skills</h2>
                 <div className="flex flex-wrap gap-2">
                   {skills.map((s) => (
-                    <Badge key={s} variant="outline">
-                      {s}
-                    </Badge>
+                    <Badge key={s} variant="outline">{s}</Badge>
                   ))}
                 </div>
               </section>
@@ -224,25 +165,17 @@ export default async function PublicJobDetailPage({ params }: Params) {
           <div className="mt-8 rounded-xl bg-violet-50 dark:bg-violet-950/40 p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <p className="text-2xl font-bold text-slate-900 dark:text-white">
-                {job.budgetMin
-                  ? `${formatCurrency(Number(job.budgetMin))}${job.budgetMax ? ` – ${formatCurrency(Number(job.budgetMax))}` : "+"}`
-                  : "Negotiable"}
-                <span className="text-sm font-normal text-slate-500 dark:text-slate-400">
-                  {" "}
-                  {job.budgetMin ? "budget" : ""}
-                </span>
+                {job.budgetMin ? `${formatCurrency(Number(job.budgetMin))}${job.budgetMax ? ` – ${formatCurrency(Number(job.budgetMax))}` : "+"}` : "Negotiable"}
+                <span className="text-sm font-normal text-slate-500 dark:text-slate-400"> {job.budgetMin ? "budget" : ""}</span>
               </p>
               {job.deadline && (
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  Apply before {formatDate(job.deadline)}
-                </p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Apply before {formatDate(job.deadline)}</p>
               )}
             </div>
-            <Button
-              asChild
-              className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white"
-            >
-              <Link href={`/${locale}/${job.tenant.slug}/jobs`}>Apply Now</Link>
+            <Button asChild className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white">
+              <Link href={`/${locale}/${job.tenant.slug}/jobs`}>
+                Apply Now
+              </Link>
             </Button>
           </div>
         </div>

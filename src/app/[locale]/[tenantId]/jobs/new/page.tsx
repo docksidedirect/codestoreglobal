@@ -48,10 +48,7 @@ export default function NewJobPage({
           location,
           isRemote,
           deadline: deadline || null,
-          skills: skills
-            .split(",")
-            .map((s) => s.trim())
-            .filter(Boolean),
+          skills: skills.split(",").map((s) => s.trim()).filter(Boolean),
           featured,
         }),
       });
@@ -61,9 +58,7 @@ export default function NewJobPage({
       try {
         data = JSON.parse(text);
       } catch {
-        throw new Error(
-          `Server error ${res.status}: ${text.slice(0, 150) || res.statusText}`,
-        );
+        throw new Error(`Server error ${res.status}: ${text.slice(0, 150) || res.statusText}`);
       }
 
       if (!res.ok || !data.success) {
@@ -189,14 +184,10 @@ export default function NewJobPage({
               onClick={() => setFeatured(!featured)}
             >
               <div className="flex items-start gap-3">
-                <Flame
-                  className={`h-5 w-5 mt-0.5 ${featured ? "text-amber-500" : "text-slate-400"}`}
-                />
+                <Flame className={`h-5 w-5 mt-0.5 ${featured ? "text-amber-500" : "text-slate-400"}`} />
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
-                    <p className="font-medium text-sm">
-                      Feature this job — $19 / 7 days
-                    </p>
+                    <p className="font-medium text-sm">Feature this job — $19 / 7 days</p>
                     <input
                       type="checkbox"
                       checked={featured}
@@ -206,9 +197,8 @@ export default function NewJobPage({
                     />
                   </div>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                    Pinned to the top of the jobs board, highlighted with a
-                    Featured badge, and shown first on the public jobs page
-                    (codestoreglobal.com/jobs) for 7 days.
+                    Pinned to the top of the jobs board, highlighted with a Featured badge, and
+                    shown first on the public jobs page (codestore.global/jobs) for 7 days.
                   </p>
                 </div>
               </div>
@@ -216,9 +206,8 @@ export default function NewJobPage({
 
             {featured && (
               <div className="text-xs rounded-lg bg-slate-100 dark:bg-slate-800 p-3 text-slate-600 dark:text-slate-400">
-                Note: featured placement is recorded instantly. Collect the $19
-                fee via your PayPal account — automated billing can be enabled
-                in a future update.
+                Note: featured placement is recorded instantly. Collect the $19 fee via your
+                PayPal account — automated billing can be enabled in a future update.
               </div>
             )}
 
@@ -226,11 +215,7 @@ export default function NewJobPage({
               <div className="text-sm text-red-500 font-medium">{error}</div>
             )}
             <Button type="submit" disabled={loading} className="w-full">
-              {loading
-                ? "Posting..."
-                : featured
-                  ? "Post Job — $19 Featured"
-                  : "Post Job (Free)"}
+              {loading ? "Posting..." : featured ? "Post Job — $19 Featured" : "Post Job (Free)"}
             </Button>
           </form>
         </CardContent>

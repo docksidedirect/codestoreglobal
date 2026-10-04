@@ -33,7 +33,7 @@ export async function generateMetadata({
   return generateOpenGraph({
     title: titles[locale] || titles.en,
     description: descriptions[locale] || descriptions.en,
-    url: `https://codestoreglobal.com/${locale}/marketplace`,
+    url: `https://codestore.global/${locale}/marketplace`,
     locale,
     type: "website",
   });
@@ -56,10 +56,10 @@ export default async function MarketplacePage({
   });
 
   const breadcrumbItems = [
-    { name: "Home", url: `https://codestoreglobal.com/${locale}` },
+    { name: "Home", url: `https://codestore.global/${locale}` },
     {
       name: "Marketplace",
-      url: `https://codestoreglobal.com/${locale}/marketplace`,
+      url: `https://codestore.global/${locale}/marketplace`,
     },
   ];
 

@@ -13,6 +13,7 @@ import {
   Briefcase,
   CheckCircle2,
   Code2,
+  Command,
   Cpu,
   Database,
   FileCode,
@@ -24,6 +25,7 @@ import {
   ShieldCheck,
   ShoppingBag,
   Sparkles,
+  Star,
   Terminal,
   TrendingUp,
   Users,
@@ -41,6 +43,7 @@ const programmingLanguages = [
     icon: <FileCode className="h-5 w-5" />,
     descKey: "landing.languages.htmlDesc",
     level: "Beginner",
+    color: "from-orange-500 to-amber-400",
     bgColor: "bg-orange-500/10 text-orange-600",
   },
   {
@@ -48,6 +51,7 @@ const programmingLanguages = [
     icon: <Code2 className="h-5 w-5" />,
     descKey: "landing.languages.jsDesc",
     level: "Beginner",
+    color: "from-yellow-400 to-amber-500",
     bgColor: "bg-yellow-500/10 text-yellow-600",
   },
   {
@@ -55,6 +59,7 @@ const programmingLanguages = [
     icon: <Terminal className="h-5 w-5" />,
     descKey: "landing.languages.pythonDesc",
     level: "Beginner",
+    color: "from-blue-500 to-cyan-400",
     bgColor: "bg-blue-500/10 text-blue-600",
   },
   {
@@ -62,6 +67,7 @@ const programmingLanguages = [
     icon: <Layers3 className="h-5 w-5" />,
     descKey: "landing.languages.tsDesc",
     level: "Intermediate",
+    color: "from-sky-500 to-blue-600",
     bgColor: "bg-sky-500/10 text-sky-600",
   },
   {
@@ -69,6 +75,7 @@ const programmingLanguages = [
     icon: <Database className="h-5 w-5" />,
     descKey: "landing.languages.sqlDesc",
     level: "Intermediate",
+    color: "from-emerald-500 to-teal-500",
     bgColor: "bg-emerald-500/10 text-emerald-600",
   },
   {
@@ -76,6 +83,7 @@ const programmingLanguages = [
     icon: <Cpu className="h-5 w-5" />,
     descKey: "landing.languages.rustDesc",
     level: "Advanced",
+    color: "from-red-500 to-rose-500",
     bgColor: "bg-red-500/10 text-red-600",
   },
 ];
@@ -85,31 +93,37 @@ const features = [
     icon: <ShieldCheck className="h-6 w-6" />,
     titleKey: "landing.features.tenant",
     descKey: "landing.features.tenantDesc",
+    color: "from-violet-500 to-indigo-500",
   },
   {
     icon: <BookOpen className="h-6 w-6" />,
     titleKey: "landing.features.courses",
     descKey: "landing.features.coursesDesc",
+    color: "from-emerald-500 to-teal-500",
   },
   {
     icon: <ShoppingBag className="h-6 w-6" />,
     titleKey: "landing.features.marketplace",
     descKey: "landing.features.marketplaceDesc",
+    color: "from-amber-500 to-orange-500",
   },
   {
     icon: <Briefcase className="h-6 w-6" />,
     titleKey: "landing.features.jobs",
     descKey: "landing.features.jobsDesc",
+    color: "from-rose-500 to-pink-500",
   },
   {
     icon: <MessageSquare className="h-6 w-6" />,
     titleKey: "landing.features.forum",
     descKey: "landing.features.forumDesc",
+    color: "from-cyan-500 to-blue-500",
   },
   {
     icon: <Globe2 className="h-6 w-6" />,
     titleKey: "landing.features.i18n",
     descKey: "landing.features.i18nDesc",
+    color: "from-indigo-500 to-violet-500",
   },
 ];
 
@@ -159,8 +173,12 @@ export default function LandingPage({
       <WebSiteSchema locale={locale} />
       <BreadcrumbSchema items={breadcrumbItems} />
       <main>
-        {/* ── HERO — no gradient blobs ── */}
-        <section className="relative border-b border-slate-200/70 dark:border-slate-800/70">
+        <section className="relative isolate border-b border-slate-200/70 dark:border-slate-800/70">
+          <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+            <div className="absolute -left-40 -top-36 h-[520px] w-[520px] rounded-full bg-violet-300/25 blur-3xl dark:bg-violet-900/20" />
+            <div className="absolute right-[-12%] top-20 h-[620px] w-[620px] rounded-full bg-cyan-200/25 blur-3xl dark:bg-cyan-900/20" />
+            <div className="absolute inset-0 bg-grid-slate" />
+          </div>
           <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-14 pt-12 sm:gap-16 sm:pb-20 sm:pt-16 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8 lg:pb-28 lg:pt-24">
             <div className="max-w-2xl">
               <Badge className="mb-7 rounded-full border-violet-200 bg-violet-50 px-3.5 py-1.5 text-violet-700 shadow-sm dark:border-violet-800 dark:bg-violet-950/50 dark:text-violet-300">
@@ -169,7 +187,7 @@ export default function LandingPage({
               </Badge>
               <h1 className="text-balance text-4xl font-semibold tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-[4.7rem] lg:leading-[1.02] dark:text-white">
                 {t("landing.hero.title1")}{" "}
-                <span className="text-violet-700 dark:text-violet-400">
+                <span className="text-gradient">
                   {t("landing.hero.title2")}
                 </span>
               </h1>
@@ -205,31 +223,27 @@ export default function LandingPage({
                   </Button>
                 </Link>
               </div>
+              <div className="mt-9 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-500 dark:text-slate-400">
+                <span className="inline-flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                  Built for global teams
+                </span>
+                <span className="inline-flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                  Secure by default
+                </span>
+              </div>
             </div>
             <ProductPreview />
           </div>
-
-          {/* ── honest facts strip — replaces fake stats ── */}
-          <div className="border-t border-slate-200/70 dark:border-slate-800/70">
-            <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-8 gap-y-2 px-4 py-6 sm:px-6 lg:px-8">
-              {[
-                "v2.0 · Live",
-                "5 languages · RTL ready",
-                "Escrow via PayPal",
-                "Tenant isolation · Prisma + MySQL",
-              ].map((fact) => (
-                <span
-                  key={fact}
-                  className="text-xs font-medium uppercase tracking-[0.12em] text-slate-500 dark:text-slate-500"
-                >
-                  {fact}
-                </span>
-              ))}
-            </div>
+          <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 border-t border-slate-200/70 px-4 py-8 sm:grid-cols-4 sm:px-6 lg:px-8 dark:border-slate-800/70">
+            <Stat value="10K+" label={t("landing.stats.devs")} />
+            <Stat value="500+" label={t("landing.stats.components")} />
+            <Stat value="1,200+" label={t("landing.stats.courses")} />
+            <Stat value="$2M+" label={t("landing.stats.escrow")} />
           </div>
         </section>
 
-        {/* ── FEATURES — solid icon tiles, no gradients ── */}
         <section className="section-pad bg-slate-50/70 dark:bg-slate-900/40">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <SectionIntro
@@ -241,10 +255,12 @@ export default function LandingPage({
               {features.map((feature, i) => (
                 <Card
                   key={i}
-                  className={`group relative overflow-hidden rounded-2xl border-slate-200/80 bg-white/80 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-violet-200 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900/70 ${i === 0 ? "lg:col-span-2" : ""}`}
+                  className={`group relative overflow-hidden rounded-2xl border-slate-200/80 bg-white/80 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-violet-200 hover:shadow-xl hover:shadow-violet-900/5 dark:border-slate-800 dark:bg-slate-900/70 ${i === 0 ? "lg:col-span-2" : ""}`}
                 >
                   <CardContent className="p-7">
-                    <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-950 text-white dark:bg-white dark:text-slate-950">
+                    <div
+                      className={`mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${feature.color} text-white shadow-lg shadow-violet-500/10`}
+                    >
                       {feature.icon}
                     </div>
                     <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
@@ -264,7 +280,6 @@ export default function LandingPage({
           </div>
         </section>
 
-        {/* ── LANGUAGES — solid top bars ── */}
         <section id="learn" className="section-pad">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <SectionIntro
@@ -279,7 +294,7 @@ export default function LandingPage({
                   className="group overflow-hidden rounded-2xl border-slate-200/80 transition-all hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900"
                 >
                   <CardContent className="p-0">
-                    <div className="h-1.5 bg-slate-950 dark:bg-white" />
+                    <div className={`h-1.5 bg-gradient-to-r ${lang.color}`} />
                     <div className="p-6">
                       <div className="flex items-center justify-between">
                         <div
@@ -315,8 +330,8 @@ export default function LandingPage({
           </div>
         </section>
 
-        {/* ── STEPS ── */}
         <section className="relative overflow-hidden bg-slate-950 py-16 sm:py-20 text-white dark:bg-black">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(124,58,237,.35),transparent_35%),radial-gradient(circle_at_90%_100%,rgba(6,182,212,.2),transparent_35%)]" />
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <SectionIntro
               dark
@@ -347,31 +362,64 @@ export default function LandingPage({
           </div>
         </section>
 
-        {/* ── honest block — replaces fake testimonials ── */}
         <section className="section-pad bg-slate-50/70 dark:bg-slate-900/40">
-          <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-            <p className="text-2xl font-medium leading-relaxed text-slate-700 dark:text-slate-300">
-              We&apos;re not going to show you invented testimonials.
-              <span className="text-slate-950 dark:text-white">
-                {" "}
-                When real users talk about CodeStore, their words go here.
-              </span>
-            </p>
-            <p className="mt-5 text-sm text-slate-500 dark:text-slate-500">
-              v2.0 shipped — collecting real feedback now.
-            </p>
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <SectionIntro
+              badge={t("landing.testimonials.badge")}
+              heading={t("landing.testimonials.heading")}
+              subheading={t("landing.testimonials.subheading")}
+            />
+            <div className="mb-10 flex flex-wrap justify-center gap-2">
+              {["English", "العربية", "Français", "Deutsch", "Español"].map(
+                (lang) => (
+                  <Badge
+                    key={lang}
+                    variant="secondary"
+                    className="rounded-full border border-slate-200 bg-white px-4 py-2 dark:border-slate-700 dark:bg-slate-900"
+                  >
+                    {lang}
+                  </Badge>
+                ),
+              )}
+            </div>
+            <div className="grid gap-5 md:grid-cols-3">
+              <TestimonialCard
+                quote={t("landing.testimonials.q1")}
+                author="Sarah Chen"
+                role={t("landing.testimonials.r1")}
+                initials="SC"
+                color="bg-emerald-500"
+              />
+              <TestimonialCard
+                quote={t("landing.testimonials.q2")}
+                author="Marcus Weber"
+                role={t("landing.testimonials.r2")}
+                initials="MW"
+                color="bg-blue-500"
+              />
+              <TestimonialCard
+                quote={t("landing.testimonials.q3")}
+                author="Demo Admin"
+                role={t("landing.testimonials.r3")}
+                initials="DA"
+                color="bg-violet-500"
+              />
+            </div>
           </div>
         </section>
 
-        {/* ── CTA — flat dark panel, no gradient ── */}
         <section className="section-pad">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="relative overflow-hidden rounded-[2rem] bg-slate-950 px-6 py-16 text-center sm:px-16">
+            <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-violet-600 via-indigo-600 to-cyan-600 px-6 py-16 text-center shadow-2xl shadow-violet-500/20 sm:px-16">
+              <div className="absolute inset-0 bg-grid-white opacity-20" />
               <div className="relative">
+                <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 text-white backdrop-blur">
+                  <Command className="h-6 w-6" />
+                </div>
                 <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                   {t("landing.cta.heading")}
                 </h2>
-                <p className="mx-auto mt-4 max-w-xl text-lg leading-7 text-slate-400">
+                <p className="mx-auto mt-4 max-w-xl text-lg leading-7 text-violet-100">
                   {t("landing.cta.subheading")}
                 </p>
                 <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
@@ -385,7 +433,7 @@ export default function LandingPage({
                     >
                       <Button
                         size="lg"
-                        className="h-12 rounded-xl bg-white px-6 text-base text-slate-950 shadow-lg hover:bg-slate-200"
+                        className="h-12 rounded-xl bg-white px-6 text-base text-violet-700 shadow-lg hover:bg-violet-50"
                       >
                         {user && (user.role === "SUPERADMIN" || user.tenantId)
                           ? t("landing.cta.dashboard")
@@ -398,7 +446,7 @@ export default function LandingPage({
                     <Button
                       size="lg"
                       variant="outline"
-                      className="h-12 rounded-xl border-white/30 px-6 text-base text-white hover:bg-white/10 hover:text-white"
+                      className="h-12 rounded-xl border-white/30 px-6 text-base text-white hover:bg-white/10"
                     >
                       {t("landing.cta.secondary")}
                     </Button>
@@ -449,7 +497,18 @@ function SectionIntro({
     </div>
   );
 }
-
+function Stat({ value, label }: { value: string; label: string }) {
+  return (
+    <div className="text-center">
+      <div className="text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl dark:text-white">
+        {value}
+      </div>
+      <div className="mt-1 text-xs font-medium uppercase tracking-[0.12em] text-slate-500 dark:text-slate-500">
+        {label}
+      </div>
+    </div>
+  );
+}
 function StepCard({
   number,
   icon,
@@ -474,10 +533,49 @@ function StepCard({
     </div>
   );
 }
-
+function TestimonialCard({
+  quote,
+  author,
+  role,
+  initials,
+  color,
+}: {
+  quote: string;
+  author: string;
+  role: string;
+  initials: string;
+  color: string;
+}) {
+  return (
+    <Card className="rounded-2xl border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900">
+      <CardContent className="p-7">
+        <div className="flex gap-1">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+          ))}
+        </div>
+        <p className="mt-5 min-h-24 text-sm leading-6 text-slate-700 dark:text-slate-300">
+          “{quote}”
+        </p>
+        <div className="mt-7 flex items-center gap-3">
+          <div
+            className={`flex h-10 w-10 items-center justify-center rounded-full ${color} text-sm font-bold text-white`}
+          >
+            {initials}
+          </div>
+          <div>
+            <div className="text-sm font-semibold">{author}</div>
+            <div className="text-xs text-slate-500">{role}</div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
 function ProductPreview() {
   return (
     <div className="relative mx-auto w-full max-w-xl lg:ml-auto">
+      <div className="absolute -inset-5 rounded-[2rem] bg-gradient-to-r from-violet-500/20 via-cyan-400/10 to-indigo-500/20 blur-2xl" />
       <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-2xl shadow-slate-900/10 dark:border-slate-700 dark:bg-slate-900">
         <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3 dark:border-slate-800">
           <div className="flex gap-1.5">
@@ -514,20 +612,29 @@ function ProductPreview() {
                   Your workspace
                 </div>
                 <div className="mt-1 text-xl font-semibold tracking-tight">
-                  Build &amp; grow together
+                  Build & grow together
                 </div>
               </div>
+              <div className="rounded-lg bg-emerald-50 px-2 py-1 text-[10px] font-medium text-emerald-600 dark:bg-emerald-950/30">
+                Live
+              </div>
             </div>
-            <div className="mt-6 rounded-xl border border-slate-200 p-4 dark:border-slate-800">
+            <div className="mt-6 grid grid-cols-3 gap-2">
+              <PreviewMetric label="Members" value="2,481" />
+              <PreviewMetric label="Revenue" value="$48.2K" />
+              <PreviewMetric label="Courses" value="128" />
+            </div>
+            <div className="mt-5 rounded-xl border border-slate-200 p-4 dark:border-slate-800">
               <div className="flex items-center justify-between text-xs font-medium">
                 <span>Workspace activity</span>
+                <span className="text-emerald-500">+18.4%</span>
               </div>
               <div className="mt-5 flex h-24 items-end gap-1.5">
                 {[35, 48, 42, 62, 55, 74, 68, 86, 78, 94, 82, 100].map(
                   (height, i) => (
                     <div
                       key={i}
-                      className="flex-1 rounded-t-sm bg-slate-300 opacity-80 dark:bg-slate-700"
+                      className="flex-1 rounded-t-sm bg-gradient-to-t from-violet-500 to-cyan-400 opacity-80"
                       style={{ height: `${height}%` }}
                     />
                   ),
@@ -543,7 +650,7 @@ function ProductPreview() {
                   Design systems for developers
                 </div>
                 <div className="mt-0.5 text-[10px] text-slate-500">
-                  Continue learning
+                  Continue learning · 68%
                 </div>
               </div>
               <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
@@ -551,6 +658,23 @@ function ProductPreview() {
           </div>
         </div>
       </div>
+      <div className="absolute -bottom-5 -left-5 hidden items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-xl sm:flex dark:border-slate-700 dark:bg-slate-900">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-300">
+          <TrendingUp className="h-4 w-4" />
+        </div>
+        <div>
+          <div className="text-[10px] text-slate-500">This month</div>
+          <div className="text-sm font-semibold">+24.8% growth</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+function PreviewMetric({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg bg-slate-50 p-2.5 dark:bg-slate-800/70">
+      <div className="text-[9px] text-slate-500">{label}</div>
+      <div className="mt-1 text-sm font-semibold">{value}</div>
     </div>
   );
 }

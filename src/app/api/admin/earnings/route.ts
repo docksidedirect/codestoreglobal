@@ -63,8 +63,8 @@ export async function GET(request: NextRequest) {
   }
 
   // tenantId/userId are plain columns (no relations) — resolve names in one batch
-  const tenantIds = [...new Set(rawTx.map((t) => t.tenantId).filter(Boolean))] as string[];
-  const userIds = [...new Set(rawTx.map((t) => t.userId).filter(Boolean))] as string[];
+  const tenantIds = Array.from(new Set(rawTx.map((t) => t.tenantId).filter((x): x is string => Boolean(x))));
+  const userIds = Array.from(new Set(rawTx.map((t) => t.userId).filter((x): x is string => Boolean(x))));
   const [tenantRows, userRows] = await Promise.all([
     tenantIds.length ? prisma.tenant.findMany({ where: { id: { in: tenantIds } }, select: { id: true, name: true } }) : [],
     userIds.length ? prisma.user.findMany({ where: { id: { in: userIds } }, select: { id: true, email: true } }) : [],

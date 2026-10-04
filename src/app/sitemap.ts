@@ -5,7 +5,7 @@ import { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 import { locales, MARKETPLACE_CATEGORIES } from "@/lib/marketplace-categories";
 
-const baseUrl = "https://codestoreglobal.com";
+const baseUrl = "https://www.codestoreglobal.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [courses, products, jobs] = await Promise.all([

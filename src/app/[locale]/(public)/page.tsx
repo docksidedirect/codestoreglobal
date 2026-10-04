@@ -179,13 +179,13 @@ export default function LandingPage({
             <div className="absolute right-[-12%] top-20 h-[620px] w-[620px] rounded-full bg-cyan-200/25 blur-3xl dark:bg-cyan-900/20" />
             <div className="absolute inset-0 bg-grid-slate" />
           </div>
-          <div className="mx-auto grid max-w-7xl items-center gap-16 px-4 pb-20 pt-16 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8 lg:pb-28 lg:pt-24">
+          <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-14 pt-12 sm:gap-16 sm:pb-20 sm:pt-16 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8 lg:pb-28 lg:pt-24">
             <div className="max-w-2xl">
               <Badge className="mb-7 rounded-full border-violet-200 bg-violet-50 px-3.5 py-1.5 text-violet-700 shadow-sm dark:border-violet-800 dark:bg-violet-950/50 dark:text-violet-300">
                 <Sparkles className="mr-1.5 h-3.5 w-3.5" />
                 {t("landing.hero.badge")}
               </Badge>
-              <h1 className="text-balance text-5xl font-semibold tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-[4.7rem] lg:leading-[1.02] dark:text-white">
+              <h1 className="text-balance text-4xl font-semibold tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-[4.7rem] lg:leading-[1.02] dark:text-white">
                 {t("landing.hero.title1")}{" "}
                 <span className="text-gradient">
                   {t("landing.hero.title2")}
@@ -588,7 +588,7 @@ function ProductPreview() {
           </div>
           <div className="w-10" />
         </div>
-        <div className="grid grid-cols-[112px_1fr]">
+        <div className="grid grid-cols-1 sm:grid-cols-[112px_1fr]">
           <div className="hidden border-r border-slate-200 bg-slate-50 p-4 sm:block dark:border-slate-800 dark:bg-slate-950">
             <div className="flex items-center gap-2 text-xs font-semibold">
               <div className="flex h-6 w-6 items-center justify-center rounded-md bg-violet-600 text-white">

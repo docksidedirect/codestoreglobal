@@ -23,14 +23,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
   }
 
-  const [transactions, jobs, agg] = await Promise.all([
+  const [rawTx, jobs, agg] = await Promise.all([
     prisma.platformTransaction.findMany({
       orderBy: { createdAt: "desc" },
       take: 200,
-      include: {
-        tenant: { select: { name: true } },
-        user: { select: { email: true, firstName: true, lastName: true } },
-      },
     }),
     prisma.jobListing.findMany({
       where: { OR: [{ featured: true }, { commissionAmount: { not: null } }] },
@@ -65,6 +61,21 @@ export async function GET(request: NextRequest) {
     months[key].fees += Number(t.platformFee);
     months[key].count += 1;
   }
+
+  // tenantId/userId are plain columns (no relations) — resolve names in one batch
+  const tenantIds = [...new Set(rawTx.map((t) => t.tenantId).filter(Boolean))] as string[];
+  const userIds = [...new Set(rawTx.map((t) => t.userId).filter(Boolean))] as string[];
+  const [tenantRows, userRows] = await Promise.all([
+    tenantIds.length ? prisma.tenant.findMany({ where: { id: { in: tenantIds } }, select: { id: true, name: true } }) : [],
+    userIds.length ? prisma.user.findMany({ where: { id: { in: userIds } }, select: { id: true, email: true } }) : [],
+  ]);
+  const tenantName = Object.fromEntries(tenantRows.map((t) => [t.id, t.name]));
+  const userEmail = Object.fromEntries(userRows.map((u) => [u.id, u.email]));
+  const transactions = rawTx.map((t) => ({
+    ...t,
+    tenant: { name: t.tenantId ? tenantName[t.tenantId] || null : null },
+    user: { email: t.userId ? userEmail[t.userId] || null : null },
+  }));
 
   const pendingFees = jobs
     .filter((j) => j.commissionAmount != null && j.commissionStatus === "UNPAID")

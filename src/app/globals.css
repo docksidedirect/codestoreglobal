@@ -83,8 +83,8 @@
   }
 
   .text-gradient {
-  @apply text-violet-700 dark:text-violet-400;
-}
+    @apply bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-500 bg-clip-text text-transparent;
+  }
 
   /* Reduced from py-24 sm:py-28 to prevent oversized gaps between sections. */
   .section-pad {

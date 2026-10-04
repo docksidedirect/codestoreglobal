@@ -330,7 +330,7 @@ export default function LandingPage({
           </div>
         </section>
 
-        <section className="relative overflow-hidden bg-slate-950 py-24 text-white dark:bg-black">
+        <section className="relative overflow-hidden bg-slate-950 py-16 sm:py-20 text-white dark:bg-black">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(124,58,237,.35),transparent_35%),radial-gradient(circle_at_90%_100%,rgba(6,182,212,.2),transparent_35%)]" />
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <SectionIntro

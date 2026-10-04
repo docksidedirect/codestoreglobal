@@ -19,6 +19,39 @@ const CATEGORIES = [
   { value: "COURSE_BUNDLE", label: "Course Bundle" },
 ] as const;
 
+// ✅ FIX 1: Compress image to max 1280px JPEG before base64 (~5MB photo → ~150-400KB)
+function fileToDataUrl(
+  file: File,
+  maxDim = 1280,
+  quality = 0.8,
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        canvas
+          .getContext("2d")!
+          .drawImage(img, 0, 0, canvas.width, canvas.height);
+        URL.revokeObjectURL(url);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      } catch (err) {
+        URL.revokeObjectURL(url);
+        reject(err);
+      }
+    };
+    img.onerror = (err) => {
+      URL.revokeObjectURL(url);
+      reject(err);
+    };
+    img.src = url;
+  });
+}
+
 export default function NewProductPage({
   params,
 }: {
@@ -37,16 +70,22 @@ export default function NewProductPage({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  function handleImageAdd(e: React.ChangeEvent<HTMLInputElement>) {
+  // ✅ FIX 1: compress each file instead of raw readAsDataURL
+  async function handleImageAdd(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
     if (!files) return;
-    Array.from(files).forEach((file) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImageUrls((prev) => [...prev, reader.result as string]);
-      };
-      reader.readAsDataURL(file);
-    });
+    setError("");
+
+    try {
+      const compressed = await Promise.all(
+        Array.from(files).map((f) => fileToDataUrl(f)),
+      );
+      setImageUrls((prev) => [...prev, ...compressed]);
+    } catch {
+      setError(
+        "Failed to process one or more images. Please try different files.",
+      );
+    }
     e.target.value = "";
   }
 
@@ -76,7 +115,16 @@ export default function NewProductPage({
         }),
       });
 
-      const data = await res.json();
+      // ✅ FIX 2: read text first, parse safely — never crash on plain-text errors
+      const text = await res.text();
+      let data: any = {};
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error(
+          `Server error ${res.status}: ${text.slice(0, 150) || res.statusText}`,
+        );
+      }
 
       if (!res.ok || !data.success) {
         throw new Error(data.error || "Failed to create product");
@@ -85,7 +133,7 @@ export default function NewProductPage({
       router.push(`/${locale}/${tenantId}/marketplace`);
       router.refresh();
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }

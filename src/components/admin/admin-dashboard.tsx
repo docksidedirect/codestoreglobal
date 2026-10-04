@@ -89,9 +89,39 @@ async function call(url: string, method: string, body?: any) {
 }
 
 export function AdminDashboard() {
-  const [tab, setTab] = useState<"overview" | "tenants" | "users">("overview");
+  const [tab, setTab] = useState<"overview" | "tenants" | "users" | "earnings">(
+    "overview",
+  );
   const [tenants, setTenants] = useState<TenantRow[]>([]);
   const [stats, setStats] = useState({ totalUsers: 0, totalRevenue: 0 });
+  const [earnings, setEarnings] = useState<any | null>(null);
+  const [earningsLoaded, setEarningsLoaded] = useState(false);
+  const [commissionBusy, setCommissionBusy] = useState<string | null>(null);
+
+  const loadEarnings = useCallback(async () => {
+    const data = await call("/api/admin/earnings", "GET");
+    setEarnings(data);
+    setEarningsLoaded(true);
+  }, []);
+
+  async function setCommission(jobId: string, commissionStatus: string) {
+    setCommissionBusy(jobId);
+    setNotice(null);
+    try {
+      await call(`/api/admin/jobs/${jobId}/commission`, "PATCH", {
+        commissionStatus,
+      });
+      setNotice({
+        type: "ok",
+        text: `Commission marked ${commissionStatus.toLowerCase()}`,
+      });
+      await loadEarnings();
+    } catch (e: any) {
+      setNotice({ type: "err", text: e.message });
+    } finally {
+      setCommissionBusy(null);
+    }
+  }
   const [users, setUsers] = useState<UserRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [notice, setNotice] = useState<{
@@ -218,10 +248,13 @@ export function AdminDashboard() {
 
       {/* Tabs */}
       <div className="flex gap-1 border-b">
-        {(["overview", "tenants", "users"] as const).map((t) => (
+        {(["overview", "tenants", "users", "earnings"] as const).map((t) => (
           <button
             key={t}
-            onClick={() => setTab(t)}
+            onClick={() => {
+              setTab(t);
+              if (t === "earnings" && !earningsLoaded) loadEarnings();
+            }}
             className={`px-4 py-2 text-sm font-medium capitalize rounded-t-lg transition-colors ${
               tab === t
                 ? "bg-white dark:bg-slate-900 border border-b-0 border-slate-200 dark:border-slate-800 text-foreground"
@@ -232,7 +265,9 @@ export function AdminDashboard() {
               ? `Workspaces (${tenants.length})`
               : t === "users"
                 ? `Users (${users.length})`
-                : "Overview"}
+                : t === "earnings"
+                  ? "Earnings"
+                  : "Overview"}
           </button>
         ))}
       </div>
@@ -491,6 +526,236 @@ export function AdminDashboard() {
             </div>
           </div>
         </div>
+      ) : tab === "earnings" ? (
+        !earnings ? (
+          <div className="flex justify-center py-16 text-muted-foreground">
+            <Loader2 className="h-6 w-6 animate-spin" />
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {/* Totals */}
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+              {[
+                {
+                  label: "Gross Volume",
+                  value: `$${Number(earnings.totals.gross).toLocaleString("en-US", { minimumFractionDigits: 2 })}`,
+                },
+                {
+                  label: "Platform Fees (10%)",
+                  value: `$${Number(earnings.totals.platformFees).toLocaleString("en-US", { minimumFractionDigits: 2 })}`,
+                },
+                {
+                  label: "Transactions",
+                  value: String(earnings.totals.transactionCount),
+                },
+                {
+                  label: "Job Commission Owed",
+                  value: `$${Number(earnings.totals.pendingJobCommission).toFixed(2)}`,
+                  warn: Number(earnings.totals.pendingJobCommission) > 0,
+                },
+                {
+                  label: "Featured Fees Recorded",
+                  value: `$${Number(earnings.totals.featuredFeesRecorded).toFixed(2)}`,
+                },
+              ].map((c) => (
+                <div
+                  key={c.label}
+                  className="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900"
+                >
+                  <p className="text-xs text-muted-foreground mb-1">
+                    {c.label}
+                  </p>
+                  <p
+                    className={`text-xl font-bold ${(c as any).warn ? "text-amber-600" : ""}`}
+                  >
+                    {c.value}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Monthly table */}
+            <div className="rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 overflow-hidden">
+              <p className="p-4 text-sm font-medium border-b">
+                Monthly volume (last 6 months)
+              </p>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b text-left text-xs text-muted-foreground">
+                    <th className="p-3 font-medium">Month</th>
+                    <th className="p-3 font-medium">Sales</th>
+                    <th className="p-3 font-medium">Gross</th>
+                    <th className="p-3 font-medium">Platform Fees</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.keys(earnings.months)
+                    .sort()
+                    .reverse()
+                    .map((m) => (
+                      <tr key={m} className="border-b last:border-0">
+                        <td className="p-3 font-medium">{m}</td>
+                        <td className="p-3">{earnings.months[m].count}</td>
+                        <td className="p-3">
+                          ${Number(earnings.months[m].gross).toFixed(2)}
+                        </td>
+                        <td className="p-3 text-emerald-700 dark:text-emerald-400 font-medium">
+                          ${Number(earnings.months[m].fees).toFixed(2)}
+                        </td>
+                      </tr>
+                    ))}
+                  {Object.keys(earnings.months).length === 0 && (
+                    <tr>
+                      <td className="p-4 text-muted-foreground" colSpan={4}>
+                        No transactions yet.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Jobs money report */}
+            <div className="rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 overflow-hidden">
+              <p className="p-4 text-sm font-medium border-b">
+                Jobs money report (featured fees + hire commission)
+              </p>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b text-left text-xs text-muted-foreground">
+                    <th className="p-3 font-medium">Job</th>
+                    <th className="p-3 font-medium">Workspace</th>
+                    <th className="p-3 font-medium">Featured Fee</th>
+                    <th className="p-3 font-medium">Commission (10%)</th>
+                    <th className="p-3 font-medium">Status</th>
+                    <th className="p-3 font-medium text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {earnings.jobs.map((j: any) => (
+                    <tr key={j.id} className="border-b last:border-0">
+                      <td className="p-3 font-medium max-w-[220px] truncate">
+                        {j.title}
+                      </td>
+                      <td className="p-3 text-muted-foreground">
+                        {j.tenant?.name || "—"}
+                      </td>
+                      <td className="p-3">
+                        {j.featuredFee != null
+                          ? `$${Number(j.featuredFee).toFixed(2)}`
+                          : "—"}
+                      </td>
+                      <td className="p-3">
+                        {j.commissionAmount != null
+                          ? `$${Number(j.commissionAmount).toFixed(2)}`
+                          : "—"}
+                      </td>
+                      <td className="p-3">
+                        <Badge
+                          className={`text-xs ${j.commissionStatus === "PAID" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300" : j.commissionStatus === "UNPAID" ? "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300" : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"}`}
+                        >
+                          {j.commissionStatus}
+                        </Badge>
+                      </td>
+                      <td className="p-3">
+                        <div className="flex gap-1 justify-end">
+                          {j.commissionAmount != null &&
+                            j.commissionStatus !== "PAID" && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="h-7 text-emerald-700"
+                                disabled={commissionBusy === j.id}
+                                onClick={() => setCommission(j.id, "PAID")}
+                              >
+                                Mark Paid
+                              </Button>
+                            )}
+                          {j.commissionAmount != null &&
+                            j.commissionStatus === "UNPAID" && (
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="h-7"
+                                disabled={commissionBusy === j.id}
+                                onClick={() => setCommission(j.id, "INVOICED")}
+                              >
+                                Invoiced
+                              </Button>
+                            )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {earnings.jobs.length === 0 && (
+                    <tr>
+                      <td className="p-4 text-muted-foreground" colSpan={6}>
+                        No monetized jobs yet.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Transactions ledger */}
+            <div className="rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 overflow-hidden">
+              <p className="p-4 text-sm font-medium border-b">
+                Transaction ledger (latest 200)
+              </p>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b text-left text-xs text-muted-foreground">
+                    <th className="p-3 font-medium">Date</th>
+                    <th className="p-3 font-medium">Type</th>
+                    <th className="p-3 font-medium">Amount</th>
+                    <th className="p-3 font-medium">Platform Fee</th>
+                    <th className="p-3 font-medium">Buyer</th>
+                    <th className="p-3 font-medium">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {earnings.transactions.map((t: any) => (
+                    <tr key={t.id} className="border-b last:border-0">
+                      <td className="p-3 whitespace-nowrap">
+                        {new Date(t.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="p-3">
+                        <Badge variant="outline" className="text-xs">
+                          {t.type.replace(/_/g, " ")}
+                        </Badge>
+                      </td>
+                      <td className="p-3 font-medium">
+                        ${Number(t.amount).toFixed(2)}
+                      </td>
+                      <td className="p-3 text-emerald-700 dark:text-emerald-400">
+                        ${Number(t.platformFee).toFixed(2)}
+                      </td>
+                      <td className="p-3 text-muted-foreground max-w-[200px] truncate">
+                        {t.user?.email || "—"}
+                      </td>
+                      <td className="p-3">
+                        <Badge
+                          className={`text-xs ${t.status === "COMPLETED" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300" : t.status === "PENDING" ? "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300" : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"}`}
+                        >
+                          {t.status}
+                        </Badge>
+                      </td>
+                    </tr>
+                  ))}
+                  {earnings.transactions.length === 0 && (
+                    <tr>
+                      <td className="p-4 text-muted-foreground" colSpan={6}>
+                        No transactions yet — the first marketplace sale will
+                        appear here.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )
       ) : tab === "tenants" ? (
         <div className="space-y-4">
           <div className="flex justify-end">

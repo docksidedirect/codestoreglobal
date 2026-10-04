@@ -19,7 +19,9 @@ import {
   Copy,
   Check,
   ShieldAlert,
+  ExternalLink,
 } from "lucide-react";
+import Link from "next/link";
 
 interface TenantRow {
   id: string;
@@ -89,6 +91,7 @@ async function call(url: string, method: string, body?: any) {
 export function AdminDashboard() {
   const [tab, setTab] = useState<"overview" | "tenants" | "users">("overview");
   const [tenants, setTenants] = useState<TenantRow[]>([]);
+  const [stats, setStats] = useState({ totalUsers: 0, totalRevenue: 0 });
   const [users, setUsers] = useState<UserRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [notice, setNotice] = useState<{
@@ -107,6 +110,10 @@ export function AdminDashboard() {
       ]);
       setTenants(t.tenants);
       setUsers(u.users);
+      setStats({
+        totalUsers: t.totalUsers ?? users.length,
+        totalRevenue: t.totalRevenue ?? 0,
+      });
     } catch (e: any) {
       setNotice({ type: "err", text: e.message });
     } finally {
@@ -182,18 +189,17 @@ export function AdminDashboard() {
     });
   }
 
-  const pending = tenants.filter((t) => t.status === "PENDING_APPROVAL");
+  const pendingTenants = tenants.filter((t) => t.status === "PENDING_APPROVAL");
   const activeTenants = tenants.filter((t) => t.status === "ACTIVE");
-  const activeUsers = users.filter((u) => u.isActive);
   const suspendedUsers = users.filter((u) => !u.isActive);
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-bold">Admin Control Panel</h1>
+          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
           <p className="text-sm text-muted-foreground">
-            Manage every workspace and user on the platform
+            Platform overview and workspace management
           </p>
         </div>
         <Button
@@ -279,70 +285,209 @@ export function AdminDashboard() {
           <Loader2 className="h-6 w-6 animate-spin" />
         </div>
       ) : tab === "overview" ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            {
-              label: "Total Workspaces",
-              value: tenants.length,
-              icon: Building2,
-            },
-            {
-              label: "Active Workspaces",
-              value: activeTenants.length,
-              icon: CheckCircle2,
-            },
-            {
-              label: "Pending Approval",
-              value: pending.length,
-              icon: ShieldAlert,
-              warn: pending.length > 0,
-            },
-            { label: "Total Users", value: users.length, icon: Users },
-          ].map((s) => (
-            <div
-              key={s.label}
-              className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
-            >
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-sm text-muted-foreground">{s.label}</p>
-                <s.icon
-                  className={`h-4 w-4 ${s.warn ? "text-amber-500" : "text-muted-foreground"}`}
-                />
-              </div>
-              <p
-                className={`text-3xl font-bold ${s.warn ? "text-amber-600" : ""}`}
-              >
-                {s.value}
+        <div className="space-y-6">
+          {/* Original stat cards + Revenue restored */}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+              <p className="text-sm text-muted-foreground mb-2">Workspaces</p>
+              <p className="text-3xl font-bold">{tenants.length}</p>
+            </div>
+            <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+              <p className="text-sm text-muted-foreground mb-2">Users</p>
+              <p className="text-3xl font-bold">{stats.totalUsers}</p>
+            </div>
+            <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+              <p className="text-sm text-muted-foreground mb-2">Revenue</p>
+              <p className="text-3xl font-bold">
+                $
+                {stats.totalRevenue.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
               </p>
             </div>
-          ))}
-          <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-            <p className="text-sm text-muted-foreground mb-2">Active Users</p>
-            <p className="text-3xl font-bold">{activeUsers.length}</p>
+            <button
+              onClick={() => setTab("tenants")}
+              className="rounded-xl border border-slate-200 bg-white p-5 text-left transition-colors hover:border-amber-300 dark:border-slate-800 dark:bg-slate-900"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-sm text-muted-foreground">Pending</p>
+                {pendingTenants.length > 0 ? (
+                  <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-950 dark:text-amber-300">
+                    Action Needed
+                  </span>
+                ) : (
+                  <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+                    All Clear
+                  </span>
+                )}
+              </div>
+              <p className="text-3xl font-bold">{pendingTenants.length}</p>
+            </button>
           </div>
-          <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-            <p className="text-sm text-muted-foreground mb-2">Stopped Users</p>
-            <p className="text-3xl font-bold text-red-600">
-              {suspendedUsers.length}
-            </p>
-          </div>
-          <div className="sm:col-span-2 rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-            <p className="text-sm font-medium mb-3">Newest signups</p>
-            <div className="space-y-2">
-              {users.slice(0, 5).map((u) => (
+
+          {/* Pending Verifications — restored from original */}
+          {pendingTenants.length > 0 && (
+            <div>
+              <h2 className="mb-4 text-lg font-bold">Pending Verifications</h2>
+              <div className="grid gap-4 md:grid-cols-2">
+                {pendingTenants.map((t) => (
+                  <div
+                    key={t.id}
+                    className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
+                  >
+                    <div className="mb-4 flex items-start justify-between">
+                      <div>
+                        <h3 className="font-semibold">{t.name}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          {t.subdomain}.codestoreglobal.com
+                        </p>
+                      </div>
+                      <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-950 dark:text-amber-300">
+                        Pending
+                      </span>
+                    </div>
+                    <div className="mb-4 space-y-1 text-sm">
+                      <p>
+                        <span className="text-muted-foreground">Owner:</span>{" "}
+                        {t.owner
+                          ? `${t.owner.firstName} ${t.owner.lastName}`
+                          : "—"}{" "}
+                        ({t.owner?.email})
+                      </p>
+                      <p>
+                        <span className="text-muted-foreground">
+                          Submitted:
+                        </span>{" "}
+                        {new Date(t.createdAt).toLocaleDateString()}
+                      </p>
+                      <p>
+                        <span className="text-muted-foreground">Industry:</span>{" "}
+                        Technology
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        className="flex-1 gap-1 bg-emerald-600 hover:bg-emerald-700 text-white"
+                        disabled={busyId === t.id}
+                        onClick={() =>
+                          run(t.id, () =>
+                            call(`/api/admin/tenants/${t.id}`, "PATCH", {
+                              status: "ACTIVE",
+                            }),
+                          )
+                        }
+                      >
+                        <CheckCircle2 className="h-4 w-4" /> Approve
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="flex-1 gap-1 text-red-600"
+                        disabled={busyId === t.id}
+                        onClick={() =>
+                          run(t.id, () =>
+                            call(`/api/admin/tenants/${t.id}`, "PATCH", {
+                              status: "REJECTED",
+                            }),
+                          )
+                        }
+                      >
+                        <XCircle className="h-4 w-4" /> Reject
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Active Workspaces — restored from original with View Dashboard */}
+          <div>
+            <h2 className="mb-4 text-lg font-bold">Active Workspaces</h2>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {activeTenants.map((t) => (
                 <div
-                  key={u.id}
-                  className="flex items-center justify-between text-sm"
+                  key={t.id}
+                  className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
                 >
-                  <span>
-                    {u.firstName} {u.lastName}{" "}
-                    <span className="text-muted-foreground">({u.email})</span>
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {new Date(u.createdAt).toLocaleDateString()}
-                  </span>
+                  <div className="mb-4 flex items-start justify-between">
+                    <div>
+                      <h3 className="font-semibold">{t.name}</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Owner:{" "}
+                        {t.owner
+                          ? `${t.owner.firstName} ${t.owner.lastName}`
+                          : "—"}
+                      </p>
+                    </div>
+                    <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs font-medium text-violet-700 dark:bg-violet-950 dark:text-violet-300">
+                      {t.subscriptionTier}
+                    </span>
+                  </div>
+                  <div className="mb-4 grid grid-cols-3 gap-2 text-center">
+                    <div>
+                      <div className="font-bold">{t._count.members}</div>
+                      <div className="text-xs text-muted-foreground">
+                        Members
+                      </div>
+                    </div>
+                    <div>
+                      <div className="font-bold">{t._count.courses}</div>
+                      <div className="text-xs text-muted-foreground">
+                        Courses
+                      </div>
+                    </div>
+                    <div>
+                      <div className="font-bold">{t._count.products}</div>
+                      <div className="text-xs text-muted-foreground">
+                        Products
+                      </div>
+                    </div>
+                  </div>
+                  <Link href={`/en/${t.id}/dashboard`}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full gap-1"
+                    >
+                      <ExternalLink className="h-3 w-3" /> View Dashboard
+                    </Button>
+                  </Link>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Extra: stopped users + newest signups */}
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+              <p className="text-sm text-muted-foreground mb-2">
+                Stopped Users
+              </p>
+              <p className="text-3xl font-bold text-red-600">
+                {suspendedUsers.length}
+              </p>
+            </div>
+            <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+              <p className="text-sm font-medium mb-3">Newest signups</p>
+              <div className="space-y-2">
+                {users.slice(0, 5).map((u) => (
+                  <div
+                    key={u.id}
+                    className="flex items-center justify-between text-sm"
+                  >
+                    <span>
+                      {u.firstName} {u.lastName}{" "}
+                      <span className="text-muted-foreground">({u.email})</span>
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(u.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

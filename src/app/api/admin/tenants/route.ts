@@ -40,7 +40,17 @@ export async function GET(request: NextRequest) {
       _count: { select: { members: true, courses: true, products: true, jobListings: true } },
     },
   });
-  return NextResponse.json({ success: true, tenants });
+  const [totalUsers, revenueAgg] = await Promise.all([
+    prisma.user.count(),
+    prisma.platformTransaction.aggregate({ _sum: { amount: true } }),
+  ]);
+
+  return NextResponse.json({
+    success: true,
+    tenants,
+    totalUsers,
+    totalRevenue: Number(revenueAgg._sum.amount ?? 0),
+  });
 }
 
 // POST /api/admin/tenants — create a workspace manually

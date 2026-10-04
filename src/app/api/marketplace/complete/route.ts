@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const captureReq = new paypal.orders.OrdersCaptureRequest(orderId);
-    captureReq.requestBody({});
+    captureReq.requestBody({} as any); // SDK types demand payment_source; PayPal accepts empty body
     const capture = await paypalClient().execute(captureReq);
 
     await prisma.platformTransaction.update({

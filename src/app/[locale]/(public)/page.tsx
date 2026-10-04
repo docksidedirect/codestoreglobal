@@ -2,32 +2,35 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  Globe,
-  Shield,
-  Zap,
-  BookOpen,
-  ShoppingBag,
-  Briefcase,
-  Code,
-  Terminal,
-  FileCode,
-  Database,
-  Layers,
-  Cpu,
   ArrowRight,
-  Sparkles,
-  Users,
-  Star,
+  ArrowUpRight,
+  BookOpen,
+  Briefcase,
+  CheckCircle2,
+  Code2,
+  Command,
+  Cpu,
+  Database,
+  FileCode,
+  Globe2,
+  Layers3,
+  LockKeyhole,
   MessageSquare,
+  Play,
+  ShieldCheck,
+  ShoppingBag,
+  Sparkles,
+  Star,
+  Terminal,
   TrendingUp,
-  Lock,
-  ChevronRight,
+  Users,
+  Zap,
 } from "lucide-react";
-import Link from "next/link";
 import {
   OrganizationSchema,
   WebSiteSchema,
@@ -37,15 +40,15 @@ import {
 const programmingLanguages = [
   {
     name: "HTML & CSS",
-    icon: <FileCode className="h-6 w-6" />,
+    icon: <FileCode className="h-5 w-5" />,
     descKey: "landing.languages.htmlDesc",
     level: "Beginner",
-    color: "from-orange-500 to-amber-500",
+    color: "from-orange-500 to-amber-400",
     bgColor: "bg-orange-500/10 text-orange-600",
   },
   {
     name: "JavaScript",
-    icon: <Code className="h-6 w-6" />,
+    icon: <Code2 className="h-5 w-5" />,
     descKey: "landing.languages.jsDesc",
     level: "Beginner",
     color: "from-yellow-400 to-amber-500",
@@ -53,15 +56,15 @@ const programmingLanguages = [
   },
   {
     name: "Python",
-    icon: <Terminal className="h-6 w-6" />,
+    icon: <Terminal className="h-5 w-5" />,
     descKey: "landing.languages.pythonDesc",
     level: "Beginner",
-    color: "from-blue-500 to-cyan-500",
+    color: "from-blue-500 to-cyan-400",
     bgColor: "bg-blue-500/10 text-blue-600",
   },
   {
     name: "TypeScript",
-    icon: <Layers className="h-6 w-6" />,
+    icon: <Layers3 className="h-5 w-5" />,
     descKey: "landing.languages.tsDesc",
     level: "Intermediate",
     color: "from-sky-500 to-blue-600",
@@ -69,7 +72,7 @@ const programmingLanguages = [
   },
   {
     name: "SQL & Databases",
-    icon: <Database className="h-6 w-6" />,
+    icon: <Database className="h-5 w-5" />,
     descKey: "landing.languages.sqlDesc",
     level: "Intermediate",
     color: "from-emerald-500 to-teal-500",
@@ -77,7 +80,7 @@ const programmingLanguages = [
   },
   {
     name: "Rust",
-    icon: <Cpu className="h-6 w-6" />,
+    icon: <Cpu className="h-5 w-5" />,
     descKey: "landing.languages.rustDesc",
     level: "Advanced",
     color: "from-red-500 to-rose-500",
@@ -87,51 +90,51 @@ const programmingLanguages = [
 
 const features = [
   {
-    icon: <Shield className="h-7 w-7" />,
+    icon: <ShieldCheck className="h-6 w-6" />,
     titleKey: "landing.features.tenant",
     descKey: "landing.features.tenantDesc",
-    color: "from-violet-500 to-purple-600",
+    color: "from-violet-500 to-indigo-500",
   },
   {
-    icon: <BookOpen className="h-7 w-7" />,
+    icon: <BookOpen className="h-6 w-6" />,
     titleKey: "landing.features.courses",
     descKey: "landing.features.coursesDesc",
     color: "from-emerald-500 to-teal-500",
   },
   {
-    icon: <ShoppingBag className="h-7 w-7" />,
+    icon: <ShoppingBag className="h-6 w-6" />,
     titleKey: "landing.features.marketplace",
     descKey: "landing.features.marketplaceDesc",
     color: "from-amber-500 to-orange-500",
   },
   {
-    icon: <Briefcase className="h-7 w-7" />,
+    icon: <Briefcase className="h-6 w-6" />,
     titleKey: "landing.features.jobs",
     descKey: "landing.features.jobsDesc",
-    color: "from-rose-500 to-pink-600",
+    color: "from-rose-500 to-pink-500",
   },
   {
-    icon: <MessageSquare className="h-7 w-7" />,
+    icon: <MessageSquare className="h-6 w-6" />,
     titleKey: "landing.features.forum",
     descKey: "landing.features.forumDesc",
     color: "from-cyan-500 to-blue-500",
   },
   {
-    icon: <Globe className="h-7 w-7" />,
+    icon: <Globe2 className="h-6 w-6" />,
     titleKey: "landing.features.i18n",
     descKey: "landing.features.i18nDesc",
-    color: "from-indigo-500 to-violet-600",
+    color: "from-indigo-500 to-violet-500",
   },
 ];
 
-interface SafeUser {
+type SafeUser = {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
   role: string;
   tenantId?: string | null;
-}
+};
 
 export default function LandingPage({
   params,
@@ -142,7 +145,6 @@ export default function LandingPage({
   const t = useTranslations();
   const [user, setUser] = useState<SafeUser | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
-  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     fetch("/api/auth/me", { credentials: "include" })
@@ -152,10 +154,6 @@ export default function LandingPage({
       })
       .catch(() => {})
       .finally(() => setAuthLoading(false));
-
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const dashboardHref =
@@ -164,126 +162,117 @@ export default function LandingPage({
       : user?.tenantId
         ? `/${locale}/${user.tenantId}/dashboard`
         : `/${locale}/login`;
-
+  const primaryHref = user ? `/${locale}/marketplace` : `/${locale}/register`;
   const breadcrumbItems = [
-    { name: "Home", url: `https://codestore.global/${locale}` },
+    { name: "Home", url: `https://codestoreglobal.com/${locale}` },
   ];
 
   return (
-    <div className="flex min-h-screen flex-col bg-white dark:bg-slate-950">
-      {/* SEO Structured Data */}
+    <div className="min-h-screen overflow-hidden bg-white text-slate-950 dark:bg-slate-950 dark:text-white">
       <OrganizationSchema />
       <WebSiteSchema locale={locale} />
       <BreadcrumbSchema items={breadcrumbItems} />
-
       <main>
-        {/* Hero Section */}
-        <section className="relative overflow-hidden pt-16 pb-24 lg:pt-32 lg:pb-40">
-          <div className="absolute inset-0 -z-10">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(120,119,198,0.15),rgba(15,23,42,0))]" />
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[500px] w-[1000px] bg-gradient-to-b from-violet-500/20 to-transparent blur-3xl opacity-50" />
+        <section className="relative isolate border-b border-slate-200/70 dark:border-slate-800/70">
+          <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+            <div className="absolute -left-40 -top-36 h-[520px] w-[520px] rounded-full bg-violet-300/25 blur-3xl dark:bg-violet-900/20" />
+            <div className="absolute right-[-12%] top-20 h-[620px] w-[620px] rounded-full bg-cyan-200/25 blur-3xl dark:bg-cyan-900/20" />
+            <div className="absolute inset-0 bg-grid-slate" />
           </div>
-
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-            <Badge className="mb-6 px-4 py-1.5 text-xs font-medium bg-violet-50 text-violet-700 border-violet-200 hover:bg-violet-100 dark:bg-violet-950/50 dark:text-violet-300 dark:border-violet-800">
-              <Sparkles className="h-3 w-3 mr-1.5" /> {t("landing.hero.badge")}
-            </Badge>
-
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-slate-900 dark:text-white mb-6">
-              {t("landing.hero.title1")}
-              <br />
-              <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 bg-clip-text text-transparent">
-                {t("landing.hero.title2")}
-              </span>
-            </h1>
-
-            <p className="mx-auto max-w-2xl text-lg sm:text-xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed">
-              {t("landing.hero.subtitle")}
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              {user && (user.role === "SUPERADMIN" || user.tenantId) ? (
-                <Link href={dashboardHref}>
-                  <Button
-                    size="lg"
-                    className="h-12 px-8 text-base bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100 shadow-xl shadow-slate-900/20 dark:shadow-white/10"
-                  >
-                    {t("landing.hero.ctaDashboard")}{" "}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              ) : (
+          <div className="mx-auto grid max-w-7xl items-center gap-16 px-4 pb-20 pt-16 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8 lg:pb-28 lg:pt-24">
+            <div className="max-w-2xl">
+              <Badge className="mb-7 rounded-full border-violet-200 bg-violet-50 px-3.5 py-1.5 text-violet-700 shadow-sm dark:border-violet-800 dark:bg-violet-950/50 dark:text-violet-300">
+                <Sparkles className="mr-1.5 h-3.5 w-3.5" />
+                {t("landing.hero.badge")}
+              </Badge>
+              <h1 className="text-balance text-5xl font-semibold tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-[4.7rem] lg:leading-[1.02] dark:text-white">
+                {t("landing.hero.title1")}{" "}
+                <span className="text-gradient">
+                  {t("landing.hero.title2")}
+                </span>
+              </h1>
+              <p className="mt-7 max-w-xl text-lg leading-8 text-slate-600 sm:text-xl dark:text-slate-400">
+                {t("landing.hero.subtitle")}
+              </p>
+              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <Link
-                  href={user ? `/${locale}/marketplace` : `/${locale}/register`}
+                  href={
+                    user && (user.role === "SUPERADMIN" || user.tenantId)
+                      ? dashboardHref
+                      : primaryHref
+                  }
                 >
                   <Button
                     size="lg"
-                    className="h-12 px-8 text-base bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100 shadow-xl shadow-slate-900/20 dark:shadow-white/10"
+                    className="group h-12 w-full rounded-xl bg-slate-950 px-6 text-base shadow-xl shadow-slate-950/15 hover:bg-violet-700 sm:w-auto dark:bg-white dark:text-slate-950 dark:hover:bg-violet-100"
                   >
-                    {t("landing.hero.ctaPrimary")}{" "}
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                    {user && (user.role === "SUPERADMIN" || user.tenantId)
+                      ? t("landing.hero.ctaDashboard")
+                      : t("landing.hero.ctaPrimary")}
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </Link>
-              )}
-              <Link href={`/${locale}/marketplace`}>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="h-12 px-8 text-base border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
-                >
-                  {t("landing.hero.ctaSecondary")}
-                </Button>
-              </Link>
+                <Link href={`/${locale}/marketplace`}>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="h-12 w-full rounded-xl border-slate-300 bg-white/70 px-6 text-base hover:border-violet-300 hover:bg-violet-50 sm:w-auto dark:border-slate-700 dark:bg-slate-900/50 dark:hover:bg-slate-800"
+                  >
+                    {t("landing.hero.ctaSecondary")}
+                    <ArrowUpRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
+              <div className="mt-9 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-500 dark:text-slate-400">
+                <span className="inline-flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                  Built for global teams
+                </span>
+                <span className="inline-flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                  Secure by default
+                </span>
+              </div>
             </div>
-
-            <div className="mt-20 grid grid-cols-2 gap-8 sm:grid-cols-4">
-              <Stat value="10K+" label={t("landing.stats.devs")} />
-              <Stat value="500+" label={t("landing.stats.components")} />
-              <Stat value="1,200+" label={t("landing.stats.courses")} />
-              <Stat value="$2M+" label={t("landing.stats.escrow")} />
-            </div>
+            <ProductPreview />
+          </div>
+          <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 border-t border-slate-200/70 px-4 py-8 sm:grid-cols-4 sm:px-6 lg:px-8 dark:border-slate-800/70">
+            <Stat value="10K+" label={t("landing.stats.devs")} />
+            <Stat value="500+" label={t("landing.stats.components")} />
+            <Stat value="1,200+" label={t("landing.stats.courses")} />
+            <Stat value="$2M+" label={t("landing.stats.escrow")} />
           </div>
         </section>
 
-        {/* Features Grid */}
-        <section className="py-24 bg-slate-50/50 dark:bg-slate-900/50">
+        <section className="section-pad bg-slate-50/70 dark:bg-slate-900/40">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <Badge
-                variant="outline"
-                className="mb-4 text-xs font-medium border-slate-300 text-slate-600 dark:border-slate-700 dark:text-slate-400"
-              >
-                {t("landing.features.badge")}
-              </Badge>
-              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-4">
-                {t("landing.features.heading")}
-              </h2>
-              <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                {t("landing.features.subheading")}
-              </p>
-            </div>
-
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <SectionIntro
+              badge={t("landing.features.badge")}
+              heading={t("landing.features.heading")}
+              subheading={t("landing.features.subheading")}
+            />
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {features.map((feature, i) => (
                 <Card
                   key={i}
-                  className="group relative overflow-hidden border-slate-200 bg-white hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:shadow-slate-900/50"
+                  className={`group relative overflow-hidden rounded-2xl border-slate-200/80 bg-white/80 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-violet-200 hover:shadow-xl hover:shadow-violet-900/5 dark:border-slate-800 dark:bg-slate-900/70 ${i === 0 ? "lg:col-span-2" : ""}`}
                 >
-                  <div
-                    className={`absolute top-0 left-0 h-1 w-full bg-gradient-to-r ${feature.color} opacity-0 group-hover:opacity-100 transition-opacity`}
-                  />
-                  <CardContent className="p-6">
+                  <CardContent className="p-7">
                     <div
-                      className={`mb-4 inline-flex rounded-xl p-3 bg-gradient-to-br ${feature.color} text-white shadow-lg`}
+                      className={`mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${feature.color} text-white shadow-lg shadow-violet-500/10`}
                     >
                       {feature.icon}
                     </div>
-                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                       {t(feature.titleKey)}
                     </h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    <p className="mt-2 max-w-lg text-sm leading-6 text-slate-600 dark:text-slate-400">
                       {t(feature.descKey)}
                     </p>
+                    <div className="mt-6 inline-flex items-center text-sm font-medium text-violet-600 opacity-0 transition-opacity group-hover:opacity-100 dark:text-violet-400">
+                      Explore capability{" "}
+                      <ArrowUpRight className="ml-1 h-4 w-4" />
+                    </div>
                   </CardContent>
                 </Card>
               ))}
@@ -291,59 +280,47 @@ export default function LandingPage({
           </div>
         </section>
 
-        {/* Learn Programming Section */}
-        <section id="learn" className="py-24">
+        <section id="learn" className="section-pad">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <Badge
-                variant="outline"
-                className="mb-4 text-xs font-medium border-slate-300 text-slate-600 dark:border-slate-700 dark:text-slate-400"
-              >
-                {t("landing.learn.badge")}
-              </Badge>
-              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-4">
-                {t("landing.learn.heading")}
-              </h2>
-              <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                {t("landing.learn.subheading")}
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <SectionIntro
+              badge={t("landing.learn.badge")}
+              heading={t("landing.learn.heading")}
+              subheading={t("landing.learn.subheading")}
+            />
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {programmingLanguages.map((lang) => (
                 <Card
                   key={lang.name}
-                  className="group overflow-hidden border-slate-200 bg-white hover:shadow-lg transition-all duration-300 dark:border-slate-800 dark:bg-slate-900"
+                  className="group overflow-hidden rounded-2xl border-slate-200/80 transition-all hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900"
                 >
                   <CardContent className="p-0">
-                    <div
-                      className={`h-2 w-full bg-gradient-to-r ${lang.color}`}
-                    />
+                    <div className={`h-1.5 bg-gradient-to-r ${lang.color}`} />
                     <div className="p-6">
-                      <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center justify-between">
                         <div
-                          className={`inline-flex rounded-xl p-3 ${lang.bgColor}`}
+                          className={`flex h-11 w-11 items-center justify-center rounded-xl ${lang.bgColor}`}
                         >
                           {lang.icon}
                         </div>
                         <Badge
                           variant="secondary"
-                          className="text-xs font-medium bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300"
+                          className="rounded-full bg-slate-100 text-xs dark:bg-slate-800"
                         >
                           {lang.level}
                         </Badge>
                       </div>
-                      <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                      <h3 className="mt-5 text-lg font-semibold">
                         {lang.name}
                       </h3>
-                      <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                      <p className="mt-2 min-h-12 text-sm leading-6 text-slate-600 dark:text-slate-400">
                         {t(lang.descKey)}
                       </p>
-                      <Link href={`/${locale}/courses`}>
-                        <span className="inline-flex items-center text-sm font-medium text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300 transition-colors group/link">
-                          {t("landing.learn.browse")}{" "}
-                          <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover/link:translate-x-0.5" />
-                        </span>
+                      <Link
+                        href={`/${locale}/courses`}
+                        className="mt-5 inline-flex items-center text-sm font-semibold text-violet-600 dark:text-violet-400"
+                      >
+                        {t("landing.learn.browse")}
+                        <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
                       </Link>
                     </div>
                   </CardContent>
@@ -353,37 +330,31 @@ export default function LandingPage({
           </div>
         </section>
 
-        {/* How It Works */}
-        <section className="py-24 bg-slate-900 text-white">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <Badge className="mb-4 bg-white/10 text-white border-white/20 hover:bg-white/20">
-                {t("landing.steps.badge")}
-              </Badge>
-              <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-                {t("landing.steps.heading")}
-              </h2>
-              <p className="text-lg text-slate-400 max-w-2xl mx-auto">
-                {t("landing.steps.subheading")}
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8">
+        <section className="relative overflow-hidden bg-slate-950 py-24 text-white dark:bg-black">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(124,58,237,.35),transparent_35%),radial-gradient(circle_at_90%_100%,rgba(6,182,212,.2),transparent_35%)]" />
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <SectionIntro
+              dark
+              badge={t("landing.steps.badge")}
+              heading={t("landing.steps.heading")}
+              subheading={t("landing.steps.subheading")}
+            />
+            <div className="grid gap-5 md:grid-cols-3">
               <StepCard
                 number="01"
-                icon={<Users className="h-6 w-6" />}
+                icon={<Users className="h-5 w-5" />}
                 title={t("landing.steps.step1Title")}
                 desc={t("landing.steps.step1Desc")}
               />
               <StepCard
                 number="02"
-                icon={<Lock className="h-6 w-6" />}
+                icon={<LockKeyhole className="h-5 w-5" />}
                 title={t("landing.steps.step2Title")}
                 desc={t("landing.steps.step2Desc")}
               />
               <StepCard
                 number="03"
-                icon={<TrendingUp className="h-6 w-6" />}
+                icon={<TrendingUp className="h-5 w-5" />}
                 title={t("landing.steps.step3Title")}
                 desc={t("landing.steps.step3Desc")}
               />
@@ -391,39 +362,27 @@ export default function LandingPage({
           </div>
         </section>
 
-        {/* Testimonials */}
-        <section className="py-24 bg-slate-50/50 dark:bg-slate-900/50">
+        <section className="section-pad bg-slate-50/70 dark:bg-slate-900/40">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <Badge
-                variant="outline"
-                className="mb-4 text-xs font-medium border-slate-300 text-slate-600 dark:border-slate-700 dark:text-slate-400"
-              >
-                {t("landing.testimonials.badge")}
-              </Badge>
-              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-4">
-                {t("landing.testimonials.heading")}
-              </h2>
-              <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                {t("landing.testimonials.subheading")}
-              </p>
-            </div>
-
-            <div className="flex flex-wrap justify-center gap-3 mb-12">
+            <SectionIntro
+              badge={t("landing.testimonials.badge")}
+              heading={t("landing.testimonials.heading")}
+              subheading={t("landing.testimonials.subheading")}
+            />
+            <div className="mb-10 flex flex-wrap justify-center gap-2">
               {["English", "العربية", "Français", "Deutsch", "Español"].map(
                 (lang) => (
                   <Badge
                     key={lang}
                     variant="secondary"
-                    className="px-4 py-2 text-sm font-medium bg-white border border-slate-200 text-slate-700 shadow-sm dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300"
+                    className="rounded-full border border-slate-200 bg-white px-4 py-2 dark:border-slate-700 dark:bg-slate-900"
                   >
                     {lang}
                   </Badge>
                 ),
               )}
             </div>
-
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid gap-5 md:grid-cols-3">
               <TestimonialCard
                 quote={t("landing.testimonials.q1")}
                 author="Sarah Chen"
@@ -449,40 +408,36 @@ export default function LandingPage({
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-24">
+        <section className="section-pad">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-600 via-indigo-600 to-blue-600 p-8 sm:p-16 text-center shadow-2xl shadow-violet-500/20">
-              <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50" />
+            <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-violet-600 via-indigo-600 to-cyan-600 px-6 py-16 text-center shadow-2xl shadow-violet-500/20 sm:px-16">
+              <div className="absolute inset-0 bg-grid-white opacity-20" />
               <div className="relative">
-                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+                <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 text-white backdrop-blur">
+                  <Command className="h-6 w-6" />
+                </div>
+                <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                   {t("landing.cta.heading")}
                 </h2>
-                <p className="text-lg text-violet-100 max-w-xl mx-auto mb-8">
+                <p className="mx-auto mt-4 max-w-xl text-lg leading-7 text-violet-100">
                   {t("landing.cta.subheading")}
                 </p>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                  {user && (user.role === "SUPERADMIN" || user.tenantId) ? (
-                    <Link href={dashboardHref}>
-                      <Button
-                        size="lg"
-                        className="h-12 px-8 text-base bg-white text-violet-700 hover:bg-violet-50 shadow-lg"
-                      >
-                        {t("landing.cta.dashboard")}{" "}
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </Link>
-                  ) : (
+                <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+                  {!authLoading && (
                     <Link
                       href={
-                        user ? `/${locale}/marketplace` : `/${locale}/register`
+                        user && (user.role === "SUPERADMIN" || user.tenantId)
+                          ? dashboardHref
+                          : primaryHref
                       }
                     >
                       <Button
                         size="lg"
-                        className="h-12 px-8 text-base bg-white text-violet-700 hover:bg-violet-50 shadow-lg"
+                        className="h-12 rounded-xl bg-white px-6 text-base text-violet-700 shadow-lg hover:bg-violet-50"
                       >
-                        {t("landing.cta.primary")}{" "}
+                        {user && (user.role === "SUPERADMIN" || user.tenantId)
+                          ? t("landing.cta.dashboard")
+                          : t("landing.cta.primary")}
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </Link>
@@ -491,7 +446,7 @@ export default function LandingPage({
                     <Button
                       size="lg"
                       variant="outline"
-                      className="h-12 px-8 text-base border-white/30 text-white hover:bg-white/10"
+                      className="h-12 rounded-xl border-white/30 px-6 text-base text-white hover:bg-white/10"
                     >
                       {t("landing.cta.secondary")}
                     </Button>
@@ -506,19 +461,54 @@ export default function LandingPage({
   );
 }
 
+function SectionIntro({
+  badge,
+  heading,
+  subheading,
+  dark = false,
+}: {
+  badge: string;
+  heading: string;
+  subheading: string;
+  dark?: boolean;
+}) {
+  return (
+    <div className="mx-auto mb-14 max-w-2xl text-center">
+      <Badge
+        variant="outline"
+        className={
+          dark
+            ? "mb-4 rounded-full border-white/20 bg-white/5 text-slate-200"
+            : "mb-4 rounded-full border-slate-300 text-slate-600 dark:border-slate-700 dark:text-slate-400"
+        }
+      >
+        {badge}
+      </Badge>
+      <h2
+        className={`text-3xl font-semibold tracking-tight sm:text-4xl ${dark ? "text-white" : "text-slate-950 dark:text-white"}`}
+      >
+        {heading}
+      </h2>
+      <p
+        className={`mt-4 text-lg leading-7 ${dark ? "text-slate-400" : "text-slate-600 dark:text-slate-400"}`}
+      >
+        {subheading}
+      </p>
+    </div>
+  );
+}
 function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div className="text-center">
-      <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
+      <div className="text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl dark:text-white">
         {value}
       </div>
-      <div className="mt-1 text-sm font-medium text-slate-600 dark:text-slate-400">
+      <div className="mt-1 text-xs font-medium uppercase tracking-[0.12em] text-slate-500 dark:text-slate-500">
         {label}
       </div>
     </div>
   );
 }
-
 function StepCard({
   number,
   icon,
@@ -531,17 +521,18 @@ function StepCard({
   desc: string;
 }) {
   return (
-    <div className="relative text-center">
-      <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-white/10 text-white mb-6 backdrop-blur-sm border border-white/10">
-        {icon}
+    <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-7 backdrop-blur transition-colors hover:bg-white/[0.1]">
+      <div className="flex items-center justify-between">
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-cyan-300">
+          {icon}
+        </div>
+        <span className="font-mono text-sm text-violet-300">{number}</span>
       </div>
-      <div className="text-sm font-bold text-violet-400 mb-2">{number}</div>
-      <h3 className="text-xl font-semibold text-white mb-3">{title}</h3>
-      <p className="text-sm text-slate-400 leading-relaxed">{desc}</p>
+      <h3 className="mt-8 text-xl font-semibold">{title}</h3>
+      <p className="mt-3 text-sm leading-6 text-slate-400">{desc}</p>
     </div>
   );
 }
-
 function TestimonialCard({
   quote,
   author,
@@ -556,32 +547,134 @@ function TestimonialCard({
   color: string;
 }) {
   return (
-    <Card className="border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
-      <CardContent className="p-6">
-        <div className="flex gap-1 mb-4">
+    <Card className="rounded-2xl border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900">
+      <CardContent className="p-7">
+        <div className="flex gap-1">
           {[1, 2, 3, 4, 5].map((i) => (
             <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
           ))}
         </div>
-        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed mb-6">
-          &ldquo;{quote}&rdquo;
+        <p className="mt-5 min-h-24 text-sm leading-6 text-slate-700 dark:text-slate-300">
+          “{quote}”
         </p>
-        <div className="flex items-center gap-3">
+        <div className="mt-7 flex items-center gap-3">
           <div
-            className={`flex h-10 w-10 items-center justify-center rounded-full ${color} text-white text-sm font-bold`}
+            className={`flex h-10 w-10 items-center justify-center rounded-full ${color} text-sm font-bold text-white`}
           >
             {initials}
           </div>
           <div>
-            <div className="text-sm font-semibold text-slate-900 dark:text-white">
-              {author}
-            </div>
-            <div className="text-xs text-slate-500 dark:text-slate-500">
-              {role}
-            </div>
+            <div className="text-sm font-semibold">{author}</div>
+            <div className="text-xs text-slate-500">{role}</div>
           </div>
         </div>
       </CardContent>
     </Card>
+  );
+}
+function ProductPreview() {
+  return (
+    <div className="relative mx-auto w-full max-w-xl lg:ml-auto">
+      <div className="absolute -inset-5 rounded-[2rem] bg-gradient-to-r from-violet-500/20 via-cyan-400/10 to-indigo-500/20 blur-2xl" />
+      <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-2xl shadow-slate-900/10 dark:border-slate-700 dark:bg-slate-900">
+        <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3 dark:border-slate-800">
+          <div className="flex gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-rose-400" />
+            <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
+            <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+          </div>
+          <div className="rounded-md bg-slate-100 px-3 py-1 text-[10px] font-medium text-slate-500 dark:bg-slate-800">
+            app.codestore.global
+          </div>
+          <div className="w-10" />
+        </div>
+        <div className="grid grid-cols-[112px_1fr]">
+          <div className="hidden border-r border-slate-200 bg-slate-50 p-4 sm:block dark:border-slate-800 dark:bg-slate-950">
+            <div className="flex items-center gap-2 text-xs font-semibold">
+              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-violet-600 text-white">
+                <Zap className="h-3.5 w-3.5" />
+              </div>
+              Workspace
+            </div>
+            <div className="mt-8 space-y-3 text-[10px] text-slate-500">
+              <div className="rounded-md bg-violet-100 px-2 py-1.5 font-medium text-violet-700 dark:bg-violet-950/60 dark:text-violet-300">
+                Overview
+              </div>
+              <div>Courses</div>
+              <div>Marketplace</div>
+              <div>Community</div>
+            </div>
+          </div>
+          <div className="p-5 sm:p-7">
+            <div className="flex items-start justify-between">
+              <div>
+                <div className="text-[10px] font-medium uppercase tracking-wider text-violet-600">
+                  Your workspace
+                </div>
+                <div className="mt-1 text-xl font-semibold tracking-tight">
+                  Build & grow together
+                </div>
+              </div>
+              <div className="rounded-lg bg-emerald-50 px-2 py-1 text-[10px] font-medium text-emerald-600 dark:bg-emerald-950/30">
+                Live
+              </div>
+            </div>
+            <div className="mt-6 grid grid-cols-3 gap-2">
+              <PreviewMetric label="Members" value="2,481" />
+              <PreviewMetric label="Revenue" value="$48.2K" />
+              <PreviewMetric label="Courses" value="128" />
+            </div>
+            <div className="mt-5 rounded-xl border border-slate-200 p-4 dark:border-slate-800">
+              <div className="flex items-center justify-between text-xs font-medium">
+                <span>Workspace activity</span>
+                <span className="text-emerald-500">+18.4%</span>
+              </div>
+              <div className="mt-5 flex h-24 items-end gap-1.5">
+                {[35, 48, 42, 62, 55, 74, 68, 86, 78, 94, 82, 100].map(
+                  (height, i) => (
+                    <div
+                      key={i}
+                      className="flex-1 rounded-t-sm bg-gradient-to-t from-violet-500 to-cyan-400 opacity-80"
+                      style={{ height: `${height}%` }}
+                    />
+                  ),
+                )}
+              </div>
+            </div>
+            <div className="mt-5 flex items-center gap-3 rounded-xl bg-slate-50 p-3 dark:bg-slate-800/70">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-100 text-violet-600 dark:bg-violet-950/60 dark:text-violet-300">
+                <Play className="h-3.5 w-3.5 fill-current" />
+              </div>
+              <div className="flex-1">
+                <div className="text-[11px] font-medium">
+                  Design systems for developers
+                </div>
+                <div className="mt-0.5 text-[10px] text-slate-500">
+                  Continue learning · 68%
+                </div>
+              </div>
+              <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute -bottom-5 -left-5 hidden items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-xl sm:flex dark:border-slate-700 dark:bg-slate-900">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-300">
+          <TrendingUp className="h-4 w-4" />
+        </div>
+        <div>
+          <div className="text-[10px] text-slate-500">This month</div>
+          <div className="text-sm font-semibold">+24.8% growth</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+function PreviewMetric({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg bg-slate-50 p-2.5 dark:bg-slate-800/70">
+      <div className="text-[9px] text-slate-500">{label}</div>
+      <div className="mt-1 text-sm font-semibold">{value}</div>
+    </div>
   );
 }

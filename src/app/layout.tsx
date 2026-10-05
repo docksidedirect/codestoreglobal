@@ -75,7 +75,7 @@ export const metadata: Metadata = {
     canonical: "https://codestore.global",
     languages: {
       "en-US": "https://codestore.global/en",
-      "ar-SA": "https://codestore.global/ar",
+      "ar-EG": "https://codestore.global/ar",
       "fr-FR": "https://codestore.global/fr",
       "de-DE": "https://codestore.global/de",
       "es-ES": "https://codestore.global/es",

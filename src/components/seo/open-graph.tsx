@@ -32,7 +32,14 @@ export function generateOpenGraph(config: OpenGraphConfig): Metadata {
       type,
       images: image
         ? [{ url: image, width: 1200, height: 630, alt: title }]
-        : [{ url: "https://codestore.global/og-default.jpg", width: 1200, height: 630, alt: title }],
+        : [
+            {
+              url: "https://codestore.global/og-default.jpg",
+              width: 1200,
+              height: 630,
+              alt: title,
+            },
+          ],
     },
     twitter: {
       card: "summary_large_image",
@@ -45,7 +52,7 @@ export function generateOpenGraph(config: OpenGraphConfig): Metadata {
       canonical: url,
       languages: {
         "en-US": url.replace(`/${locale}`, "/en"),
-        "ar-SA": url.replace(`/${locale}`, "/ar"),
+        "ar-EG": url.replace(`/${locale}`, "/ar"),
         "fr-FR": url.replace(`/${locale}`, "/fr"),
         "de-DE": url.replace(`/${locale}`, "/de"),
         "es-ES": url.replace(`/${locale}`, "/es"),

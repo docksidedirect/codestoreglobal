@@ -20,7 +20,7 @@ import { ScreenshotSlot } from "@/components/screenshot-slot";
 /*    - section backgrounds alternate white / #f7f7f8 for rhythm only.          */
 /* -------------------------------------------------------------------------- */
 
-const SITE = "https://codestore.global";
+const SITE = "https://codestoreglobal.com";
 const APP_VERSION = "2.0.0";
 const REPO_URL = "https://github.com/docksidedirect/codestoreglobal";
 
@@ -44,10 +44,18 @@ const FALLBACK_DESCRIPTION =
 // Capture instructions live in SCREENSHOTS.md. `available: false` removes a step
 // entirely — an illustration is never substituted for a real screen.
 const SHOTS = [
-  { key: "s1", available: false, chrome: "yourteam.codestore.global/products" },
-  { key: "s2", available: false, chrome: "yourteam.codestore.global/products/design-tokens" },
-  { key: "s3", available: false, chrome: "yourteam.codestore.global/settings/members" },
-  { key: "s4", available: false, chrome: "codestore.global/admin" },
+  { key: "s1", available: true, chrome: "codestoreglobal.com/en/marketplace" },
+  {
+    key: "s2",
+    available: false,
+    chrome: "yourteam.codestoreglobal.com/products/design-tokens",
+  },
+  {
+    key: "s3",
+    available: false,
+    chrome: "yourteam.codestoreglobal.com/settings/members",
+  },
+  { key: "s4", available: true, chrome: "codestoreglobal.com/en/admin" },
 ];
 const SHOT_PATH: Record<string, string> = {
   s1: "/screenshots/01-workspace-products.png",
@@ -62,7 +70,17 @@ const METRICS = ["m1", "m2", "m3"] as const;
 const FEATURE_KEYS = ["f1", "f2", "f3", "f4", "f5", "f6"] as const;
 const SPEC_KEYS = ["runtime", "database", "payments", "node"] as const;
 const PRICE_ROWS = ["members", "components", "commission", "hosting"] as const;
-const INCLUDED_KEYS = ["i1", "i2", "i3", "i4", "i5", "i6", "i7", "i8", "i9"] as const;
+const INCLUDED_KEYS = [
+  "i1",
+  "i2",
+  "i3",
+  "i4",
+  "i5",
+  "i6",
+  "i7",
+  "i8",
+  "i9",
+] as const;
 
 /* -------------------------------------------------------------------------- */
 
@@ -72,7 +90,9 @@ export async function generateMetadata({
   params: { locale: string };
 }): Promise<Metadata> {
   const t = await getTranslations({ locale });
-  const title = t.has("landingV2.meta.title") ? t("landingV2.meta.title") : FALLBACK_TITLE;
+  const title = t.has("landingV2.meta.title")
+    ? t("landingV2.meta.title")
+    : FALLBACK_TITLE;
   const description = t.has("landingV2.meta.description")
     ? t("landingV2.meta.description")
     : FALLBACK_DESCRIPTION;
@@ -97,7 +117,7 @@ export async function generateMetadata({
       siteName: "CodeStore",
       title,
       description,
-      // TODO: real 1200x630 screenshot, not a generated gradient card.
+      // Real screenshot, cropped from the verified marketplace capture.
       images: [
         {
           url: `${SITE}/og-codestore.png`,
@@ -152,7 +172,9 @@ export default async function LandingPage({
                   gap under the headline. 52px fits it in four. */}
               <h1 className="mt-4 text-[36px] font-semibold leading-[1.08] tracking-[-0.022em] sm:text-[46px] lg:text-[52px]">
                 {t("landingV2.hero.h1Lead")}{" "}
-                <span className="text-[var(--cs-accent)]">{t("landingV2.hero.h1Accent")}</span>
+                <span className="text-[var(--cs-accent)]">
+                  {t("landingV2.hero.h1Accent")}
+                </span>
               </h1>
               <p className="mt-6 max-w-xl text-[17px] leading-[1.65] text-[var(--cs-body)]">
                 {t("landingV2.hero.body")}
@@ -175,9 +197,14 @@ export default async function LandingPage({
               </div>
 
               <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-[13.5px] text-[var(--cs-body)]">
-                {(["hero.assure1", "hero.assure2", "hero.assure3"] as const).map((k) => (
+                {(
+                  ["hero.assure1", "hero.assure2", "hero.assure3"] as const
+                ).map((k) => (
                   <li key={k} className="flex items-center gap-2">
-                    <span aria-hidden="true" className="text-[var(--cs-accent)]">
+                    <span
+                      aria-hidden="true"
+                      className="text-[var(--cs-accent)]"
+                    >
                       ✓
                     </span>
                     {t(`landingV2.${k}`)}
@@ -201,7 +228,9 @@ export default async function LandingPage({
                 <ScreenshotSlot src={SHOT_PATH[heroShot.key]} />
               )}
               <div className="border-t border-[var(--cs-rule)] px-3.5 py-2.5">
-                <span className="cs-mono text-[12px] text-[var(--cs-mid)]">{heroShot.chrome}</span>
+                <span className="cs-mono text-[12px] text-[var(--cs-mid)]">
+                  {heroShot.chrome}
+                </span>
               </div>
             </div>
           </div>
@@ -244,7 +273,10 @@ export default async function LandingPage({
 
             <div className="mt-12 grid gap-x-10 gap-y-10 md:grid-cols-3">
               {(["pain1", "pain2", "pain3"] as const).map((pain, i) => (
-                <div key={pain} className="border-t-2 border-[var(--cs-ink)] pt-5">
+                <div
+                  key={pain}
+                  className="border-t-2 border-[var(--cs-ink)] pt-5"
+                >
                   <div className="cs-mono text-[13px] font-semibold">
                     {String(i + 1).padStart(2, "0")}
                   </div>
@@ -278,7 +310,10 @@ export default async function LandingPage({
             <div className="mt-12 grid gap-x-12 gap-y-10 md:grid-cols-2">
               {FEATURE_KEYS.map((f) => (
                 <div key={f} className="flex gap-4">
-                  <span aria-hidden="true" className="mt-0.5 shrink-0 text-[15px] text-[var(--cs-accent)]">
+                  <span
+                    aria-hidden="true"
+                    className="mt-0.5 shrink-0 text-[15px] text-[var(--cs-accent)]"
+                  >
                     ◆
                   </span>
                   <div>
@@ -317,7 +352,10 @@ export default async function LandingPage({
         {/* =============================================================== */}
         {/* HOW IT WORKS — four real screens, alternating.                   */}
         {/* =============================================================== */}
-        <section id="how" className="border-b border-[var(--cs-rule)] bg-[var(--cs-band)]">
+        <section
+          id="how"
+          className="border-b border-[var(--cs-rule)] bg-[var(--cs-band)]"
+        >
           <div className="cs-wrap py-16 lg:py-20">
             <div className="max-w-3xl">
               <p className="cs-label">{t("landingV2.how.eyebrow")}</p>
@@ -339,7 +377,9 @@ export default async function LandingPage({
                   >
                     <div
                       className={`min-w-0 overflow-hidden rounded-[8px] border border-[var(--cs-rule-2)] bg-white ${
-                        imageFirst ? "lg:col-start-1 lg:row-start-1" : "lg:col-start-2 lg:row-start-1"
+                        imageFirst
+                          ? "lg:col-start-1 lg:row-start-1"
+                          : "lg:col-start-2 lg:row-start-1"
                       }`}
                     >
                       {shot.available ? (
@@ -357,12 +397,16 @@ export default async function LandingPage({
                         <ScreenshotSlot src={SHOT_PATH[shot.key]} />
                       )}
                       <div className="border-t border-[var(--cs-rule)] px-3.5 py-2.5">
-                        <span className="cs-mono text-[12px] text-[var(--cs-mid)]">{shot.chrome}</span>
+                        <span className="cs-mono text-[12px] text-[var(--cs-mid)]">
+                          {shot.chrome}
+                        </span>
                       </div>
                     </div>
                     <figcaption
                       className={
-                        imageFirst ? "lg:col-start-2 lg:row-start-1" : "lg:col-start-1 lg:row-start-1"
+                        imageFirst
+                          ? "lg:col-start-2 lg:row-start-1"
+                          : "lg:col-start-1 lg:row-start-1"
                       }
                     >
                       <div className="cs-mono text-[13px] font-semibold">
@@ -402,8 +446,12 @@ export default async function LandingPage({
                     key={k}
                     className="flex justify-between border-t border-[var(--cs-rule)] py-3 last:border-b"
                   >
-                    <dt className="text-[var(--cs-body)]">{t(`landingV2.deploy.spec.${k}Label`)}</dt>
-                    <dd className="cs-mono text-[13px]">{t(`landingV2.deploy.spec.${k}Value`)}</dd>
+                    <dt className="text-[var(--cs-body)]">
+                      {t(`landingV2.deploy.spec.${k}Label`)}
+                    </dt>
+                    <dd className="cs-mono text-[13px]">
+                      {t(`landingV2.deploy.spec.${k}Value`)}
+                    </dd>
                   </div>
                 ))}
               </dl>
@@ -444,7 +492,9 @@ npm run build && npm start`}</code>
                 </p>
 
                 <div className="mt-8 border-l-2 border-[var(--cs-ink)] pl-5">
-                  <p className="text-[15px] leading-[1.65]">{t("landingV2.proof.note")}</p>
+                  <p className="text-[15px] leading-[1.65]">
+                    {t("landingV2.proof.note")}
+                  </p>
                   <Link href={demoHref}>
                     <Button className="mt-4 h-auto rounded-[6px] bg-[var(--cs-ink)] px-4 py-2.5 text-[14.5px] font-medium text-white hover:bg-black">
                       {t("landingV2.proof.cta")}
@@ -454,15 +504,25 @@ npm run build && npm start`}</code>
               </div>
 
               <div>
-                <div className="cs-label">{t("landingV2.proof.changelogHeading")}</div>
+                <div className="cs-label">
+                  {t("landingV2.proof.changelogHeading")}
+                </div>
                 <table className="mt-4 w-full text-left text-[14.5px]">
                   <tbody>
                     {CHANGELOG.map((entry) => (
-                      <tr key={entry.version} className="border-t border-[var(--cs-rule)] last:border-b">
-                        <th scope="row" className="cs-mono w-16 py-3 align-top text-[13px] font-normal">
+                      <tr
+                        key={entry.version}
+                        className="border-t border-[var(--cs-rule)] last:border-b"
+                      >
+                        <th
+                          scope="row"
+                          className="cs-mono w-16 py-3 align-top text-[13px] font-normal"
+                        >
                           {entry.version}
                         </th>
-                        <td className="py-3 text-[var(--cs-body)]">{entry.body}</td>
+                        <td className="py-3 text-[var(--cs-body)]">
+                          {entry.body}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -479,7 +539,10 @@ npm run build && npm start`}</code>
                   {CHANGELOG_URL && (
                     <>
                       {" · "}
-                      <a href={CHANGELOG_URL} className="text-[var(--cs-accent)] underline-offset-4 hover:underline">
+                      <a
+                        href={CHANGELOG_URL}
+                        className="text-[var(--cs-accent)] underline-offset-4 hover:underline"
+                      >
                         {t("landingV2.proof.changelogLink")}
                       </a>
                     </>
@@ -487,13 +550,19 @@ npm run build && npm start`}</code>
                   {DOCS_URL && (
                     <>
                       {" · "}
-                      <a href={DOCS_URL} className="text-[var(--cs-accent)] underline-offset-4 hover:underline">
+                      <a
+                        href={DOCS_URL}
+                        className="text-[var(--cs-accent)] underline-offset-4 hover:underline"
+                      >
                         {t("landingV2.proof.docsLink")}
                       </a>
                     </>
                   )}
                   {" · "}
-                  <a href="mailto:support@codestore.global" className="text-[var(--cs-accent)] underline-offset-4 hover:underline">
+                  <a
+                    href="mailto:support@codestore.global"
+                    className="text-[var(--cs-accent)] underline-offset-4 hover:underline"
+                  >
                     support@codestore.global
                   </a>
                 </p>
@@ -519,7 +588,9 @@ npm run build && npm start`}</code>
 
             <div className="mt-12 grid gap-10 rounded-[10px] border border-[var(--cs-rule-2)] p-8 sm:p-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
               <div>
-                <h3 className="text-[17px] font-semibold">{t("landingV2.pricing.planName")}</h3>
+                <h3 className="text-[17px] font-semibold">
+                  {t("landingV2.pricing.planName")}
+                </h3>
                 <p className="mt-4 flex items-baseline gap-2">
                   <span className="text-[46px] font-semibold leading-none tracking-[-0.03em]">
                     ${PRICE_PER_WORKSPACE_MONTH}
@@ -534,7 +605,9 @@ npm run build && npm start`}</code>
                       key={k}
                       className="flex justify-between border-t border-[var(--cs-rule)] py-2.5 last:border-b"
                     >
-                      <dt className="text-[var(--cs-body)]">{t(`landingV2.pricing.row.${k}Label`)}</dt>
+                      <dt className="text-[var(--cs-body)]">
+                        {t(`landingV2.pricing.row.${k}Label`)}
+                      </dt>
                       <dd>{t(`landingV2.pricing.row.${k}Value`)}</dd>
                     </div>
                   ))}
@@ -550,14 +623,21 @@ npm run build && npm start`}</code>
               </div>
 
               <div>
-                <div className="cs-label">{t("landingV2.pricing.includedHeading")}</div>
+                <div className="cs-label">
+                  {t("landingV2.pricing.includedHeading")}
+                </div>
                 <ul className="mt-5 grid gap-2.5 text-[14.5px] sm:grid-cols-2">
                   {INCLUDED_KEYS.map((k) => (
                     <li key={k} className="flex gap-2.5">
-                      <span aria-hidden="true" className="shrink-0 text-[var(--cs-accent)]">
+                      <span
+                        aria-hidden="true"
+                        className="shrink-0 text-[var(--cs-accent)]"
+                      >
                         ✓
                       </span>
-                      <span className="text-[var(--cs-body)]">{t(`landingV2.included.${k}`)}</span>
+                      <span className="text-[var(--cs-body)]">
+                        {t(`landingV2.included.${k}`)}
+                      </span>
                     </li>
                   ))}
                 </ul>

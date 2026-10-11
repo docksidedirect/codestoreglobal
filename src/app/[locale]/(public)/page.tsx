@@ -22,7 +22,6 @@ import {
   LockKeyhole,
   MessageSquare,
   Play,
-  Quote,
   ShieldCheck,
   ShoppingBag,
   Sparkles,
@@ -46,8 +45,6 @@ const programmingLanguages = [
     level: "Beginner",
     color: "from-orange-500 to-amber-400",
     bgColor: "bg-orange-500/10 text-orange-600",
-    ringColor:
-      "group-hover:ring-orange-200 dark:group-hover:ring-orange-900/40",
   },
   {
     name: "JavaScript",
@@ -56,8 +53,6 @@ const programmingLanguages = [
     level: "Beginner",
     color: "from-yellow-400 to-amber-500",
     bgColor: "bg-yellow-500/10 text-yellow-600",
-    ringColor:
-      "group-hover:ring-yellow-200 dark:group-hover:ring-yellow-900/40",
   },
   {
     name: "Python",
@@ -66,7 +61,6 @@ const programmingLanguages = [
     level: "Beginner",
     color: "from-blue-500 to-cyan-400",
     bgColor: "bg-blue-500/10 text-blue-600",
-    ringColor: "group-hover:ring-blue-200 dark:group-hover:ring-blue-900/40",
   },
   {
     name: "TypeScript",
@@ -75,7 +69,6 @@ const programmingLanguages = [
     level: "Intermediate",
     color: "from-sky-500 to-blue-600",
     bgColor: "bg-sky-500/10 text-sky-600",
-    ringColor: "group-hover:ring-sky-200 dark:group-hover:ring-sky-900/40",
   },
   {
     name: "SQL & Databases",
@@ -84,8 +77,6 @@ const programmingLanguages = [
     level: "Intermediate",
     color: "from-emerald-500 to-teal-500",
     bgColor: "bg-emerald-500/10 text-emerald-600",
-    ringColor:
-      "group-hover:ring-emerald-200 dark:group-hover:ring-emerald-900/40",
   },
   {
     name: "Rust",
@@ -94,7 +85,6 @@ const programmingLanguages = [
     level: "Advanced",
     color: "from-red-500 to-rose-500",
     bgColor: "bg-red-500/10 text-red-600",
-    ringColor: "group-hover:ring-red-200 dark:group-hover:ring-red-900/40",
   },
 ];
 
@@ -183,29 +173,28 @@ export default function LandingPage({
       <WebSiteSchema locale={locale} />
       <BreadcrumbSchema items={breadcrumbItems} />
       <main>
-        {/* ── HERO ─────────────────────────────────────────────── */}
         <section className="relative isolate border-b border-slate-200/70 dark:border-slate-800/70">
           <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
             <div className="absolute -left-40 -top-36 h-[520px] w-[520px] rounded-full bg-violet-300/25 blur-3xl dark:bg-violet-900/20" />
             <div className="absolute right-[-12%] top-20 h-[620px] w-[620px] rounded-full bg-cyan-200/25 blur-3xl dark:bg-cyan-900/20" />
             <div className="absolute inset-0 bg-grid-slate" />
           </div>
-          <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 pb-10 pt-10 sm:gap-12 sm:px-6 sm:pb-14 sm:pt-14 lg:grid-cols-[0.92fr_1.08fr] lg:px-8 lg:pb-20 lg:pt-20">
+          <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-14 pt-12 sm:gap-16 sm:pb-20 sm:pt-16 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8 lg:pb-28 lg:pt-24">
             <div className="max-w-2xl">
-              <Badge className="mb-6 rounded-full border-violet-200 bg-violet-50 px-3.5 py-1.5 text-violet-700 shadow-sm dark:border-violet-800 dark:bg-violet-950/50 dark:text-violet-300">
+              <Badge className="mb-7 rounded-full border-violet-200 bg-violet-50 px-3.5 py-1.5 text-violet-700 shadow-sm dark:border-violet-800 dark:bg-violet-950/50 dark:text-violet-300">
                 <Sparkles className="mr-1.5 h-3.5 w-3.5" />
                 {t("landing.hero.badge")}
               </Badge>
-              <h1 className="text-balance text-4xl font-semibold tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-[4.5rem] lg:leading-[1.02] dark:text-white">
+              <h1 className="text-balance text-4xl font-semibold tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-[4.7rem] lg:leading-[1.02] dark:text-white">
                 {t("landing.hero.title1")}{" "}
                 <span className="text-gradient">
                   {t("landing.hero.title2")}
                 </span>
               </h1>
-              <p className="mt-6 max-w-xl text-lg leading-8 text-slate-600 sm:text-xl dark:text-slate-400">
+              <p className="mt-7 max-w-xl text-lg leading-8 text-slate-600 sm:text-xl dark:text-slate-400">
                 {t("landing.hero.subtitle")}
               </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href={
                     user && (user.role === "SUPERADMIN" || user.tenantId)
@@ -234,7 +223,7 @@ export default function LandingPage({
                   </Button>
                 </Link>
               </div>
-              <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-500 dark:text-slate-400">
+              <div className="mt-9 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-500 dark:text-slate-400">
                 <span className="inline-flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                   Built for global teams
@@ -247,7 +236,7 @@ export default function LandingPage({
             </div>
             <ProductPreview />
           </div>
-          <div className="mx-auto grid max-w-7xl grid-cols-2 divide-slate-200/70 border-t border-slate-200/70 sm:grid-cols-4 sm:divide-x dark:divide-slate-800/70 dark:border-slate-800/70">
+          <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 border-t border-slate-200/70 px-4 py-8 sm:grid-cols-4 sm:px-6 lg:px-8 dark:border-slate-800/70">
             <Stat value="10K+" label={t("landing.stats.devs")} />
             <Stat value="500+" label={t("landing.stats.components")} />
             <Stat value="1,200+" label={t("landing.stats.courses")} />
@@ -255,8 +244,7 @@ export default function LandingPage({
           </div>
         </section>
 
-        {/* ── FEATURES ─────────────────────────────────────────── */}
-        <section className="py-12 sm:py-16 lg:py-20 bg-slate-50/70 dark:bg-slate-900/40">
+        <section className="section-pad bg-slate-50/70 dark:bg-slate-900/40">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <SectionIntro
               badge={t("landing.features.badge")}
@@ -267,32 +255,24 @@ export default function LandingPage({
               {features.map((feature, i) => (
                 <Card
                   key={i}
-                  className={`group relative overflow-hidden rounded-2xl border-slate-200/80 bg-white/80 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-violet-900/10 dark:border-slate-800 dark:bg-slate-900/70 dark:hover:shadow-violet-500/10 ${
-                    i === 0 ? "lg:col-span-2" : ""
-                  }`}
+                  className={`group relative overflow-hidden rounded-2xl border-slate-200/80 bg-white/80 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-violet-200 hover:shadow-xl hover:shadow-violet-900/5 dark:border-slate-800 dark:bg-slate-900/70 ${i === 0 ? "lg:col-span-2" : ""}`}
                 >
-                  {/* hover glow blob */}
-                  <div
-                    className={`pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-gradient-to-br ${feature.color} opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-20`}
-                  />
-                  <CardContent className="relative p-7">
-                    <div className="flex items-start justify-between">
-                      <div
-                        className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${feature.color} text-white shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3`}
-                      >
-                        {feature.icon}
-                      </div>
-                      <span className="flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 text-slate-400 transition-all duration-300 group-hover:border-transparent group-hover:bg-slate-950 group-hover:text-white dark:border-slate-700 dark:group-hover:bg-white dark:group-hover:text-slate-950">
-                        <ArrowUpRight className="h-3.5 w-3.5" />
-                      </span>
+                  <CardContent className="p-7">
+                    <div
+                      className={`mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${feature.color} text-white shadow-lg shadow-violet-500/10`}
+                    >
+                      {feature.icon}
                     </div>
-                    <h3 className="mt-6 text-lg font-semibold text-slate-900 dark:text-white">
+                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                       {t(feature.titleKey)}
                     </h3>
                     <p className="mt-2 max-w-lg text-sm leading-6 text-slate-600 dark:text-slate-400">
                       {t(feature.descKey)}
                     </p>
-                    <div className="mt-5 h-px w-10 bg-gradient-to-r from-violet-500 to-transparent transition-all duration-500 group-hover:w-24" />
+                    <div className="mt-6 inline-flex items-center text-sm font-medium text-violet-600 opacity-0 transition-opacity group-hover:opacity-100 dark:text-violet-400">
+                      Explore capability{" "}
+                      <ArrowUpRight className="ml-1 h-4 w-4" />
+                    </div>
                   </CardContent>
                 </Card>
               ))}
@@ -300,8 +280,7 @@ export default function LandingPage({
           </div>
         </section>
 
-        {/* ── LEARN ────────────────────────────────────────────── */}
-        <section id="learn" className="py-12 sm:py-16 lg:py-20">
+        <section id="learn" className="section-pad">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <SectionIntro
               badge={t("landing.learn.badge")}
@@ -312,38 +291,36 @@ export default function LandingPage({
               {programmingLanguages.map((lang) => (
                 <Card
                   key={lang.name}
-                  className={`group overflow-hidden rounded-2xl border-slate-200/80 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900 ${lang.ringColor} hover:ring-2`}
+                  className="group overflow-hidden rounded-2xl border-slate-200/80 transition-all hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900"
                 >
                   <CardContent className="p-0">
-                    {/* taller gradient header with pattern */}
-                    <div
-                      className={`relative flex h-20 items-center justify-center bg-gradient-to-br ${lang.color} overflow-hidden`}
-                    >
-                      <div className="absolute inset-0 bg-grid-white opacity-25" />
-                      <div className="absolute -bottom-8 left-1/2 h-24 w-24 -translate-x-1/2 rounded-full bg-white/20 blur-xl transition-transform duration-500 group-hover:scale-150" />
-                      <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-white/95 text-slate-900 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
-                        {lang.icon}
-                      </div>
-                    </div>
-                    <div className="p-6 pt-5">
+                    <div className={`h-1.5 bg-gradient-to-r ${lang.color}`} />
+                    <div className="p-6">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-semibold">{lang.name}</h3>
+                        <div
+                          className={`flex h-11 w-11 items-center justify-center rounded-xl ${lang.bgColor}`}
+                        >
+                          {lang.icon}
+                        </div>
                         <Badge
                           variant="secondary"
-                          className="rounded-full bg-slate-100 text-xs capitalize dark:bg-slate-800"
+                          className="rounded-full bg-slate-100 text-xs dark:bg-slate-800"
                         >
                           {lang.level}
                         </Badge>
                       </div>
+                      <h3 className="mt-5 text-lg font-semibold">
+                        {lang.name}
+                      </h3>
                       <p className="mt-2 min-h-12 text-sm leading-6 text-slate-600 dark:text-slate-400">
                         {t(lang.descKey)}
                       </p>
                       <Link
                         href={`/${locale}/courses`}
-                        className="mt-4 inline-flex items-center text-sm font-semibold text-violet-600 dark:text-violet-400"
+                        className="mt-5 inline-flex items-center text-sm font-semibold text-violet-600 dark:text-violet-400"
                       >
                         {t("landing.learn.browse")}
-                        <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1.5" />
+                        <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
                       </Link>
                     </div>
                   </CardContent>
@@ -353,8 +330,7 @@ export default function LandingPage({
           </div>
         </section>
 
-        {/* ── STEPS ────────────────────────────────────────────── */}
-        <section className="relative overflow-hidden bg-slate-950 py-12 text-white sm:py-16 lg:py-20 dark:bg-black">
+        <section className="relative overflow-hidden bg-slate-950 py-16 sm:py-20 text-white dark:bg-black">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(124,58,237,.35),transparent_35%),radial-gradient(circle_at_90%_100%,rgba(6,182,212,.2),transparent_35%)]" />
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <SectionIntro
@@ -363,85 +339,79 @@ export default function LandingPage({
               heading={t("landing.steps.heading")}
               subheading={t("landing.steps.subheading")}
             />
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="grid gap-5 md:grid-cols-3">
               <StepCard
                 number="01"
                 icon={<Users className="h-5 w-5" />}
                 title={t("landing.steps.step1Title")}
                 desc={t("landing.steps.step1Desc")}
-                accent="from-violet-500 to-fuchsia-500"
               />
               <StepCard
                 number="02"
                 icon={<LockKeyhole className="h-5 w-5" />}
                 title={t("landing.steps.step2Title")}
                 desc={t("landing.steps.step2Desc")}
-                accent="from-cyan-400 to-blue-500"
               />
               <StepCard
                 number="03"
                 icon={<TrendingUp className="h-5 w-5" />}
                 title={t("landing.steps.step3Title")}
                 desc={t("landing.steps.step3Desc")}
-                accent="from-emerald-400 to-teal-500"
               />
             </div>
           </div>
         </section>
 
-        {/* ── TESTIMONIALS ─────────────────────────────────────── */}
-        <section className="py-12 sm:py-16 lg:py-20 bg-slate-50/70 dark:bg-slate-900/40">
+        <section className="section-pad bg-slate-50/70 dark:bg-slate-900/40">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <SectionIntro
               badge={t("landing.testimonials.badge")}
               heading={t("landing.testimonials.heading")}
               subheading={t("landing.testimonials.subheading")}
             />
-            <div className="mb-8 flex flex-wrap justify-center gap-2">
+            <div className="mb-10 flex flex-wrap justify-center gap-2">
               {["English", "العربية", "Français", "Deutsch", "Español"].map(
                 (lang) => (
                   <Badge
                     key={lang}
                     variant="secondary"
-                    className="rounded-full border border-slate-200 bg-white px-4 py-2 transition-colors hover:border-violet-300 hover:text-violet-600 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-violet-700"
+                    className="rounded-full border border-slate-200 bg-white px-4 py-2 dark:border-slate-700 dark:bg-slate-900"
                   >
                     {lang}
                   </Badge>
                 ),
               )}
             </div>
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="grid gap-5 md:grid-cols-3">
               <TestimonialCard
                 quote={t("landing.testimonials.q1")}
                 author="Sarah Chen"
                 role={t("landing.testimonials.r1")}
                 initials="SC"
-                color="from-emerald-400 to-teal-500"
+                color="bg-emerald-500"
               />
               <TestimonialCard
                 quote={t("landing.testimonials.q2")}
                 author="Marcus Weber"
                 role={t("landing.testimonials.r2")}
                 initials="MW"
-                color="from-blue-400 to-indigo-500"
+                color="bg-blue-500"
               />
               <TestimonialCard
                 quote={t("landing.testimonials.q3")}
                 author="Demo Admin"
                 role={t("landing.testimonials.r3")}
                 initials="DA"
-                color="from-violet-400 to-fuchsia-500"
+                color="bg-violet-500"
               />
             </div>
           </div>
         </section>
 
-        {/* ── CTA ──────────────────────────────────────────────── */}
-        <section className="py-12 sm:py-16 lg:py-20">
+        <section className="section-pad">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-violet-600 via-indigo-600 to-cyan-600 px-6 py-14 text-center shadow-2xl shadow-violet-500/20 sm:px-16">
+            <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-violet-600 via-indigo-600 to-cyan-600 px-6 py-16 text-center shadow-2xl shadow-violet-500/20 sm:px-16">
               <div className="absolute inset-0 bg-grid-white opacity-20" />
-              <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
               <div className="relative">
                 <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 text-white backdrop-blur">
                   <Command className="h-6 w-6" />
@@ -503,7 +473,7 @@ function SectionIntro({
   dark?: boolean;
 }) {
   return (
-    <div className="mx-auto mb-10 max-w-2xl text-center">
+    <div className="mx-auto mb-14 max-w-2xl text-center">
       <Badge
         variant="outline"
         className={
@@ -520,18 +490,17 @@ function SectionIntro({
         {heading}
       </h2>
       <p
-        className={`mt-3 text-lg leading-7 ${dark ? "text-slate-400" : "text-slate-600 dark:text-slate-400"}`}
+        className={`mt-4 text-lg leading-7 ${dark ? "text-slate-400" : "text-slate-600 dark:text-slate-400"}`}
       >
         {subheading}
       </p>
     </div>
   );
 }
-
 function Stat({ value, label }: { value: string; label: string }) {
   return (
-    <div className="px-4 py-6 text-center transition-colors hover:bg-slate-50 dark:hover:bg-slate-900/50">
-      <div className="bg-gradient-to-br from-slate-950 to-slate-600 bg-clip-text text-2xl font-bold tracking-tight text-transparent sm:text-3xl dark:from-white dark:to-slate-400">
+    <div className="text-center">
+      <div className="text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl dark:text-white">
         {value}
       </div>
       <div className="mt-1 text-xs font-medium uppercase tracking-[0.12em] text-slate-500 dark:text-slate-500">
@@ -540,44 +509,30 @@ function Stat({ value, label }: { value: string; label: string }) {
     </div>
   );
 }
-
 function StepCard({
   number,
   icon,
   title,
   desc,
-  accent,
 }: {
   number: string;
   icon: React.ReactNode;
   title: string;
   desc: string;
-  accent: string;
 }) {
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] p-7 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:bg-white/[0.1] hover:shadow-2xl hover:shadow-violet-500/10">
-      {/* top accent line */}
-      <div
-        className={`absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r ${accent} opacity-0 transition-opacity duration-300 group-hover:opacity-100`}
-      />
+    <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-7 backdrop-blur transition-colors hover:bg-white/[0.1]">
       <div className="flex items-center justify-between">
-        <div
-          className={`flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${accent} text-white shadow-lg transition-transform duration-300 group-hover:scale-110`}
-        >
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-cyan-300">
           {icon}
         </div>
-        <span
-          className={`bg-gradient-to-br ${accent} bg-clip-text font-mono text-sm font-bold text-transparent`}
-        >
-          {number}
-        </span>
+        <span className="font-mono text-sm text-violet-300">{number}</span>
       </div>
-      <h3 className="mt-7 text-xl font-semibold">{title}</h3>
+      <h3 className="mt-8 text-xl font-semibold">{title}</h3>
       <p className="mt-3 text-sm leading-6 text-slate-400">{desc}</p>
     </div>
   );
 }
-
 function TestimonialCard({
   quote,
   author,
@@ -592,30 +547,21 @@ function TestimonialCard({
   color: string;
 }) {
   return (
-    <Card className="group relative overflow-hidden rounded-2xl border-slate-200/80 bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900">
-      {/* gradient accent bar */}
-      <div
-        className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${color}`}
-      />
+    <Card className="rounded-2xl border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900">
       <CardContent className="p-7">
-        <div className="flex items-center justify-between">
-          <div className="flex gap-1">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
-            ))}
-          </div>
-          <Quote className="h-6 w-6 text-slate-200 transition-colors group-hover:text-violet-200 dark:text-slate-800 dark:group-hover:text-violet-900" />
+        <div className="flex gap-1">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+          ))}
         </div>
         <p className="mt-5 min-h-24 text-sm leading-6 text-slate-700 dark:text-slate-300">
           “{quote}”
         </p>
-        <div className="mt-7 flex items-center gap-3 border-t border-slate-100 pt-5 dark:border-slate-800">
+        <div className="mt-7 flex items-center gap-3">
           <div
-            className={`flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br ${color} p-[2px]`}
+            className={`flex h-10 w-10 items-center justify-center rounded-full ${color} text-sm font-bold text-white`}
           >
-            <div className="flex h-full w-full items-center justify-center rounded-full bg-white text-xs font-bold text-slate-900 dark:bg-slate-900 dark:text-white">
-              {initials}
-            </div>
+            {initials}
           </div>
           <div>
             <div className="text-sm font-semibold">{author}</div>
@@ -626,7 +572,6 @@ function TestimonialCard({
     </Card>
   );
 }
-
 function ProductPreview() {
   return (
     <div className="relative mx-auto w-full max-w-xl lg:ml-auto">
@@ -725,7 +670,6 @@ function ProductPreview() {
     </div>
   );
 }
-
 function PreviewMetric({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-lg bg-slate-50 p-2.5 dark:bg-slate-800/70">

@@ -7,17 +7,35 @@ export const dynamic = "force-dynamic";
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 
-async function requireTenantMember(request: NextRequest, tenantId: string) {
+/**
+ * Resolves the URL segment to a canonical Tenant id and checks access.
+ *
+ * The segment is a slug ("devnexus-demo"), but every column here is a cuid, so
+ * the raw segment must never reach a `where` clause. Previously this compared
+ * `user.tenantId !== tenantId` (cuid vs slug) and returned 401 for every valid
+ * workspace, which made the members page look empty.
+ */
+async function requireTenantMember(request: NextRequest, segment: string) {
   const token = request.cookies.get("token")?.value;
   if (!token) return null;
   try {
     const { payload } = await jwtVerify(token, JWT_SECRET, { clockTolerance: 60 });
+
+    const tenant = await prisma.tenant.findFirst({
+      where: { OR: [{ id: segment }, { slug: segment }] },
+      select: { id: true },
+    });
+    if (!tenant) return null;
+
     const user = await prisma.user.findUnique({
       where: { id: payload.userId as string },
-      select: { id: true, tenantId: true },
+      select: { id: true, tenantId: true, role: true },
     });
-    if (!user || user.tenantId !== tenantId) return null;
-    return user;
+    if (!user) return null;
+    if (user.role !== "SUPERADMIN" && user.tenantId !== tenant.id) return null;
+
+    // Callers must use `tenantId`, never `params.tenantId`.
+    return { ...user, tenantId: tenant.id };
   } catch {
     return null;
   }
@@ -35,12 +53,12 @@ export async function GET(
 
   const [members, invites] = await Promise.all([
     prisma.user.findMany({
-      where: { tenantId: params.tenantId },
+      where: { tenantId: me.tenantId },
       select: { id: true, firstName: true, lastName: true, email: true, role: true, avatarUrl: true, createdAt: true },
       orderBy: { createdAt: "asc" },
     }),
     prisma.tenantInvite.findMany({
-      where: { tenantId: params.tenantId },
+      where: { tenantId: me.tenantId },
       orderBy: { createdAt: "desc" },
     }),
   ]);
@@ -72,7 +90,7 @@ export async function POST(
 
   // Already a member of this tenant?
   const existingUser = await prisma.user.findUnique({ where: { email: cleanEmail } });
-  if (existingUser && existingUser.tenantId === params.tenantId) {
+  if (existingUser && existingUser.tenantId === me.tenantId) {
     return NextResponse.json({ success: false, error: "This email is already a member" }, { status: 409 });
   }
 
@@ -81,9 +99,9 @@ export async function POST(
 
   // @@unique([tenantId, email]) — regenerate instead of failing
   const invite = await prisma.tenantInvite.upsert({
-    where: { tenantId_email: { tenantId: params.tenantId, email: cleanEmail } },
+    where: { tenantId_email: { tenantId: me.tenantId, email: cleanEmail } },
     update: { token, expiresAt, usedAt: null, invitedBy: me.id },
-    create: { email: cleanEmail, token, expiresAt, tenantId: params.tenantId, invitedBy: me.id },
+    create: { email: cleanEmail, token, expiresAt, tenantId: me.tenantId, invitedBy: me.id },
   });
 
   return NextResponse.json({ success: true, invite }, { status: 201 });

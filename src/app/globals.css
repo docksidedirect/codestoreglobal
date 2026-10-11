@@ -105,3 +105,58 @@
     background-size: 32px 32px;
   }
 }
+
+/* ===========================================================================
+   APPEND THIS TO src/app/globals.css
+   ===========================================================================
+
+   Paste the block below at the end of src/app/globals.css, after the existing
+   `@layer utilities { ... }` block. Nothing above it needs to change.
+
+   Why a separate namespaced block instead of reusing the shadcn tokens:
+   globals.css already defines --accent, --border and --muted as bare HSL
+   triplets (e.g. `--accent: 210 40% 96.1%`). They are consumed as
+   `hsl(var(--accent))` by every Button, Badge and Card in the app. Reusing
+   those names for the landing palette would silently break those components
+   across tenant and admin screens. So the landing palette is prefixed --cs- and
+   scoped to .cs-theme.
+
+   To re-skin the landing page later, this is the only block you need to touch.
+   --------------------------------------------------------------------------- */
+
+@layer components {
+  .cs-theme {
+    --cs-ink: #111318;
+    --cs-body: #3f444d;
+    --cs-mid: #6b7280;
+    --cs-faint: #9aa0a6;
+    --cs-rule: #e5e7eb;
+    --cs-rule-2: #d1d5db;
+    --cs-band: #f7f7f8;
+    --cs-accent: #1f4ed8;
+    color: var(--cs-ink);
+  }
+
+  /* One content column, so every section lines up on the same left edge. */
+  .cs-wrap {
+    max-width: 1140px;
+    margin-inline: auto;
+    padding-inline: 24px;
+  }
+
+  /* Monospace eyebrow labels. Not decorative: they mark what the block is. */
+  .cs-label {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cs-faint);
+  }
+
+  /* Monospace for data: versions, field names, specs, routes. */
+  .cs-mono {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+}
+

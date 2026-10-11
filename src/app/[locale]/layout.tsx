@@ -7,9 +7,9 @@ import { locales, type Locale } from "@/i18n/request";
 import { isRTL } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "CODESTORE GLOBAL — Multi-Tenant Developer Platform",
+  title: "CodeStore — Private Component Store for Dev Teams",
   description:
-    "Host secure sub-workspaces, publish technical courses, trade SaaS components, and run an escrowed job marketplace — all in one unified platform.",
+    "A private component store for dev teams. Deploy it, and your team gets a gated storefront for internal components and licensed kits.",
 };
 
 export default async function LocaleLayout({

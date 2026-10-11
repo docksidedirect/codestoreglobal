@@ -29,6 +29,11 @@ export async function GET(request: NextRequest) {
         role: true,
         tenantId: true,
         avatarUrl: true,
+        // Workspace routes are keyed by slug, not by the cuid in tenantId.
+        // Without this, post-login redirects land on /{locale}/{cuid}/dashboard,
+        // which renders an empty workspace because the underlying APIs match on
+        // slug. Same trap for /products, /settings/members and /courses.
+        tenant: { select: { slug: true } },
       },
     });
 
@@ -39,7 +44,11 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({ success: true, user });
+    const { tenant, ...rest } = user;
+    return NextResponse.json({
+      success: true,
+      user: { ...rest, tenantSlug: tenant?.slug ?? null },
+    });
   } catch {
     return NextResponse.json(
       { success: false, user: null },

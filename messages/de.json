@@ -206,5 +206,142 @@
     "copy": "Kopieren",
     "share": "Teilen",
     "download": "Herunterladen"
+  },
+  "landingV2": {
+    "meta": {
+      "title": "CodeStore — Privater Komponenten-Store für Dev-Teams",
+      "description": "Ihre Komponenten liegen in Slack-Threads und niemand weiß, welche Lizenzen Sie halten. CodeStore ist ein privater Store für interne Komponenten und lizenzierte Kits, Käufe lückenlos erfasst."
+    },
+    "hero": {
+      "eyebrow": "Privater Komponenten-Store",
+      "h1Lead": "Ihre Komponenten liegen über mehrere Repos verstreut.",
+      "h1Accent": "Niemand kann belegen, welche Lizenzen Sie halten.",
+      "body": "CodeStore ist ein Storefront, den Sie für Ihr eigenes Team betreiben. Interne Komponenten und Drittanbieter-Kits in einem geschlossenen Katalog, Version und Changelog an jedem Produkt, und jeder Kauf landet in einem Register pro Workspace, das Ihnen gehört.",
+      "cta": "Demo buchen",
+      "secondary": "Quellcode lesen",
+      "assure1": "Workspaces per Subdomain isoliert",
+      "assure2": "Self-hosted auf Ihrer Datenbank",
+      "assure3": "v2.0 — erste Teams im Onboarding"
+    },
+    "metrics": {
+      "m1Value": "10 %",
+      "m1Body": "Provision pro abgeschlossener Treuhand-Aufgabe, am Job erfasst.",
+      "m2Value": "5",
+      "m2Body": "Sprachen mit echten RTL-Layouts — Arabisch inklusive, nicht nachträglich ergänzt.",
+      "m3Value": "0",
+      "m3Body": "Kosten pro Sitz. Mitglieder sind pro Workspace unbegrenzt."
+    },
+    "problem": {
+      "h2": "Es gibt drei Arten, das falsch zu machen, und die dritte ist ein Audit.",
+      "pain1Title": "Duplikate",
+      "pain1Body": "Jemand fragt in #frontend nach der Button-Komponente. Es gibt sie dreimal, in drei Repos, und die im Designsystem ist die alte. Niemand weiß, welche, also kopiert die neue Kollegin die Version, die kompiliert.",
+      "pain2Title": "Doppelter Einkauf",
+      "pain2Body": "Eine Charting-Bibliothek wird von der Platform lizenziert, sechs Wochen später noch einmal von Growth, weil kein Team die Belege des anderen sieht. Die Verlängerung läuft über die Karte von jemandem, der gegangen ist.",
+      "pain3Title": "Das Audit",
+      "pain3Body": "Sie können nicht sagen, wer das nutzen darf und bis wann, ohne Stripe, das Anbieterportal und drei E-Mail-Threads zu öffnen. Das einzige Tracking, das ein Audit übersteht, entsteht im Moment des Kaufs — gebunden an einen Workspace."
+    },
+    "features": {
+      "eyebrow": "Das Produkt",
+      "heading": "Was drin ist, und was nicht",
+      "subheading": "Alles Folgende existiert im aktuellen Build. Was fehlt, ist noch nicht gebaut — das können Sie im Quellcode prüfen, statt uns zu glauben.",
+      "f1": "Ein Workspace ist eine Datengrenze, kein Filter",
+      "f1Desc": "Eine Subdomain und ein Slug pro Workspace. Die Isolation wird in der Query erzwungen: Es gibt keinen Codepfad, der Zeilen eines anderen Workspace liest. Neue Workspaces bleiben in PENDING_APPROVAL, bis ein Admin sie aktiviert.",
+      "f2": "Version und Changelog am Produkt",
+      "f2Desc": "Beides sind Spalten der Produktzeile, also hat „auf welchem Release sind wir“ eine verlinkbare Antwort statt eines unauffindbaren PDFs.",
+      "f3": "Einladungen mit Rolle und Ablaufdatum",
+      "f3Desc": "Genau einmal als verwendet markiert. Keine Selbstregistrierung in einen Workspace, also erreicht niemand Ihren Katalog, indem er eine URL errät. Mitglieder sind unbegrenzt.",
+      "f4": "Jeder Verkauf schreibt eine Transaktion",
+      "f4Desc": "Order-ID, Capture-ID, Betrag, Plattformgebühr, Verkäuferauszahlung — dem Workspace zugeordnet. Diese Tabelle ist das Lizenzregister, nach dem die Buchhaltung nicht mehr fragt.",
+      "f5": "Eine Jobbörse mit Treuhand",
+      "f5Desc": "Budgetrahmen, Bewerbungen, der gegen das Inserat gehaltene Treuhandbetrag, freigegeben bei Abschluss. Die Provision beträgt 10 % pro abgeschlossener Aufgabe.",
+      "f6": "Fünf Sprachen mit echten RTL-Layouts",
+      "f6Desc": "Englisch, Arabisch, Französisch, Deutsch und Spanisch. Jede Seite erscheint in allen fünf — keine nachträglich aufgesetzte Übersetzungsschicht.",
+      "notInBuild": "Nicht im Build: automatische Lizenzschlüssel-Ausgabe, SSO/SAML, SCIM, Managed Hosting und ein nutzungsbasiertes Abrechnungsmodell."
+    },
+    "screens": {
+      "s1Caption": "Die Komponenten des Teams in einer Liste",
+      "s1Body": "Preis, Version und Tags pro Zeile, direkt aus der Produkttabelle. Das ist der geschlossene Katalog, den Ihre Mitglieder sehen und sonst niemand.",
+      "s1Alt": "Produktliste des Workspace mit internen Komponenten samt Preisen, Versionen und Tags",
+      "s2Caption": "Version und Changelog, am Produkt",
+      "s2Body": "Das Drei-Teams-drei-Forks-Problem übersteht einen verbindlichen Datensatz nicht, auf den alle verlinken.",
+      "s2Alt": "Produktdetailseite mit Versionsnummer und Changelog-Text einer Komponente",
+      "s3Caption": "Einladung per E-Mail, mit Rolle und Ablaufdatum",
+      "s3Body": "Einmal genutzt, dann tot. Kein Weg hinein für jemanden, der eine URL errät.",
+      "s3Alt": "Teamseite mit E-Mail-Einladungsfeld und Liste offener Einladungen",
+      "s4Caption": "Der Kauf schreibt das Register",
+      "s4Body": "Order-ID, Capture-ID, Plattformgebühr, Verkäuferauszahlung. Das ist die Tabelle, die das April-Gespräch mit der Buchhaltung beendet.",
+      "s4Alt": "Admin-Einnahmenansicht mit Plattformtransaktionen, Order-IDs, Gebühren und Verkäuferauszahlungen"
+    },
+    "how": {
+      "eyebrow": "So funktioniert es",
+      "h2": "Vier Screens aus der laufenden Anwendung",
+      "subhead": "Kein Anmeldeformular erstellt einen Workspace — wir richten ihn mit Ihnen in einem Call ein, danach laden Sie das Team ein. Das ist das aktuelle Onboarding, und in dieser Phase ist es Absicht."
+    },
+    "deploy": {
+      "eyebrow": "Betrieb",
+      "h2": "Self-hosted, weil Ihr Katalog uns nichts angeht",
+      "body": "Sie betreiben es auf Ihrer Domain gegen Ihre Datenbank. Genau deshalb sieht niemand sonst Ihren Katalog — keine Berechtigungseinstellung, eine Architekturentscheidung.",
+      "spec": {
+        "runtimeLabel": "Runtime",
+        "runtimeValue": "Next.js 14",
+        "databaseLabel": "Datenbank",
+        "databaseValue": "MySQL 8 · Prisma",
+        "paymentsLabel": "Zahlungen",
+        "paymentsValue": "PayPal",
+        "nodeLabel": "Node",
+        "nodeValue": "20+"
+      },
+      "search": "Suchtext: 1512×860 Screenshots, Produktbilder und Code sowie die Workspace-URL",
+      "note": "Migrationen liegen im Repository. Kein proprietärer Build-Schritt und keine Bindung an die Datenschicht."
+    },
+    "proof": {
+      "eyebrow": "Belege",
+      "h2": "v2.0 — erste Teams im Onboarding",
+      "body": "Wir haben noch keine Kundenlogos, die hier stehen könnten, und sie zu erfinden wäre der schnellste Weg, das Einzige zu verlieren, was diese Seite zu bieten hat. Also: der Changelog und das Repository.",
+      "note": "Wenn Sie das für Ihr Team wollen und bereit sind, früh dabei zu sein, sitzt der Gründer im Setup-Call. Bringen Sie Ihre schlimmste doppelte Komponente mit, wir laden sie gemeinsam hoch.",
+      "cta": "Setup-Call buchen",
+      "changelogHeading": "Changelog",
+      "repoLink": "Quellcode auf GitHub",
+      "changelogLink": "Vollständiger Changelog",
+      "docsLink": "Dokumentation"
+    },
+    "pricing": {
+      "eyebrow": "Preis",
+      "h2": "Ein Tarif, abgerechnet pro Workspace",
+      "body": "Keine Stufen, kein „Beliebteste Wahl“-Badge, keine Pro-Sitz-Rechnung. Sie zahlen für den isolierten Storefront.",
+      "planName": "Workspace",
+      "priceSuffix": "/ Workspace / Monat",
+      "cta": "Demo buchen",
+      "provisionNote": "Workspaces richten wir gemeinsam mit Ihnen ein, nicht per Anmeldeformular.",
+      "includedHeading": "Enthalten",
+      "footnote": "Self-Hosting ist heute der unterstützte Betrieb. Sie betreiben es auf Ihrer Domain und Ihrer Datenbank — auch deshalb sieht niemand sonst Ihren Katalog.",
+      "row": {
+        "membersLabel": "Mitglieder",
+        "membersValue": "Unbegrenzt",
+        "componentsLabel": "Interne Komponenten",
+        "componentsValue": "Unbegrenzt",
+        "commissionLabel": "Provision pro Aufgabe",
+        "commissionValue": "10 %",
+        "hostingLabel": "Hosting",
+        "hostingValue": "Self-hosted"
+      }
+    },
+    "included": {
+      "i1": "Privater, geschlossener Storefront für Ihr Team",
+      "i2": "Unbegrenzte interne Komponenten",
+      "i3": "Lizenzierte Drittanbieter-Kits neben Ihren eigenen",
+      "i4": "Version und Changelog an jedem Produkt",
+      "i5": "E-Mail-Einladungen mit ablaufenden Token",
+      "i6": "Jobbörse mit Treuhand, 10 % pro Aufgabe",
+      "i7": "Kaufregister pro Workspace",
+      "i8": "PayPal-Checkout",
+      "i9": "Fünf Sprachen, Arabisch in RTL"
+    },
+    "finalcta": {
+      "heading": "Der Katalog Ihres Teams, auf Ihrer eigenen Domain",
+      "subheading": "Sagen Sie uns, was Ihr Team in Slack immer wieder neu herumreicht. Wenn CodeStore das nicht halten kann, sagen wir es im Call — nicht nach Ihrer Zahlung.",
+      "primary": "Demo buchen",
+      "secondary": "Quellcode lesen"
+    }
   }
 }

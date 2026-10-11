@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { SignJWT } from "jose";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { setSessionCookie } from "@/lib/session-cookie";
 
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID!;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET!;
@@ -75,16 +76,9 @@ export async function GET(request: NextRequest) {
       .setExpirationTime("7d")
       .sign(secret);
 
-    // 5. Set the same shared cookie + go home
+    // 5. Set the session cookie + go home
     const response = NextResponse.redirect(new URL(`/${locale}`, request.url));
-    response.cookies.set("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7,
-      path: "/",
-      domain: ".codestoreglobal.com",
-    });
+    setSessionCookie(response, token, request);
     return response;
   } catch (err) {
     console.error("[GOOGLE_AUTH_ERROR]", err);

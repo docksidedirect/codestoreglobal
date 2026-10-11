@@ -1,11 +1,40 @@
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 import { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 import { locales, MARKETPLACE_CATEGORIES } from "@/lib/marketplace-categories";
 
+// TODO: confirm the canonical host. This file and robots.ts say codestore.global
+// while the landing page breadcrumb said codestoreglobal.com. Pick one, then fix
+// the other two — split indexing is the most expensive SEO bug on the site.
 const baseUrl = "https://codestore.global";
+
+/**
+ * The landing page's real last-modified date. Do not stamp `new Date()` on
+ * static pages: telling crawlers every page changed today, every day, is how
+ * you teach them to ignore your lastmod values. Bump this when the landing
+ * copy actually changes.
+ */
+const LANDING_LAST_MODIFIED = new Date("2026-10-05");
+
+const STATIC_ROUTES: {
+  path: string;
+  changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"];
+  priority: number;
+  lastModified: Date;
+}[] = [
+  {
+    path: "",
+    changeFrequency: "weekly",
+    priority: 1.0,
+    lastModified: LANDING_LAST_MODIFIED,
+  },
+  { path: "/courses", changeFrequency: "weekly", priority: 0.8, lastModified: LANDING_LAST_MODIFIED },
+  { path: "/marketplace", changeFrequency: "weekly", priority: 0.8, lastModified: LANDING_LAST_MODIFIED },
+  // /login and /register are deliberately absent. They are noindex account
+  // screens, and robots.ts disallows them — listing them here was a contradiction.
+];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [courses, products, jobs] = await Promise.all([
@@ -14,25 +43,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     prisma.jobListing.findMany({ where: { status: "OPEN" }, select: { slug: true, updatedAt: true } }),
   ]);
 
-  const staticRoutes = [
-    "", "/courses", "/marketplace", "/login", "/register",
-  ];
-
   const sitemapEntries: MetadataRoute.Sitemap = [];
 
-  // Static routes for each locale
+  // Static routes for each locale. The landing page is the wedge page; give it
+  // the highest priority and the real lastmod.
   for (const locale of locales) {
-    for (const route of staticRoutes) {
+    for (const route of STATIC_ROUTES) {
       sitemapEntries.push({
-        url: `${baseUrl}/${locale}${route}`,
-        lastModified: new Date(),
-        changeFrequency: route === "" ? "daily" : "weekly",
-        priority: route === "" ? 1.0 : 0.8,
+        url: `${baseUrl}/${locale}${route.path}`,
+        lastModified: route.lastModified,
+        changeFrequency: route.changeFrequency,
+        priority: route.priority,
       });
     }
   }
 
-  // Dynamic course pages
   for (const course of courses) {
     for (const locale of locales) {
       sitemapEntries.push({
@@ -44,7 +69,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // Dynamic product pages
   for (const product of products) {
     for (const locale of locales) {
       sitemapEntries.push({
@@ -56,7 +80,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // Dynamic job pages
   for (const job of jobs) {
     for (const locale of locales) {
       sitemapEntries.push({
@@ -68,14 +91,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // Marketplace category pages (programmatic SEO)
+  // One category page per locale, each rendering that category's real products.
+  // These are only legitimate while the pages contain distinct content — the
+  // moment they become the same list with a swapped heading, they are doorway
+  // pages and should be removed rather than resubmitted.
   for (const category of MARKETPLACE_CATEGORIES) {
     for (const locale of locales) {
       sitemapEntries.push({
         url: `${baseUrl}/${locale}/marketplace/category/${category.slug}`,
-        lastModified: new Date(),
-        changeFrequency: "daily",
-        priority: 0.8,
+        lastModified: LANDING_LAST_MODIFIED,
+        changeFrequency: "weekly",
+        priority: 0.6,
       });
     }
   }

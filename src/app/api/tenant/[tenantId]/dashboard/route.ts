@@ -22,9 +22,10 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     const resolvedParams = params instanceof Promise || (params && typeof (params as any).then === "function")
       ? await params
       : params;
-    const tenantId = resolvedParams?.tenantId;
+    // The URL segment is a slug ("devnexus-demo") or, for older links, a cuid.
+    const segment = resolvedParams?.tenantId;
 
-    if (!tenantId) {
+    if (!segment) {
       return NextResponse.json({ error: "Missing Tenant ID Mapping" }, { status: 400 });
     }
 
@@ -36,7 +37,19 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    // Allow SUPERADMIN or matching tenant member
+    // Resolve the URL segment (a slug like "devnexus-demo", or a legacy cuid)
+    // to the canonical Tenant id. Every query below filters on tenantId, which
+    // is a cuid column — comparing it against a slug matched nothing and made
+    // the whole workspace render empty.
+    const tenant = await prisma.tenant.findFirst({
+      where: { OR: [{ id: segment }, { slug: segment }] },
+      select: { id: true },
+    });
+    if (!tenant) {
+      return NextResponse.json({ error: "Workspace not found" }, { status: 404 });
+    }
+    const tenantId = tenant.id;
+
     if (user.role !== "SUPERADMIN" && user.tenantId !== tenantId) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }

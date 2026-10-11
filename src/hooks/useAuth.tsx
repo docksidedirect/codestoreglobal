@@ -16,6 +16,12 @@ interface User {
   lastName: string;
   role: string;
   tenantId?: string | null;
+  /**
+   * Workspace URLs are keyed by this slug, not by tenantId (a cuid). Navigating
+   * with tenantId renders an empty workspace because the APIs match on slug.
+   * The API returns it; components should prefer it.
+   */
+  tenantSlug?: string | null;
   avatarUrl?: string | null;
 }
 

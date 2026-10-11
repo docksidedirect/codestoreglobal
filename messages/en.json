@@ -206,5 +206,142 @@
     "copy": "Copy",
     "share": "Share",
     "download": "Download"
+  },
+  "landingV2": {
+    "meta": {
+      "title": "CodeStore — Private Component Store for Dev Teams",
+      "description": "Your team's components live in Slack threads. CodeStore is a private storefront for internal and licensed kits, with purchases on the record."
+    },
+    "hero": {
+      "eyebrow": "Private component store",
+      "h1Lead": "Your components are scattered across repos.",
+      "h1Accent": "Nobody can prove which licences you hold.",
+      "body": "CodeStore is a storefront you deploy for your own team. Internal components and third-party kits in one gated catalog, version and changelog on every product, and each purchase written to a per-workspace record you own.",
+      "cta": "Book a demo",
+      "secondary": "Read the source",
+      "assure1": "Subdomain-isolated workspaces",
+      "assure2": "Self-hosted on your database",
+      "assure3": "v2.0 — onboarding first teams"
+    },
+    "metrics": {
+      "m1Value": "10%",
+      "m1Body": "Commission per completed escrow job, recorded on the job.",
+      "m2Value": "5",
+      "m2Body": "Languages with real RTL layouts — Arabic included, not bolted on.",
+      "m3Value": "0",
+      "m3Body": "Per-seat charges. Members are unlimited on a workspace."
+    },
+    "problem": {
+      "h2": "There are three ways this goes wrong, and the third one is an audit.",
+      "pain1Title": "Duplication",
+      "pain1Body": "Someone asks in #frontend for the button component. It exists three times, in three repos, and the one in the design system is the old one. Nobody knows which, so the new hire copies the version that compiles.",
+      "pain2Title": "Double purchase",
+      "pain2Body": "A charting library gets licensed by Platform, then again by Growth six weeks later, because neither team can see the other's receipts. The renewal lands on a card belonging to someone who left.",
+      "pain3Title": "The audit",
+      "pain3Body": "You cannot answer which teammate may use this, and until when, without opening Stripe, the vendor portal and three email threads. The only tracking that survives an audit is written at the moment of purchase, against a workspace."
+    },
+    "features": {
+      "eyebrow": "The product",
+      "heading": "What is in it, and what is not",
+      "subheading": "Everything below exists in the current build. Anything absent is not built yet, and you can check that against the source rather than taking our word for it.",
+      "f1": "Workspaces are a data boundary, not a filter",
+      "f1Desc": "One subdomain and slug per workspace. Isolation is enforced in the query, so there is no code path that reads another workspace's rows. New workspaces sit in PENDING_APPROVAL until an admin activates them.",
+      "f2": "Version and changelog on the product",
+      "f2Desc": "Both are columns on the product row, so \"which release are we on\" has an answer you can link to instead of a PDF nobody can find.",
+      "f3": "Invites that carry a role and an expiry",
+      "f3Desc": "Marked used once. There is no self-signup into a workspace, so nobody reaches your catalog by guessing a URL. Members are unlimited.",
+      "f4": "Every sale writes a platform transaction",
+      "f4Desc": "Order id, capture id, amount, platform fee, seller payout — scoped to the workspace. That table is the licence record finance stops asking about.",
+      "f5": "An escrow jobs board",
+      "f5Desc": "Budget ranges, applications, the escrow amount held against the listing and released on completion. Commission is 10% per completed job.",
+      "f6": "Five languages with real RTL layouts",
+      "f6Desc": "English, Arabic, French, German and Spanish. Every page ships in all five — not a translation layer added afterwards.",
+      "notInBuild": "Not in the build: automatic licence-key issuance, SSO/SAML, SCIM, managed hosting, and a usage-based billing model."
+    },
+    "screens": {
+      "s1Caption": "The team's components, in one list",
+      "s1Body": "Price, version and tags per row, read straight off the product table. This is the gated catalog your members see and nobody else does.",
+      "s1Alt": "Workspace products list showing internal components with prices, versions and tags",
+      "s2Caption": "Version and changelog, on the product",
+      "s2Body": "The three-team, three-fork problem does not survive one canonical record that everyone links to.",
+      "s2Alt": "Product detail page showing a component's version number and changelog text",
+      "s3Caption": "Invite by email, with a role and an expiry",
+      "s3Body": "Used once, then dead. No path in for anyone who guesses a URL.",
+      "s3Alt": "Team members page with an email invite field and a list of pending invitations",
+      "s4Caption": "The purchase writes the record",
+      "s4Body": "Order id, capture id, platform fee, seller payout. This is the table that ends the April conversation with finance.",
+      "s4Alt": "Admin earnings view listing platform transactions with order ids, platform fees and seller payouts"
+    },
+    "how": {
+      "eyebrow": "How it works",
+      "h2": "Four screens from the running app",
+      "subhead": "There is no signup form that creates a workspace — we provision it with you on a call, then you invite the team. That is the current onboarding, and it is deliberate at this stage."
+    },
+    "deploy": {
+      "eyebrow": "Deployment",
+      "h2": "Self-hosted, because your catalog is none of our business",
+      "body": "You run it on your own domain against your own database. That is also the reason nobody else can see your catalog — not a permissions setting, an architecture choice.",
+      "spec": {
+        "runtimeLabel": "Runtime",
+        "runtimeValue": "Next.js 14",
+        "databaseLabel": "Database",
+        "databaseValue": "MySQL 8 · Prisma",
+        "paymentsLabel": "Payments",
+        "paymentsValue": "PayPal",
+        "nodeLabel": "Node",
+        "nodeValue": "20+"
+      },
+      "search": "Search text: 1512x860 screenshots, product images and code, plus the workspace URL",
+      "note": "Migrations ship in the repository. No proprietary build step, and no lock-in on the data layer."
+    },
+    "proof": {
+      "eyebrow": "Proof",
+      "h2": "v2.0 — onboarding first teams now",
+      "body": "We have no customer logos to put here yet, and inventing them is the fastest way to lose the only thing this page has to trade on. So: the changelog, and the repository.",
+      "note": "If you want this for your team and you are willing to be early, the founder is on the setup call. Bring your worst duplicate component and we will load it together.",
+      "cta": "Book the setup call",
+      "changelogHeading": "Changelog",
+      "repoLink": "Source on GitHub",
+      "changelogLink": "Full changelog",
+      "docsLink": "Documentation"
+    },
+    "pricing": {
+      "eyebrow": "Pricing",
+      "h2": "One plan, priced per workspace",
+      "body": "No tiers, no \"most popular\" badge, no per-seat maths. You are paying for the isolated storefront.",
+      "planName": "Workspace",
+      "priceSuffix": "/ workspace / month",
+      "cta": "Book a demo",
+      "provisionNote": "Workspaces are provisioned with you, not by a signup form.",
+      "includedHeading": "Included",
+      "footnote": "Self-hosted is the supported deployment today. You run it on your own domain and your own database, which is also why nobody else can see your catalog.",
+      "row": {
+        "membersLabel": "Members",
+        "membersValue": "Unlimited",
+        "componentsLabel": "Internal components",
+        "componentsValue": "Unlimited",
+        "commissionLabel": "Completed-job commission",
+        "commissionValue": "10%",
+        "hostingLabel": "Hosting",
+        "hostingValue": "Self-hosted"
+      }
+    },
+    "included": {
+      "i1": "Private, gated storefront for your team",
+      "i2": "Unlimited internal components",
+      "i3": "Licensed third-party kits, beside your own",
+      "i4": "Version and changelog on every product",
+      "i5": "Email invites with expiring tokens",
+      "i6": "Escrow jobs board, 10% per job",
+      "i7": "Purchase records per workspace",
+      "i8": "PayPal checkout",
+      "i9": "Five languages, Arabic RTL"
+    },
+    "finalcta": {
+      "heading": "Your team's catalog, on your own domain",
+      "subheading": "Tell us what your team keeps re-sharing in Slack. If CodeStore cannot hold it, we will say so on the call rather than after you have paid.",
+      "primary": "Book a demo",
+      "secondary": "Read the source"
+    }
   }
 }

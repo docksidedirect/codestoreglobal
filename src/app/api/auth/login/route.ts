@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { SignJWT } from "jose";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { setSessionCookie } from "@/lib/session-cookie";
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
 
@@ -18,6 +19,9 @@ export async function POST(request: NextRequest) {
 
     const user = await prisma.user.findUnique({
       where: { email: email.toLowerCase().trim() },
+      // The slug is what workspace routes are keyed by; tenantId is a cuid and
+      // produces URLs that render empty workspaces.
+      include: { tenant: { select: { slug: true } } },
     });
 
     if (!user) {
@@ -53,18 +57,17 @@ export async function POST(request: NextRequest) {
         lastName: user.lastName,
         role: user.role,
         tenantId: user.tenantId,
+        // The slug the client must use in workspace URLs.
+        tenantSlug: user.tenant?.slug ?? null,
         avatarUrl: user.avatarUrl,
       },
     });
 
-    response.cookies.set("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7,
-      path: "/",
-      domain: ".codestoreglobal.com",
-    });
+    // Domain and Secure are derived from the request, so this works on
+    // localhost, on a self-hosted domain, and in production. Hardcoding
+    // domain: ".codestoreglobal.com" meant the browser rejected the cookie
+    // everywhere else, and every protected route redirected back to /login.
+    setSessionCookie(response, token, request);
 
     return response;
   } catch (error: any) {

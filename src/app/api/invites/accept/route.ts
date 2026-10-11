@@ -49,7 +49,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: "Password must be at least 8 characters" }, { status: 400 });
     }
 
-    const invite = await prisma.tenantInvite.findUnique({ where: { token } });
+    const invite = await prisma.tenantInvite.findUnique({
+      where: { token },
+      // slug is needed so the client can redirect to /{locale}/{slug}/dashboard.
+      include: { tenant: { select: { slug: true } } },
+    });
     if (!invite) {
       return NextResponse.json({ success: false, error: "Invalid invite link" }, { status: 404 });
     }
@@ -90,7 +94,17 @@ export async function POST(request: NextRequest) {
       .setExpirationTime("7d")
       .sign(JWT_SECRET);
 
-    const res = NextResponse.json({ success: true, user: { id: user.id, tenantId: user.tenantId } }, { status: 201 });
+    const res = NextResponse.json(
+      {
+        success: true,
+        user: {
+          id: user.id,
+          tenantId: user.tenantId,
+          tenantSlug: invite.tenant?.slug ?? null,
+        },
+      },
+      { status: 201 }
+    );
     const isProd = (request.headers.get("host") || "").includes("codestoreglobal.com");
     res.cookies.set("token", jwt, {
       httpOnly: true,

@@ -206,5 +206,142 @@
     "copy": "Copiar",
     "share": "Compartir",
     "download": "Descargar"
+  },
+  "landingV2": {
+    "meta": {
+      "title": "CodeStore — Store privado de componentes para equipos dev",
+      "description": "Tus componentes viven en hilos de Slack y nadie sabe qué licencias tienes. CodeStore es un store privado para componentes internos y kits con licencia, con cada compra registrada."
+    },
+    "hero": {
+      "eyebrow": "Store privado de componentes",
+      "h1Lead": "Tus componentes están repartidos por varios repos.",
+      "h1Accent": "Nadie puede demostrar qué licencias tienes.",
+      "body": "CodeStore es un storefront que despliegas para tu propio equipo. Componentes internos y kits de terceros en un catálogo cerrado, versión y changelog en cada producto, y cada compra escrita en un registro por espacio de trabajo que es tuyo.",
+      "cta": "Reservar una demo",
+      "secondary": "Leer el código",
+      "assure1": "Espacios de trabajo aislados por subdominio",
+      "assure2": "Autoalojado en tu base de datos",
+      "assure3": "v2.0 — incorporando a los primeros equipos"
+    },
+    "metrics": {
+      "m1Value": "10 %",
+      "m1Body": "De comisión por trabajo con escrow completado, registrada en el trabajo.",
+      "m2Value": "5",
+      "m2Body": "Idiomas con diseños RTL reales — el árabe incluido, no añadido después.",
+      "m3Value": "0",
+      "m3Body": "Cargos por asiento. Los miembros son ilimitados en un espacio de trabajo."
+    },
+    "problem": {
+      "h2": "Hay tres formas de que esto salga mal, y la tercera es una auditoría.",
+      "pain1Title": "Duplicación",
+      "pain1Body": "Alguien pregunta en #frontend por el componente de botón. Existe tres veces, en tres repos, y el del design system es el viejo. Nadie sabe cuál, así que la persona nueva copia la versión que compila.",
+      "pain2Title": "Doble compra",
+      "pain2Body": "Una librería de gráficas la licencia Plataforma, y seis semanas después la vuelve a licenciar Growth, porque ningún equipo ve los recibos del otro. La renovación llega a la tarjeta de alguien que ya se fue.",
+      "pain3Title": "La auditoría",
+      "pain3Body": "No puedes decir quién puede usar esto, ni hasta cuándo, sin abrir Stripe, el portal del proveedor y tres hilos de correo. El único seguimiento que sobrevive a una auditoría se escribe en el momento de la compra, asociado a un espacio de trabajo."
+    },
+    "features": {
+      "eyebrow": "El producto",
+      "heading": "Qué hay dentro y qué no",
+      "subheading": "Todo lo que sigue existe en la versión actual. Lo que falta aún no está construido, y puedes comprobarlo en el código en lugar de creernos.",
+      "f1": "Un espacio de trabajo es una frontera de datos, no un filtro",
+      "f1Desc": "Un subdominio y un slug por espacio. El aislamiento se aplica en la consulta: no hay ninguna ruta de código que lea filas de otro espacio. Los espacios nuevos quedan en PENDING_APPROVAL hasta que un administrador los activa.",
+      "f2": "Versión y changelog en el producto",
+      "f2Desc": "Ambos son columnas de la fila del producto, así que «en qué release estamos» tiene una respuesta enlazable en lugar de un PDF que nadie encuentra.",
+      "f3": "Invitaciones con rol y caducidad",
+      "f3Desc": "Marcadas como usadas una sola vez. No hay auto-registro en un espacio, así que nadie llega a tu catálogo adivinando una URL. Los miembros son ilimitados.",
+      "f4": "Cada venta escribe una transacción",
+      "f4Desc": "Id de pedido, id de captura, importe, comisión de la plataforma, pago al vendedor — asociados al espacio. Esa tabla es el registro de licencias del que finanzas deja de hablar.",
+      "f5": "Un tablero de trabajos con escrow",
+      "f5Desc": "Rangos de presupuesto, candidaturas, el importe en escrow retenido contra el anuncio y liberado al completar. La comisión es del 10 % por trabajo completado.",
+      "f6": "Cinco idiomas con diseños RTL reales",
+      "f6Desc": "Inglés, árabe, francés, alemán y español. Cada página se publica en los cinco — no una capa de traducción añadida después.",
+      "notInBuild": "No está en la versión actual: emisión automática de claves de licencia, SSO/SAML, SCIM, alojamiento gestionado y facturación por uso."
+    },
+    "screens": {
+      "s1Caption": "Los componentes del equipo, en una sola lista",
+      "s1Body": "Precio, versión y etiquetas por fila, leídos directamente de la tabla de productos. Este es el catálogo cerrado que ven tus miembros y nadie más.",
+      "s1Alt": "Lista de productos del espacio de trabajo con componentes internos, precios, versiones y etiquetas",
+      "s2Caption": "Versión y changelog, en el producto",
+      "s2Body": "El problema de tres equipos y tres forks no sobrevive a un registro único al que todos enlazan.",
+      "s2Alt": "Página de detalle de producto con el número de versión y el texto del changelog",
+      "s3Caption": "Invitación por correo, con rol y caducidad",
+      "s3Body": "Se usa una vez y muere. Ningún acceso para quien adivine una URL.",
+      "s3Alt": "Página de miembros del equipo con campo de invitación por correo y lista de invitaciones pendientes",
+      "s4Caption": "La compra escribe el registro",
+      "s4Body": "Id de pedido, id de captura, comisión de la plataforma, pago al vendedor. Esta es la tabla que termina la conversación de abril con finanzas.",
+      "s4Alt": "Vista de ingresos de administración con transacciones, ids de pedido, comisiones y pagos a vendedores"
+    },
+    "how": {
+      "eyebrow": "Cómo funciona",
+      "h2": "Cuatro pantallas de la aplicación en marcha",
+      "subhead": "Ningún formulario de registro crea un espacio de trabajo — lo aprovisionamos contigo en una llamada, y después invitas al equipo. Ese es el onboarding actual, y en esta fase es deliberado."
+    },
+    "deploy": {
+      "eyebrow": "Despliegue",
+      "h2": "Autoalojado, porque tu catálogo no es asunto nuestro",
+      "body": "Lo ejecutas en tu propio dominio contra tu propia base de datos. Esa es también la razón por la que nadie más ve tu catálogo: no es un ajuste de permisos, es una decisión de arquitectura.",
+      "spec": {
+        "runtimeLabel": "Runtime",
+        "runtimeValue": "Next.js 14",
+        "databaseLabel": "Base de datos",
+        "databaseValue": "MySQL 8 · Prisma",
+        "paymentsLabel": "Pagos",
+        "paymentsValue": "PayPal",
+        "nodeLabel": "Node",
+        "nodeValue": "20+"
+      },
+      "search": "Texto de búsqueda: capturas 1512×860, imágenes de producto y código, más la URL del espacio de trabajo",
+      "note": "Las migraciones vienen en el repositorio. Sin paso de build propietario y sin dependencia de la capa de datos."
+    },
+    "proof": {
+      "eyebrow": "Pruebas",
+      "h2": "v2.0 — incorporando a los primeros equipos",
+      "body": "Todavía no tenemos logos de clientes que poner aquí, e inventarlos es la forma más rápida de perder lo único que esta página tiene para ofrecer. Así que: el changelog y el repositorio.",
+      "note": "Si quieres esto para tu equipo y aceptas ser de los primeros, el fundador está en la llamada de instalación. Trae tu peor componente duplicado y lo subimos juntos.",
+      "cta": "Reservar la llamada de instalación",
+      "changelogHeading": "Changelog",
+      "repoLink": "Código fuente en GitHub",
+      "changelogLink": "Changelog completo",
+      "docsLink": "Documentación"
+    },
+    "pricing": {
+      "eyebrow": "Precio",
+      "h2": "Un solo plan, facturado por espacio de trabajo",
+      "body": "Sin niveles, sin insignia de «más popular», sin cálculo por asiento. Pagas por el storefront aislado.",
+      "planName": "Espacio de trabajo",
+      "priceSuffix": "/ espacio de trabajo / mes",
+      "cta": "Reservar una demo",
+      "provisionNote": "Los espacios de trabajo se aprovisionan contigo, no con un formulario.",
+      "includedHeading": "Incluido",
+      "footnote": "El autoalojamiento es el despliegue soportado hoy. Lo ejecutas en tu propio dominio y tu propia base de datos, y por eso mismo nadie más ve tu catálogo.",
+      "row": {
+        "membersLabel": "Miembros",
+        "membersValue": "Ilimitados",
+        "componentsLabel": "Componentes internos",
+        "componentsValue": "Ilimitados",
+        "commissionLabel": "Comisión por trabajo",
+        "commissionValue": "10 %",
+        "hostingLabel": "Alojamiento",
+        "hostingValue": "Autoalojado"
+      }
+    },
+    "included": {
+      "i1": "Storefront privado y cerrado para tu equipo",
+      "i2": "Componentes internos ilimitados",
+      "i3": "Kits de terceros con licencia, junto a los tuyos",
+      "i4": "Versión y changelog en cada producto",
+      "i5": "Invitaciones por correo con tokens que caducan",
+      "i6": "Tablero de trabajos con escrow, 10 % por trabajo",
+      "i7": "Registros de compra por espacio de trabajo",
+      "i8": "Pago con PayPal",
+      "i9": "Cinco idiomas, el árabe en RTL"
+    },
+    "finalcta": {
+      "heading": "El catálogo de tu equipo, en tu propio dominio",
+      "subheading": "Cuéntanos qué recompila tu equipo en Slack una y otra vez. Si CodeStore no puede con ello, te lo diremos en la llamada, no después de que pagues.",
+      "primary": "Reservar una demo",
+      "secondary": "Leer el código"
+    }
   }
 }

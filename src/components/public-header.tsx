@@ -38,20 +38,22 @@ export function PublicHeader() {
     if (next !== locale)
       window.location.href = pathname.replace(`/${locale}`, `/${next}`);
   };
+  // tenantSlug, not tenantId: workspace routes are keyed by slug.
+  const workspace = user?.tenantSlug ?? user?.tenantId;
   const dashboardHref =
     user?.role === "SUPERADMIN"
       ? `/${locale}/admin`
-      : user?.tenantId
-        ? `/${locale}/${user.tenantId}/dashboard`
+      : workspace
+        ? `/${locale}/${workspace}/dashboard`
         : `/${locale}/login`;
   const isHome = pathname === `/${locale}` || pathname === `/${locale}/`;
+  // "Private component store" is the product. The public marketplace is a
+  // secondary surface (it is where other teams' listings live), so it sits after
+  // the wedge rather than leading the nav.
   const navLinks = [
     { href: `/${locale}`, label: "Home", active: isHome },
-    {
-      href: `/${locale}/courses`,
-      label: "Courses",
-      active: pathname.includes("/courses"),
-    },
+    { href: `/${locale}#how-it-works`, label: "How it works", active: false },
+    { href: `/${locale}#pricing`, label: "Pricing", active: false },
     {
       href: `/${locale}/marketplace`,
       label: "Marketplace",
@@ -142,7 +144,7 @@ export function PublicHeader() {
                       size="sm"
                       className="rounded-lg bg-slate-950 dark:bg-white dark:text-slate-950"
                     >
-                      Get Started
+                      Book a demo
                       <ArrowUpRight className="ml-1 h-3.5 w-3.5" />
                     </Button>
                   </Link>
@@ -224,7 +226,7 @@ export function PublicHeader() {
                     onClick={() => setMobileOpen(false)}
                   >
                     <Button size="sm" className="w-full">
-                      Get Started
+                      Book a demo
                     </Button>
                   </Link>
                 </div>

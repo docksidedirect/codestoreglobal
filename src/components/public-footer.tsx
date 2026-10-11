@@ -3,6 +3,24 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+/*
+ * TODO: fill in the real values before this ships.
+ *   LEGAL_NAME / COMPANY_NUMBER / REGISTERED_ADDRESS — company info
+ *   PRIVACY_URL / TERMS_URL — real pages, or leave null and the links are simply
+ *                             not rendered. A dead legal link reads as a template.
+ *   DOCS_URL / CHANGELOG_URL — real pages; also null until they exist.
+ */
+const SUPPORT_EMAIL = "support@codestore.global";
+const SECURITY_EMAIL = "security@codestore.global";
+const LEGAL_NAME = "CODESTORE GLOBAL";
+const COMPANY_NUMBER: string | null = null;
+const REGISTERED_ADDRESS: string | null = null;
+const PRIVACY_URL: string | null = null;
+const TERMS_URL: string | null = null;
+const DOCS_URL: string | null = null;
+const CHANGELOG_URL: string | null = null;
+const REPO_URL = "https://github.com/docksidedirect/codestoreglobal";
+
 export function PublicFooter() {
   const pathname = usePathname();
   const locale = pathname.split("/")[1] || "en";
@@ -20,37 +38,74 @@ export function PublicFooter() {
               />
             </div>
             <p className="text-sm text-slate-600 dark:text-slate-400">
-              The multi-tenant platform for modern developers.
+              A private component store for dev teams.
+            </p>
+            <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+              <a
+                href={`mailto:${SUPPORT_EMAIL}`}
+                className="hover:text-slate-950 dark:hover:text-white transition-colors"
+              >
+                {SUPPORT_EMAIL}
+              </a>
             </p>
           </div>
           <div>
             <h4 className="font-semibold text-slate-900 dark:text-white mb-3 text-sm">
-              Platform
+              Product
             </h4>
             <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
               <li>
                 <Link
-                  href={`/${locale}/courses`}
-                  className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
+                  href={`/${locale}#how-it-works`}
+                  className="hover:text-slate-950 dark:hover:text-white transition-colors"
                 >
-                  Courses
+                  How it works
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={`/${locale}#pricing`}
+                  className="hover:text-slate-950 dark:hover:text-white transition-colors"
+                >
+                  Pricing
                 </Link>
               </li>
               <li>
                 <Link
                   href={`/${locale}/marketplace`}
-                  className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
+                  className="hover:text-slate-950 dark:hover:text-white transition-colors"
                 >
-                  Marketplace
+                  Public marketplace
                 </Link>
               </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold text-slate-900 dark:text-white mb-3 text-sm">
+              Read
+            </h4>
+            <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+              {DOCS_URL && (
+                <li>
+                  <a href={DOCS_URL} className="hover:text-slate-950 dark:hover:text-white transition-colors">
+                    Documentation
+                  </a>
+                </li>
+              )}
+              {CHANGELOG_URL && (
+                <li>
+                  <a href={CHANGELOG_URL} className="hover:text-slate-950 dark:hover:text-white transition-colors">
+                    Changelog
+                  </a>
+                </li>
+              )}
               <li>
-                <Link
-                  href={`/${locale}`}
-                  className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
+                <a
+                  href={REPO_URL}
+                  className="hover:text-slate-950 dark:hover:text-white transition-colors"
                 >
-                  Home
-                </Link>
+                  Source on GitHub
+                </a>
               </li>
             </ul>
           </div>
@@ -62,42 +117,53 @@ export function PublicFooter() {
               <li>
                 <Link
                   href={`/${locale}/login`}
-                  className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
+                  className="hover:text-slate-950 dark:hover:text-white transition-colors"
                 >
-                  Sign In
+                  Sign in
                 </Link>
               </li>
               <li>
                 <Link
                   href={`/${locale}/register`}
-                  className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
+                  className="hover:text-slate-950 dark:hover:text-white transition-colors"
                 >
-                  Get Started
+                  Create your account
                 </Link>
               </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold text-slate-900 dark:text-white mb-3 text-sm">
-              Legal
-            </h4>
-            <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+              {PRIVACY_URL && (
+                <li>
+                  <a href={PRIVACY_URL} className="hover:text-slate-950 dark:hover:text-white transition-colors">
+                    Privacy
+                  </a>
+                </li>
+              )}
+              {TERMS_URL && (
+                <li>
+                  <a href={TERMS_URL} className="hover:text-slate-950 dark:hover:text-white transition-colors">
+                    Terms
+                  </a>
+                </li>
+              )}
               <li>
-                <span className="cursor-default">Privacy Policy</span>
-              </li>
-              <li>
-                <span className="cursor-default">Terms of Service</span>
+                <a
+                  href={`mailto:${SECURITY_EMAIL}`}
+                  className="hover:text-slate-950 dark:hover:text-white transition-colors"
+                >
+                  Security contact
+                </a>
               </li>
             </ul>
           </div>
         </div>
-        <div className="border-t border-slate-200 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 dark:border-slate-800">
+        <div className="border-t border-slate-200 pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 dark:border-slate-800">
           <p className="text-sm text-slate-500 dark:text-slate-500">
-            © 2024 CODESTORE GLOBAL. All rights reserved.
+            © {new Date().getFullYear()} {LEGAL_NAME}. All rights reserved.
+            {COMPANY_NUMBER && <> · Reg. {COMPANY_NUMBER}</>}
+            {REGISTERED_ADDRESS && <> · {REGISTERED_ADDRESS}</>}
           </p>
           <div className="flex items-center gap-4">
             <span className="text-xs text-slate-400 dark:text-slate-600">
-              Built with Next.js · Prisma · MySQL
+              Built with Next.js · MySQL · Prisma
             </span>
           </div>
         </div>

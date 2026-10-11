@@ -1,680 +1,599 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  BookOpen,
-  Briefcase,
-  CheckCircle2,
-  Code2,
-  Command,
-  Cpu,
-  Database,
-  FileCode,
-  Globe2,
-  Layers3,
-  LockKeyhole,
-  MessageSquare,
-  Play,
-  ShieldCheck,
-  ShoppingBag,
-  Sparkles,
-  Star,
-  Terminal,
-  TrendingUp,
-  Users,
-  Zap,
-} from "lucide-react";
-import {
-  OrganizationSchema,
-  WebSiteSchema,
-  BreadcrumbSchema,
-} from "@/components/seo/structured-data";
+import { LandingStructuredData } from "@/components/seo/structured-data";
+import { CHANGELOG } from "@/lib/landing-content";
+import { ScreenshotSlot } from "@/components/screenshot-slot";
 
-const programmingLanguages = [
-  {
-    name: "HTML & CSS",
-    icon: <FileCode className="h-5 w-5" />,
-    descKey: "landing.languages.htmlDesc",
-    level: "Beginner",
-    color: "from-orange-500 to-amber-400",
-    bgColor: "bg-orange-500/10 text-orange-600",
-  },
-  {
-    name: "JavaScript",
-    icon: <Code2 className="h-5 w-5" />,
-    descKey: "landing.languages.jsDesc",
-    level: "Beginner",
-    color: "from-yellow-400 to-amber-500",
-    bgColor: "bg-yellow-500/10 text-yellow-600",
-  },
-  {
-    name: "Python",
-    icon: <Terminal className="h-5 w-5" />,
-    descKey: "landing.languages.pythonDesc",
-    level: "Beginner",
-    color: "from-blue-500 to-cyan-400",
-    bgColor: "bg-blue-500/10 text-blue-600",
-  },
-  {
-    name: "TypeScript",
-    icon: <Layers3 className="h-5 w-5" />,
-    descKey: "landing.languages.tsDesc",
-    level: "Intermediate",
-    color: "from-sky-500 to-blue-600",
-    bgColor: "bg-sky-500/10 text-sky-600",
-  },
-  {
-    name: "SQL & Databases",
-    icon: <Database className="h-5 w-5" />,
-    descKey: "landing.languages.sqlDesc",
-    level: "Intermediate",
-    color: "from-emerald-500 to-teal-500",
-    bgColor: "bg-emerald-500/10 text-emerald-600",
-  },
-  {
-    name: "Rust",
-    icon: <Cpu className="h-5 w-5" />,
-    descKey: "landing.languages.rustDesc",
-    level: "Advanced",
-    color: "from-red-500 to-rose-500",
-    bgColor: "bg-red-500/10 text-red-600",
-  },
+/* -------------------------------------------------------------------------- */
+/*  Option D — professional B2B.                                                */
+/*                                                                            */
+/*  Design rules, so this does not drift back into template territory:         */
+/*    - one accent colour, used only on the words naming the category and the   */
+/*      check glyphs. Nothing else is coloured.                                */
+/*    - hairline rules do all the dividing. No shadows, no rounded-2xl, no      */
+/*      gradients, no blur, no glow, no pill badges, no browser-chrome frames.  */
+/*    - monospace is used for data (versions, field names, specs), never as     */
+/*      decoration.                                                            */
+/*    - no card has an icon in a tinted rounded square.                         */
+/*    - section backgrounds alternate white / #f7f7f8 for rhythm only.          */
+/* -------------------------------------------------------------------------- */
+
+const SITE = "https://codestore.global";
+const APP_VERSION = "2.0.0";
+const REPO_URL = "https://github.com/docksidedirect/codestoreglobal";
+
+// Both null because neither page exists in the repo yet, and a link to a 404 is
+// the same trust problem as a fake stat. The links are wired and appear the
+// moment a URL is set.
+const CHANGELOG_URL: string | null = null;
+const DOCS_URL: string | null = null;
+
+// TODO: confirm the price and the seat policy before publishing.
+const PRICE_PER_WORKSPACE_MONTH = 49;
+
+// Real commit count on main as of this pass. Keep it true or delete the item.
+const COMMITS_ON_MAIN = 90;
+
+const FALLBACK_TITLE = "CodeStore — Private Component Store for Dev Teams";
+const FALLBACK_DESCRIPTION =
+  "Your team's components live in Slack threads. CodeStore is a private storefront for internal and licensed kits, with purchases on the record.";
+
+// Screenshots: 1512x860 (16:9-ish laptop viewport), real UI, consistent theme.
+// Capture instructions live in SCREENSHOTS.md. `available: false` removes a step
+// entirely — an illustration is never substituted for a real screen.
+const SHOTS = [
+  { key: "s1", available: false, chrome: "yourteam.codestore.global/products" },
+  { key: "s2", available: false, chrome: "yourteam.codestore.global/products/design-tokens" },
+  { key: "s3", available: false, chrome: "yourteam.codestore.global/settings/members" },
+  { key: "s4", available: false, chrome: "codestore.global/admin" },
 ];
-
-const features = [
-  {
-    icon: <ShieldCheck className="h-6 w-6" />,
-    titleKey: "landing.features.tenant",
-    descKey: "landing.features.tenantDesc",
-    color: "from-violet-500 to-indigo-500",
-  },
-  {
-    icon: <BookOpen className="h-6 w-6" />,
-    titleKey: "landing.features.courses",
-    descKey: "landing.features.coursesDesc",
-    color: "from-emerald-500 to-teal-500",
-  },
-  {
-    icon: <ShoppingBag className="h-6 w-6" />,
-    titleKey: "landing.features.marketplace",
-    descKey: "landing.features.marketplaceDesc",
-    color: "from-amber-500 to-orange-500",
-  },
-  {
-    icon: <Briefcase className="h-6 w-6" />,
-    titleKey: "landing.features.jobs",
-    descKey: "landing.features.jobsDesc",
-    color: "from-rose-500 to-pink-500",
-  },
-  {
-    icon: <MessageSquare className="h-6 w-6" />,
-    titleKey: "landing.features.forum",
-    descKey: "landing.features.forumDesc",
-    color: "from-cyan-500 to-blue-500",
-  },
-  {
-    icon: <Globe2 className="h-6 w-6" />,
-    titleKey: "landing.features.i18n",
-    descKey: "landing.features.i18nDesc",
-    color: "from-indigo-500 to-violet-500",
-  },
-];
-
-type SafeUser = {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: string;
-  tenantId?: string | null;
+const SHOT_PATH: Record<string, string> = {
+  s1: "/screenshots/01-workspace-products.png",
+  s2: "/screenshots/02-product-version-changelog.png",
+  s3: "/screenshots/03-invite-members.png",
+  s4: "/screenshots/04-purchase-record.png",
 };
 
-export default function LandingPage({
-  params,
+const METRICS = ["m1", "m2", "m3"] as const;
+const FEATURE_KEYS = ["f1", "f2", "f3", "f4", "f5", "f6"] as const;
+const SPEC_KEYS = ["runtime", "database", "payments", "node"] as const;
+const PRICE_ROWS = ["members", "components", "commission", "hosting"] as const;
+const INCLUDED_KEYS = ["i1", "i2", "i3", "i4", "i5", "i6", "i7", "i8", "i9"] as const;
+
+/* -------------------------------------------------------------------------- */
+
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const t = await getTranslations({ locale });
+  const title = t.has("landingV2.meta.title") ? t("landingV2.meta.title") : FALLBACK_TITLE;
+  const description = t.has("landingV2.meta.description")
+    ? t("landingV2.meta.description")
+    : FALLBACK_DESCRIPTION;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `${SITE}/en`,
+      languages: {
+        en: `${SITE}/en`,
+        ar: `${SITE}/ar`,
+        fr: `${SITE}/fr`,
+        de: `${SITE}/de`,
+        es: `${SITE}/es`,
+        "x-default": `${SITE}/en`,
+      },
+    },
+    openGraph: {
+      type: "website",
+      url: `${SITE}/${locale}`,
+      siteName: "CodeStore",
+      title,
+      description,
+      // TODO: real 1200x630 screenshot, not a generated gradient card.
+      images: [
+        {
+          url: `${SITE}/og-codestore.png`,
+          width: 1200,
+          height: 630,
+          alt: "CodeStore workspace products list showing internal components with versions and prices",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [`${SITE}/og-codestore.png`],
+      creator: "@codestoreglobal", // TODO: delete if this handle is not real.
+    },
+  };
+}
+
+export default async function LandingPage({
+  params: { locale },
 }: {
   params: { locale: string };
 }) {
-  const locale = params.locale;
-  const t = useTranslations();
-  const [user, setUser] = useState<SafeUser | null>(null);
-  const [authLoading, setAuthLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("/api/auth/me", { credentials: "include" })
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.success && data.user) setUser(data.user as SafeUser);
-      })
-      .catch(() => {})
-      .finally(() => setAuthLoading(false));
-  }, []);
-
-  const dashboardHref =
-    user?.role === "SUPERADMIN"
-      ? `/${locale}/admin`
-      : user?.tenantId
-        ? `/${locale}/${user.tenantId}/dashboard`
-        : `/${locale}/login`;
-  const primaryHref = user ? `/${locale}/marketplace` : `/${locale}/register`;
-  const breadcrumbItems = [
-    { name: "Home", url: `https://codestoreglobal.com/${locale}` },
-  ];
+  const t = await getTranslations({ locale });
+  const signedIn = false; // server-rendered; the header owns the real session UI
+  const demoHref = `/${locale}/register?intent=demo`;
+  const visibleShots = SHOTS.filter((s) => s.available);
+  const heroShot = visibleShots[0] ?? SHOTS[0];
 
   return (
-    <div className="min-h-screen overflow-hidden bg-white text-slate-950 dark:bg-slate-950 dark:text-white">
-      <OrganizationSchema />
-      <WebSiteSchema locale={locale} />
-      <BreadcrumbSchema items={breadcrumbItems} />
+    <div className="cs-theme bg-white">
+      <LandingStructuredData
+        locale={locale}
+        version={APP_VERSION}
+        price={PRICE_PER_WORKSPACE_MONTH}
+        repoUrl={REPO_URL}
+      />
+
       <main>
-        <section className="relative isolate border-b border-slate-200/70 dark:border-slate-800/70">
-          <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-            <div className="absolute -left-40 -top-36 h-[520px] w-[520px] rounded-full bg-violet-300/25 blur-3xl dark:bg-violet-900/20" />
-            <div className="absolute right-[-12%] top-20 h-[620px] w-[620px] rounded-full bg-cyan-200/25 blur-3xl dark:bg-cyan-900/20" />
-            <div className="absolute inset-0 bg-grid-slate" />
-          </div>
-          <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-14 pt-12 sm:gap-16 sm:pb-20 sm:pt-16 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8 lg:pb-28 lg:pt-24">
-            <div className="max-w-2xl">
-              <Badge className="mb-7 rounded-full border-violet-200 bg-violet-50 px-3.5 py-1.5 text-violet-700 shadow-sm dark:border-violet-800 dark:bg-violet-950/50 dark:text-violet-300">
-                <Sparkles className="mr-1.5 h-3.5 w-3.5" />
-                {t("landing.hero.badge")}
-              </Badge>
-              <h1 className="text-balance text-4xl font-semibold tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-[4.7rem] lg:leading-[1.02] dark:text-white">
-                {t("landing.hero.title1")}{" "}
-                <span className="text-gradient">
-                  {t("landing.hero.title2")}
-                </span>
+        {/* =============================================================== */}
+        {/* HERO — headline left, product surface right. No gradient, no     */}
+        {/* glow, no grid, no badge pill. Accent only on the category words. */}
+        {/* =============================================================== */}
+        <section className="border-b border-[var(--cs-rule)]">
+          <div className="cs-wrap grid items-center gap-12 py-16 lg:grid-cols-[1.02fr_0.98fr] lg:py-24">
+            <div>
+              <p className="cs-label">{t("landingV2.hero.eyebrow")}</p>
+              <h1 className="mt-4 text-[36px] font-semibold leading-[1.08] tracking-[-0.022em] sm:text-[46px] lg:text-[58px]">
+                {t("landingV2.hero.h1Lead")}{" "}
+                <span className="text-[var(--cs-accent)]">{t("landingV2.hero.h1Accent")}</span>
               </h1>
-              <p className="mt-7 max-w-xl text-lg leading-8 text-slate-600 sm:text-xl dark:text-slate-400">
-                {t("landing.hero.subtitle")}
+              <p className="mt-6 max-w-xl text-[17px] leading-[1.65] text-[var(--cs-body)]">
+                {t("landingV2.hero.body")}
               </p>
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                <Link
-                  href={
-                    user && (user.role === "SUPERADMIN" || user.tenantId)
-                      ? dashboardHref
-                      : primaryHref
-                  }
-                >
-                  <Button
-                    size="lg"
-                    className="group h-12 w-full rounded-xl bg-slate-950 px-6 text-base shadow-xl shadow-slate-950/15 hover:bg-violet-700 sm:w-auto dark:bg-white dark:text-slate-950 dark:hover:bg-violet-100"
-                  >
-                    {user && (user.role === "SUPERADMIN" || user.tenantId)
-                      ? t("landing.hero.ctaDashboard")
-                      : t("landing.hero.ctaPrimary")}
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+
+              <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-3">
+                <Link href={signedIn ? `/${locale}` : demoHref}>
+                  <Button className="h-auto rounded-[6px] bg-[var(--cs-ink)] px-5 py-3 text-[15px] font-medium text-white hover:bg-black">
+                    {t("landingV2.hero.cta")}
                   </Button>
                 </Link>
-                <Link href={`/${locale}/marketplace`}>
+                <Link href={REPO_URL} target="_blank" rel="noopener noreferrer">
                   <Button
-                    size="lg"
                     variant="outline"
-                    className="h-12 w-full rounded-xl border-slate-300 bg-white/70 px-6 text-base hover:border-violet-300 hover:bg-violet-50 sm:w-auto dark:border-slate-700 dark:bg-slate-900/50 dark:hover:bg-slate-800"
+                    className="h-auto rounded-[6px] border-[var(--cs-rule-2)] bg-white px-5 py-3 text-[15px] font-medium text-[var(--cs-ink)] hover:bg-[#f7f7f8]"
                   >
-                    {t("landing.hero.ctaSecondary")}
-                    <ArrowUpRight className="ml-2 h-4 w-4" />
+                    {t("landingV2.hero.secondary")}
                   </Button>
                 </Link>
               </div>
-              <div className="mt-9 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-500 dark:text-slate-400">
-                <span className="inline-flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                  Built for global teams
-                </span>
-                <span className="inline-flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                  Secure by default
-                </span>
+
+              <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-[13.5px] text-[var(--cs-body)]">
+                {(["hero.assure1", "hero.assure2", "hero.assure3"] as const).map((k) => (
+                  <li key={k} className="flex items-center gap-2">
+                    <span aria-hidden="true" className="text-[var(--cs-accent)]">
+                      ✓
+                    </span>
+                    {t(`landingV2.${k}`)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* min-w-0 + overflow-hidden so a missing file cannot blow out the grid */}
+            <div className="min-w-0 overflow-hidden rounded-[8px] border border-[var(--cs-rule-2)] bg-[#fbfbfc]">
+              {heroShot.available ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={SHOT_PATH[heroShot.key]}
+                  alt={t(`landingV2.screens.${heroShot.key}Alt`)}
+                  width={1512}
+                  height={860}
+                  className="block w-full"
+                />
+              ) : (
+                <ScreenshotSlot src={SHOT_PATH[heroShot.key]} />
+              )}
+              <div className="border-t border-[var(--cs-rule)] px-3.5 py-2.5">
+                <span className="cs-mono text-[12px] text-[var(--cs-mid)]">{heroShot.chrome}</span>
               </div>
             </div>
-            <ProductPreview />
-          </div>
-          <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 border-t border-slate-200/70 px-4 py-8 sm:grid-cols-4 sm:px-6 lg:px-8 dark:border-slate-800/70">
-            <Stat value="10K+" label={t("landing.stats.devs")} />
-            <Stat value="500+" label={t("landing.stats.components")} />
-            <Stat value="1,200+" label={t("landing.stats.courses")} />
-            <Stat value="$2M+" label={t("landing.stats.escrow")} />
           </div>
         </section>
 
-        <section className="section-pad bg-slate-50/70 dark:bg-slate-900/40">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <SectionIntro
-              badge={t("landing.features.badge")}
-              heading={t("landing.features.heading")}
-              subheading={t("landing.features.subheading")}
-            />
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {features.map((feature, i) => (
-                <Card
-                  key={i}
-                  className={`group relative overflow-hidden rounded-2xl border-slate-200/80 bg-white/80 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-violet-200 hover:shadow-xl hover:shadow-violet-900/5 dark:border-slate-800 dark:bg-slate-900/70 ${i === 0 ? "lg:col-span-2" : ""}`}
-                >
-                  <CardContent className="p-7">
-                    <div
-                      className={`mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${feature.color} text-white shadow-lg shadow-violet-500/10`}
-                    >
-                      {feature.icon}
-                    </div>
-                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                      {t(feature.titleKey)}
-                    </h3>
-                    <p className="mt-2 max-w-lg text-sm leading-6 text-slate-600 dark:text-slate-400">
-                      {t(feature.descKey)}
-                    </p>
-                    <div className="mt-6 inline-flex items-center text-sm font-medium text-violet-600 opacity-0 transition-opacity group-hover:opacity-100 dark:text-violet-400">
-                      Explore capability{" "}
-                      <ArrowUpRight className="ml-1 h-4 w-4" />
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="learn" className="section-pad">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <SectionIntro
-              badge={t("landing.learn.badge")}
-              heading={t("landing.learn.heading")}
-              subheading={t("landing.learn.subheading")}
-            />
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {programmingLanguages.map((lang) => (
-                <Card
-                  key={lang.name}
-                  className="group overflow-hidden rounded-2xl border-slate-200/80 transition-all hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900"
-                >
-                  <CardContent className="p-0">
-                    <div className={`h-1.5 bg-gradient-to-r ${lang.color}`} />
-                    <div className="p-6">
-                      <div className="flex items-center justify-between">
-                        <div
-                          className={`flex h-11 w-11 items-center justify-center rounded-xl ${lang.bgColor}`}
-                        >
-                          {lang.icon}
-                        </div>
-                        <Badge
-                          variant="secondary"
-                          className="rounded-full bg-slate-100 text-xs dark:bg-slate-800"
-                        >
-                          {lang.level}
-                        </Badge>
-                      </div>
-                      <h3 className="mt-5 text-lg font-semibold">
-                        {lang.name}
-                      </h3>
-                      <p className="mt-2 min-h-12 text-sm leading-6 text-slate-600 dark:text-slate-400">
-                        {t(lang.descKey)}
-                      </p>
-                      <Link
-                        href={`/${locale}/courses`}
-                        className="mt-5 inline-flex items-center text-sm font-semibold text-violet-600 dark:text-violet-400"
-                      >
-                        {t("landing.learn.browse")}
-                        <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="relative overflow-hidden bg-slate-950 py-16 sm:py-20 text-white dark:bg-black">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(124,58,237,.35),transparent_35%),radial-gradient(circle_at_90%_100%,rgba(6,182,212,.2),transparent_35%)]" />
-          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <SectionIntro
-              dark
-              badge={t("landing.steps.badge")}
-              heading={t("landing.steps.heading")}
-              subheading={t("landing.steps.subheading")}
-            />
-            <div className="grid gap-5 md:grid-cols-3">
-              <StepCard
-                number="01"
-                icon={<Users className="h-5 w-5" />}
-                title={t("landing.steps.step1Title")}
-                desc={t("landing.steps.step1Desc")}
-              />
-              <StepCard
-                number="02"
-                icon={<LockKeyhole className="h-5 w-5" />}
-                title={t("landing.steps.step2Title")}
-                desc={t("landing.steps.step2Desc")}
-              />
-              <StepCard
-                number="03"
-                icon={<TrendingUp className="h-5 w-5" />}
-                title={t("landing.steps.step3Title")}
-                desc={t("landing.steps.step3Desc")}
-              />
-            </div>
-          </div>
-        </section>
-
-        <section className="section-pad bg-slate-50/70 dark:bg-slate-900/40">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <SectionIntro
-              badge={t("landing.testimonials.badge")}
-              heading={t("landing.testimonials.heading")}
-              subheading={t("landing.testimonials.subheading")}
-            />
-            <div className="mb-10 flex flex-wrap justify-center gap-2">
-              {["English", "العربية", "Français", "Deutsch", "Español"].map(
-                (lang) => (
-                  <Badge
-                    key={lang}
-                    variant="secondary"
-                    className="rounded-full border border-slate-200 bg-white px-4 py-2 dark:border-slate-700 dark:bg-slate-900"
-                  >
-                    {lang}
-                  </Badge>
-                ),
-              )}
-            </div>
-            <div className="grid gap-5 md:grid-cols-3">
-              <TestimonialCard
-                quote={t("landing.testimonials.q1")}
-                author="Sarah Chen"
-                role={t("landing.testimonials.r1")}
-                initials="SC"
-                color="bg-emerald-500"
-              />
-              <TestimonialCard
-                quote={t("landing.testimonials.q2")}
-                author="Marcus Weber"
-                role={t("landing.testimonials.r2")}
-                initials="MW"
-                color="bg-blue-500"
-              />
-              <TestimonialCard
-                quote={t("landing.testimonials.q3")}
-                author="Demo Admin"
-                role={t("landing.testimonials.r3")}
-                initials="DA"
-                color="bg-violet-500"
-              />
-            </div>
-          </div>
-        </section>
-
-        <section className="section-pad">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-violet-600 via-indigo-600 to-cyan-600 px-6 py-16 text-center shadow-2xl shadow-violet-500/20 sm:px-16">
-              <div className="absolute inset-0 bg-grid-white opacity-20" />
-              <div className="relative">
-                <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 text-white backdrop-blur">
-                  <Command className="h-6 w-6" />
+        {/* =============================================================== */}
+        {/* METRICS — the three numbers that are true. Operational, not      */}
+        {/* vanity. Replaces the deleted 10K+ / 500+ / $2M+ wall.            */}
+        {/* =============================================================== */}
+        <section className="border-b border-[var(--cs-rule)] bg-[var(--cs-band)]">
+          <div className="cs-wrap grid gap-8 py-10 sm:grid-cols-3">
+            {METRICS.map((m, i) => (
+              <div
+                key={m}
+                className={
+                  i === 1
+                    ? "border-[var(--cs-rule-2)] sm:border-x sm:border-[var(--cs-rule-2)] sm:px-8"
+                    : undefined
+                }
+              >
+                <div className="text-[38px] font-semibold leading-none tracking-[-0.03em]">
+                  {t(`landingV2.metrics.${m}Value`)}
                 </div>
-                <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                  {t("landing.cta.heading")}
-                </h2>
-                <p className="mx-auto mt-4 max-w-xl text-lg leading-7 text-violet-100">
-                  {t("landing.cta.subheading")}
-                </p>
-                <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-                  {!authLoading && (
-                    <Link
-                      href={
-                        user && (user.role === "SUPERADMIN" || user.tenantId)
-                          ? dashboardHref
-                          : primaryHref
+                <div className="mt-2.5 text-[14px] leading-[1.6] text-[var(--cs-body)]">
+                  {t(`landingV2.metrics.${m}Body`)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* =============================================================== */}
+        {/* PROBLEM — three numbered blocks with a heavy top rule.           */}
+        {/* =============================================================== */}
+        <section className="border-b border-[var(--cs-rule)]">
+          <div className="cs-wrap py-16 lg:py-20">
+            <h2 className="max-w-3xl text-[30px] font-semibold tracking-[-0.022em] sm:text-[34px]">
+              {t("landingV2.problem.h2")}
+            </h2>
+
+            <div className="mt-12 grid gap-x-10 gap-y-10 md:grid-cols-3">
+              {(["pain1", "pain2", "pain3"] as const).map((pain, i) => (
+                <div key={pain} className="border-t-2 border-[var(--cs-ink)] pt-5">
+                  <div className="cs-mono text-[13px] font-semibold">
+                    {String(i + 1).padStart(2, "0")}
+                  </div>
+                  <h3 className="mt-3 text-[17px] font-semibold">
+                    {t(`landingV2.problem.${pain}Title`)}
+                  </h3>
+                  <p className="mt-2.5 text-[14.5px] leading-[1.65] text-[var(--cs-body)]">
+                    {t(`landingV2.problem.${pain}Body`)}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* =============================================================== */}
+        {/* PRODUCT — icon + title + body, two per row. No tinted icon chips. */}
+        {/* =============================================================== */}
+        <section id="product" className="border-b border-[var(--cs-rule)]">
+          <div className="cs-wrap py-16 lg:py-20">
+            <div className="max-w-3xl">
+              <p className="cs-label">{t("landingV2.features.eyebrow")}</p>
+              <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.022em] sm:text-[34px]">
+                {t("landingV2.features.heading")}
+              </h2>
+              <p className="mt-4 text-[16.5px] leading-[1.65] text-[var(--cs-body)]">
+                {t("landingV2.features.subheading")}
+              </p>
+            </div>
+
+            <div className="mt-12 grid gap-x-12 gap-y-10 md:grid-cols-2">
+              {FEATURE_KEYS.map((f) => (
+                <div key={f} className="flex gap-4">
+                  <span aria-hidden="true" className="mt-0.5 shrink-0 text-[15px] text-[var(--cs-accent)]">
+                    ◆
+                  </span>
+                  <div>
+                    <h3 className="text-[16.5px] font-semibold">
+                      {t(`landingV2.features.${f}`)}
+                    </h3>
+                    <p className="mt-2 text-[14.5px] leading-[1.65] text-[var(--cs-body)]">
+                      {t(`landingV2.features.${f}Desc`)}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* ============================================================
+                PROTECTED COPY — DO NOT REMOVE.
+
+                "Not in the build: automatic licence-key issuance, SSO/SAML,
+                SCIM, managed hosting, and a usage-based billing model."
+
+                This line is the strongest credibility signal on the page: a
+                technical buyer reads an explicit list of what does not exist as
+                competence, and it costs nothing but honesty. It has been
+                verified against prisma/schema.prisma — there is no LicenseKey,
+                SsoConfig, SAML, SCIM, ApiKey or usage-billing model in it.
+
+                If a future edit is tempted to delete this "because the page
+                sounds incomplete without it", delete something else instead.
+                ============================================================ */}
+            <p className="mt-10 text-[13.5px] text-[var(--cs-faint)]">
+              {t("landingV2.features.notInBuild")}
+            </p>
+          </div>
+        </section>
+
+        {/* =============================================================== */}
+        {/* HOW IT WORKS — four real screens, alternating.                   */}
+        {/* =============================================================== */}
+        <section id="how" className="border-b border-[var(--cs-rule)] bg-[var(--cs-band)]">
+          <div className="cs-wrap py-16 lg:py-20">
+            <div className="max-w-3xl">
+              <p className="cs-label">{t("landingV2.how.eyebrow")}</p>
+              <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.022em] sm:text-[34px]">
+                {t("landingV2.how.h2")}
+              </h2>
+              <p className="mt-4 text-[16.5px] leading-[1.65] text-[var(--cs-body)]">
+                {t("landingV2.how.subhead")}
+              </p>
+            </div>
+
+            <div className="mt-12 space-y-14">
+              {visibleShots.map((shot, i) => {
+                const imageFirst = i % 2 === 0;
+                return (
+                  <figure
+                    key={shot.key}
+                    className="grid items-center gap-8 lg:grid-cols-[1.25fr_1fr] lg:gap-14"
+                  >
+                    <div
+                      className={`min-w-0 overflow-hidden rounded-[8px] border border-[var(--cs-rule-2)] bg-white ${
+                        imageFirst ? "lg:col-start-1 lg:row-start-1" : "lg:col-start-2 lg:row-start-1"
+                      }`}
+                    >
+                      {shot.available ? (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img
+                          src={SHOT_PATH[shot.key]}
+                          alt={t(`landingV2.screens.${shot.key}Alt`)}
+                          width={1512}
+                          height={860}
+                          loading={i === 0 ? "eager" : "lazy"}
+                          decoding="async"
+                          className="block w-full"
+                        />
+                      ) : (
+                        <ScreenshotSlot src={SHOT_PATH[shot.key]} />
+                      )}
+                      <div className="border-t border-[var(--cs-rule)] px-3.5 py-2.5">
+                        <span className="cs-mono text-[12px] text-[var(--cs-mid)]">{shot.chrome}</span>
+                      </div>
+                    </div>
+                    <figcaption
+                      className={
+                        imageFirst ? "lg:col-start-2 lg:row-start-1" : "lg:col-start-1 lg:row-start-1"
                       }
                     >
-                      <Button
-                        size="lg"
-                        className="h-12 rounded-xl bg-white px-6 text-base text-violet-700 shadow-lg hover:bg-violet-50"
-                      >
-                        {user && (user.role === "SUPERADMIN" || user.tenantId)
-                          ? t("landing.cta.dashboard")
-                          : t("landing.cta.primary")}
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </Link>
-                  )}
-                  <Link href={`/${locale}/marketplace`}>
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="h-12 rounded-xl border-white/30 px-6 text-base text-white hover:bg-white/10"
-                    >
-                      {t("landing.cta.secondary")}
+                      <div className="cs-mono text-[13px] font-semibold">
+                        {String(i + 1).padStart(2, "0")}
+                      </div>
+                      <h3 className="mt-2.5 text-[19px] font-semibold">
+                        {t(`landingV2.screens.${shot.key}Caption`)}
+                      </h3>
+                      <p className="mt-2.5 text-[14.5px] leading-[1.65] text-[var(--cs-body)]">
+                        {t(`landingV2.screens.${shot.key}Body`)}
+                      </p>
+                    </figcaption>
+                  </figure>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* =============================================================== */}
+        {/* DEPLOY — the install block. Commands stay in English: translating */}
+        {/* a shell command would be worse than useless.                     */}
+        {/* =============================================================== */}
+        <section id="deploy" className="border-b border-[var(--cs-rule)]">
+          <div className="cs-wrap grid gap-12 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:py-20">
+            <div>
+              <p className="cs-label">{t("landingV2.deploy.eyebrow")}</p>
+              <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.022em] sm:text-[34px]">
+                {t("landingV2.deploy.h2")}
+              </h2>
+              <p className="mt-4 text-[16.5px] leading-[1.65] text-[var(--cs-body)]">
+                {t("landingV2.deploy.body")}
+              </p>
+              <dl className="mt-8 text-[14.5px]">
+                {SPEC_KEYS.map((k) => (
+                  <div
+                    key={k}
+                    className="flex justify-between border-t border-[var(--cs-rule)] py-3 last:border-b"
+                  >
+                    <dt className="text-[var(--cs-body)]">{t(`landingV2.deploy.spec.${k}Label`)}</dt>
+                    <dd className="cs-mono text-[13px]">{t(`landingV2.deploy.spec.${k}Value`)}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+            <div className="min-w-0">
+              <pre className="overflow-x-auto rounded-[8px] border border-[var(--cs-rule)] bg-[#f8f9fa] p-4 text-[13px] leading-[1.7] text-[#1f2937]">
+                <code>{`git clone ${REPO_URL}
+cd codestoreglobal && npm install
+
+# .env
+DATABASE_URL="mysql://user:pass@localhost:3306/codestoreglobal"
+JWT_SECRET="$(openssl rand -hex 32)"
+
+npx prisma migrate deploy
+npm run build && npm start`}</code>
+              </pre>
+              <p className="mt-3 text-[13px] text-[var(--cs-faint)]">
+                {t("landingV2.deploy.note")}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* =============================================================== */}
+        {/* PROOF — late on purpose: with no customer logos to show, the      */}
+        {/* honest v2.0 statement earns its place after the product.         */}
+        {/* =============================================================== */}
+        <section className="border-b border-[var(--cs-rule)] bg-[var(--cs-band)]">
+          <div className="cs-wrap py-16 lg:py-20">
+            <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+              <div>
+                <p className="cs-label">{t("landingV2.proof.eyebrow")}</p>
+                <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.022em] sm:text-[34px]">
+                  {t("landingV2.proof.h2")}
+                </h2>
+                <p className="mt-4 text-[16.5px] leading-[1.65] text-[var(--cs-body)]">
+                  {t("landingV2.proof.body")}
+                </p>
+
+                <div className="mt-8 border-l-2 border-[var(--cs-ink)] pl-5">
+                  <p className="text-[15px] leading-[1.65]">{t("landingV2.proof.note")}</p>
+                  <Link href={demoHref}>
+                    <Button className="mt-4 h-auto rounded-[6px] bg-[var(--cs-ink)] px-4 py-2.5 text-[14.5px] font-medium text-white hover:bg-black">
+                      {t("landingV2.proof.cta")}
                     </Button>
                   </Link>
                 </div>
               </div>
+
+              <div>
+                <div className="cs-label">{t("landingV2.proof.changelogHeading")}</div>
+                <table className="mt-4 w-full text-left text-[14.5px]">
+                  <tbody>
+                    {CHANGELOG.map((entry) => (
+                      <tr key={entry.version} className="border-t border-[var(--cs-rule)] last:border-b">
+                        <th scope="row" className="cs-mono w-16 py-3 align-top text-[13px] font-normal">
+                          {entry.version}
+                        </th>
+                        <td className="py-3 text-[var(--cs-body)]">{entry.body}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <p className="mt-4 text-[14px]">
+                  <a
+                    href={REPO_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[var(--cs-accent)] underline-offset-4 hover:underline"
+                  >
+                    {t("landingV2.proof.repoLink")}
+                  </a>
+                  {CHANGELOG_URL && (
+                    <>
+                      {" · "}
+                      <a href={CHANGELOG_URL} className="text-[var(--cs-accent)] underline-offset-4 hover:underline">
+                        {t("landingV2.proof.changelogLink")}
+                      </a>
+                    </>
+                  )}
+                  {DOCS_URL && (
+                    <>
+                      {" · "}
+                      <a href={DOCS_URL} className="text-[var(--cs-accent)] underline-offset-4 hover:underline">
+                        {t("landingV2.proof.docsLink")}
+                      </a>
+                    </>
+                  )}
+                  {" · "}
+                  <a href="mailto:support@codestore.global" className="text-[var(--cs-accent)] underline-offset-4 hover:underline">
+                    support@codestore.global
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* =============================================================== */}
+        {/* PRICING — one plan, as a bordered block with a spec table.       */}
+        {/* =============================================================== */}
+        <section id="pricing" className="border-b border-[var(--cs-rule)]">
+          <div className="cs-wrap py-16 lg:py-20">
+            <div className="max-w-3xl">
+              <p className="cs-label">{t("landingV2.pricing.eyebrow")}</p>
+              <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.022em] sm:text-[34px]">
+                {t("landingV2.pricing.h2")}
+              </h2>
+              <p className="mt-4 text-[16.5px] leading-[1.65] text-[var(--cs-body)]">
+                {t("landingV2.pricing.body")}
+              </p>
+            </div>
+
+            <div className="mt-12 grid gap-10 rounded-[10px] border border-[var(--cs-rule-2)] p-8 sm:p-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+              <div>
+                <h3 className="text-[17px] font-semibold">{t("landingV2.pricing.planName")}</h3>
+                <p className="mt-4 flex items-baseline gap-2">
+                  <span className="text-[46px] font-semibold leading-none tracking-[-0.03em]">
+                    ${PRICE_PER_WORKSPACE_MONTH}
+                  </span>
+                  <span className="text-[14px] text-[var(--cs-mid)]">
+                    {t("landingV2.pricing.priceSuffix")}
+                  </span>
+                </p>
+                <dl className="mt-6 text-[14px]">
+                  {PRICE_ROWS.map((k) => (
+                    <div
+                      key={k}
+                      className="flex justify-between border-t border-[var(--cs-rule)] py-2.5 last:border-b"
+                    >
+                      <dt className="text-[var(--cs-body)]">{t(`landingV2.pricing.row.${k}Label`)}</dt>
+                      <dd>{t(`landingV2.pricing.row.${k}Value`)}</dd>
+                    </div>
+                  ))}
+                </dl>
+                <Link href={demoHref} className="mt-7 block">
+                  <Button className="h-auto w-full rounded-[6px] bg-[var(--cs-ink)] px-5 py-3 text-[15px] font-medium text-white hover:bg-black">
+                    {t("landingV2.pricing.cta")}
+                  </Button>
+                </Link>
+                <p className="mt-3 text-[12.5px] text-[var(--cs-faint)]">
+                  {t("landingV2.pricing.provisionNote")}
+                </p>
+              </div>
+
+              <div>
+                <div className="cs-label">{t("landingV2.pricing.includedHeading")}</div>
+                <ul className="mt-5 grid gap-2.5 text-[14.5px] sm:grid-cols-2">
+                  {INCLUDED_KEYS.map((k) => (
+                    <li key={k} className="flex gap-2.5">
+                      <span aria-hidden="true" className="shrink-0 text-[var(--cs-accent)]">
+                        ✓
+                      </span>
+                      <span className="text-[var(--cs-body)]">{t(`landingV2.included.${k}`)}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-6 text-[13px] text-[var(--cs-faint)]">
+                  {t("landingV2.pricing.footnote")}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* =============================================================== */}
+        {/* FINAL CTA — a bordered band, not a gradient slab.                */}
+        {/* =============================================================== */}
+        <section className="bg-[var(--cs-band)]">
+          <div className="cs-wrap grid items-center gap-8 py-14 lg:grid-cols-[1.4fr_0.6fr]">
+            <div>
+              <h2 className="text-[26px] font-semibold tracking-[-0.022em] sm:text-[30px]">
+                {t("landingV2.finalcta.heading")}
+              </h2>
+              <p className="mt-3 max-w-2xl text-[15.5px] leading-[1.65] text-[var(--cs-body)]">
+                {t("landingV2.finalcta.subheading")}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3 lg:justify-end">
+              <Link href={demoHref}>
+                <Button className="h-auto rounded-[6px] bg-[var(--cs-ink)] px-5 py-3 text-[15px] font-medium text-white hover:bg-black">
+                  {t("landingV2.finalcta.primary")}
+                </Button>
+              </Link>
+              <Link href={REPO_URL} target="_blank" rel="noopener noreferrer">
+                <Button
+                  variant="outline"
+                  className="h-auto rounded-[6px] border-[var(--cs-rule-2)] bg-transparent px-5 py-3 text-[15px] font-medium text-[var(--cs-ink)] hover:bg-white"
+                >
+                  {t("landingV2.finalcta.secondary")}
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
       </main>
-    </div>
-  );
-}
-
-function SectionIntro({
-  badge,
-  heading,
-  subheading,
-  dark = false,
-}: {
-  badge: string;
-  heading: string;
-  subheading: string;
-  dark?: boolean;
-}) {
-  return (
-    <div className="mx-auto mb-14 max-w-2xl text-center">
-      <Badge
-        variant="outline"
-        className={
-          dark
-            ? "mb-4 rounded-full border-white/20 bg-white/5 text-slate-200"
-            : "mb-4 rounded-full border-slate-300 text-slate-600 dark:border-slate-700 dark:text-slate-400"
-        }
-      >
-        {badge}
-      </Badge>
-      <h2
-        className={`text-3xl font-semibold tracking-tight sm:text-4xl ${dark ? "text-white" : "text-slate-950 dark:text-white"}`}
-      >
-        {heading}
-      </h2>
-      <p
-        className={`mt-4 text-lg leading-7 ${dark ? "text-slate-400" : "text-slate-600 dark:text-slate-400"}`}
-      >
-        {subheading}
-      </p>
-    </div>
-  );
-}
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="text-center">
-      <div className="text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl dark:text-white">
-        {value}
-      </div>
-      <div className="mt-1 text-xs font-medium uppercase tracking-[0.12em] text-slate-500 dark:text-slate-500">
-        {label}
-      </div>
-    </div>
-  );
-}
-function StepCard({
-  number,
-  icon,
-  title,
-  desc,
-}: {
-  number: string;
-  icon: React.ReactNode;
-  title: string;
-  desc: string;
-}) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-7 backdrop-blur transition-colors hover:bg-white/[0.1]">
-      <div className="flex items-center justify-between">
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-cyan-300">
-          {icon}
-        </div>
-        <span className="font-mono text-sm text-violet-300">{number}</span>
-      </div>
-      <h3 className="mt-8 text-xl font-semibold">{title}</h3>
-      <p className="mt-3 text-sm leading-6 text-slate-400">{desc}</p>
-    </div>
-  );
-}
-function TestimonialCard({
-  quote,
-  author,
-  role,
-  initials,
-  color,
-}: {
-  quote: string;
-  author: string;
-  role: string;
-  initials: string;
-  color: string;
-}) {
-  return (
-    <Card className="rounded-2xl border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900">
-      <CardContent className="p-7">
-        <div className="flex gap-1">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
-          ))}
-        </div>
-        <p className="mt-5 min-h-24 text-sm leading-6 text-slate-700 dark:text-slate-300">
-          “{quote}”
-        </p>
-        <div className="mt-7 flex items-center gap-3">
-          <div
-            className={`flex h-10 w-10 items-center justify-center rounded-full ${color} text-sm font-bold text-white`}
-          >
-            {initials}
-          </div>
-          <div>
-            <div className="text-sm font-semibold">{author}</div>
-            <div className="text-xs text-slate-500">{role}</div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-function ProductPreview() {
-  return (
-    <div className="relative mx-auto w-full max-w-xl lg:ml-auto">
-      <div className="absolute -inset-5 rounded-[2rem] bg-gradient-to-r from-violet-500/20 via-cyan-400/10 to-indigo-500/20 blur-2xl" />
-      <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-2xl shadow-slate-900/10 dark:border-slate-700 dark:bg-slate-900">
-        <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3 dark:border-slate-800">
-          <div className="flex gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-rose-400" />
-            <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
-            <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
-          </div>
-          <div className="rounded-md bg-slate-100 px-3 py-1 text-[10px] font-medium text-slate-500 dark:bg-slate-800">
-            app.codestore.global
-          </div>
-          <div className="w-10" />
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-[112px_1fr]">
-          <div className="hidden border-r border-slate-200 bg-slate-50 p-4 sm:block dark:border-slate-800 dark:bg-slate-950">
-            <div className="flex items-center gap-2 text-xs font-semibold">
-              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-violet-600 text-white">
-                <Zap className="h-3.5 w-3.5" />
-              </div>
-              Workspace
-            </div>
-            <div className="mt-8 space-y-3 text-[10px] text-slate-500">
-              <div className="rounded-md bg-violet-100 px-2 py-1.5 font-medium text-violet-700 dark:bg-violet-950/60 dark:text-violet-300">
-                Overview
-              </div>
-              <div>Courses</div>
-              <div>Marketplace</div>
-              <div>Community</div>
-            </div>
-          </div>
-          <div className="p-5 sm:p-7">
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="text-[10px] font-medium uppercase tracking-wider text-violet-600">
-                  Your workspace
-                </div>
-                <div className="mt-1 text-xl font-semibold tracking-tight">
-                  Build & grow together
-                </div>
-              </div>
-              <div className="rounded-lg bg-emerald-50 px-2 py-1 text-[10px] font-medium text-emerald-600 dark:bg-emerald-950/30">
-                Live
-              </div>
-            </div>
-            <div className="mt-6 grid grid-cols-3 gap-2">
-              <PreviewMetric label="Members" value="2,481" />
-              <PreviewMetric label="Revenue" value="$48.2K" />
-              <PreviewMetric label="Courses" value="128" />
-            </div>
-            <div className="mt-5 rounded-xl border border-slate-200 p-4 dark:border-slate-800">
-              <div className="flex items-center justify-between text-xs font-medium">
-                <span>Workspace activity</span>
-                <span className="text-emerald-500">+18.4%</span>
-              </div>
-              <div className="mt-5 flex h-24 items-end gap-1.5">
-                {[35, 48, 42, 62, 55, 74, 68, 86, 78, 94, 82, 100].map(
-                  (height, i) => (
-                    <div
-                      key={i}
-                      className="flex-1 rounded-t-sm bg-gradient-to-t from-violet-500 to-cyan-400 opacity-80"
-                      style={{ height: `${height}%` }}
-                    />
-                  ),
-                )}
-              </div>
-            </div>
-            <div className="mt-5 flex items-center gap-3 rounded-xl bg-slate-50 p-3 dark:bg-slate-800/70">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-100 text-violet-600 dark:bg-violet-950/60 dark:text-violet-300">
-                <Play className="h-3.5 w-3.5 fill-current" />
-              </div>
-              <div className="flex-1">
-                <div className="text-[11px] font-medium">
-                  Design systems for developers
-                </div>
-                <div className="mt-0.5 text-[10px] text-slate-500">
-                  Continue learning · 68%
-                </div>
-              </div>
-              <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="absolute -bottom-5 -left-5 hidden items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-xl sm:flex dark:border-slate-700 dark:bg-slate-900">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-300">
-          <TrendingUp className="h-4 w-4" />
-        </div>
-        <div>
-          <div className="text-[10px] text-slate-500">This month</div>
-          <div className="text-sm font-semibold">+24.8% growth</div>
-        </div>
-      </div>
-    </div>
-  );
-}
-function PreviewMetric({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-lg bg-slate-50 p-2.5 dark:bg-slate-800/70">
-      <div className="text-[9px] text-slate-500">{label}</div>
-      <div className="mt-1 text-sm font-semibold">{value}</div>
     </div>
   );
 }

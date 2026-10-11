@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
-// TODO: confirm the canonical host (see sitemap.ts).
-const baseUrl = "https://codestore.global";
+// Canonical host — must match sitemap.ts and the page metadata exactly.
+const baseUrl = "https://codestoreglobal.com";
 
 export default function robots(): MetadataRoute.Robots {
   return {

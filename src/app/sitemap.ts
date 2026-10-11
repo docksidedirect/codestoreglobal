@@ -5,10 +5,9 @@ import { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 import { locales, MARKETPLACE_CATEGORIES } from "@/lib/marketplace-categories";
 
-// TODO: confirm the canonical host. This file and robots.ts say codestore.global
-// while the landing page breadcrumb said codestoreglobal.com. Pick one, then fix
-// the other two — split indexing is the most expensive SEO bug on the site.
-const baseUrl = "https://codestore.global";
+// Canonical host: codestoreglobal.com (apex). The www host should redirect
+// here; if it does not, fix that at the DNS/host level, not in this file.
+const baseUrl = "https://codestoreglobal.com";
 
 /**
  * The landing page's real last-modified date. Do not stamp `new Date()` on
@@ -16,7 +15,7 @@ const baseUrl = "https://codestore.global";
  * you teach them to ignore your lastmod values. Bump this when the landing
  * copy actually changes.
  */
-const LANDING_LAST_MODIFIED = new Date("2026-10-05");
+const LANDING_LAST_MODIFIED = new Date("2026-10-11");
 
 const STATIC_ROUTES: {
   path: string;
@@ -32,6 +31,7 @@ const STATIC_ROUTES: {
   },
   { path: "/courses", changeFrequency: "weekly", priority: 0.8, lastModified: LANDING_LAST_MODIFIED },
   { path: "/marketplace", changeFrequency: "weekly", priority: 0.8, lastModified: LANDING_LAST_MODIFIED },
+  { path: "/jobs", changeFrequency: "weekly", priority: 0.8, lastModified: LANDING_LAST_MODIFIED },
   // /login and /register are deliberately absent. They are noindex account
   // screens, and robots.ts disallows them — listing them here was a contradiction.
 ];

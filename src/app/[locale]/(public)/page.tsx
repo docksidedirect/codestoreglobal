@@ -37,9 +37,9 @@ const PRICE_PER_WORKSPACE_MONTH = 49;
 // Real commit count on main as of this pass. Keep it true or delete the item.
 const COMMITS_ON_MAIN = 90;
 
-const FALLBACK_TITLE = "CodeStore — Private Component Store for Dev Teams";
+const FALLBACK_TITLE = "CodeStore Global — Private Code Store for Dev Teams";
 const FALLBACK_DESCRIPTION =
-  "Your team's components live in Slack threads. CodeStore is a private storefront for internal and licensed kits, with purchases on the record.";
+  "Your team's components live in Slack threads. CodeStore is a private code store for internal and licensed kits, with purchases on the record.";
 
 // Screenshots: 1512x860 (16:9-ish laptop viewport), real UI, consistent theme.
 // Capture instructions live in SCREENSHOTS.md. `available: false` removes a step

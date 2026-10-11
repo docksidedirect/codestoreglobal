@@ -37,16 +37,11 @@ const STATIC_ROUTES: {
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [courses, products, jobs] = await Promise.all([
-    prisma.course.findMany({ where: { isPublished: true }, select: { slug: true, updatedAt: true } }),
-    prisma.product.findMany({ where: { isActive: true }, select: { slug: true, updatedAt: true } }),
-    prisma.jobListing.findMany({ where: { status: "OPEN" }, select: { slug: true, updatedAt: true } }),
-  ]);
-
   const sitemapEntries: MetadataRoute.Sitemap = [];
 
-  // Static routes for each locale. The landing page is the wedge page; give it
-  // the highest priority and the real lastmod.
+  // Static routes for each locale. These never depend on the database, so the
+  // sitemap always returns a valid 200 even if the DB is unreachable — a
+  // sitemap that 500s gets dropped by Search Console ("couldn't fetch").
   for (const locale of locales) {
     for (const route of STATIC_ROUTES) {
       sitemapEntries.push({
@@ -56,6 +51,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: route.priority,
       });
     }
+  }
+
+  // Dynamic URLs from the database. Wrapped so a DB failure degrades to the
+  // static sitemap above instead of killing the whole file.
+  let courses: { slug: string; updatedAt: Date }[] = [];
+  let products: { slug: string; updatedAt: Date }[] = [];
+  let jobs: { slug: string; updatedAt: Date }[] = [];
+  try {
+    [courses, products, jobs] = await Promise.all([
+      prisma.course.findMany({ where: { isPublished: true }, select: { slug: true, updatedAt: true } }),
+      prisma.product.findMany({ where: { isActive: true }, select: { slug: true, updatedAt: true } }),
+      prisma.jobListing.findMany({ where: { status: "OPEN" }, select: { slug: true, updatedAt: true } }),
+    ]);
+  } catch (error) {
+    console.error("[sitemap] database query failed; serving static URLs only", error);
   }
 
   for (const course of courses) {

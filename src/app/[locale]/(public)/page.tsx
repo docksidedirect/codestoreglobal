@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { LandingStructuredData } from "@/components/seo/structured-data";
 import { CHANGELOG } from "@/lib/landing-content";
 import { ScreenshotSlot } from "@/components/screenshot-slot";
+import { Reveal } from "@/components/reveal";
 
 /* -------------------------------------------------------------------------- */
 /*  Option D — professional B2B.                                                */
@@ -44,18 +45,10 @@ const FALLBACK_DESCRIPTION =
 // Capture instructions live in SCREENSHOTS.md. `available: false` removes a step
 // entirely — an illustration is never substituted for a real screen.
 const SHOTS = [
-  { key: "s1", available: true, chrome: "codestoreglobal.com/en/marketplace" },
-  {
-    key: "s2",
-    available: false,
-    chrome: "yourteam.codestoreglobal.com/products/design-tokens",
-  },
-  {
-    key: "s3",
-    available: false,
-    chrome: "yourteam.codestoreglobal.com/settings/members",
-  },
-  { key: "s4", available: true, chrome: "codestoreglobal.com/en/admin" },
+  { key: "s1", available: true },
+  { key: "s2", available: false },
+  { key: "s3", available: false },
+  { key: "s4", available: true },
 ];
 const SHOT_PATH: Record<string, string> = {
   s1: "/screenshots/01-workspace-products.png",
@@ -157,178 +150,198 @@ export default async function LandingPage({
         repoUrl={REPO_URL}
       />
 
+      <style>{`
+        @keyframes cs-fade-up {
+          from { opacity: 0; transform: translateY(18px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        html { scroll-behavior: smooth; }
+        .cs-reveal { opacity: 0; }
+        .cs-reveal.cs-in { animation: cs-fade-up 0.55s ease-out forwards; }
+        @media (prefers-reduced-motion: reduce) {
+          html { scroll-behavior: auto; }
+          .cs-reveal { opacity: 1; }
+          .cs-reveal.cs-in { animation: none; }
+        }
+      `}</style>
       <main>
         {/* =============================================================== */}
         {/* HERO — headline left, product surface right. No gradient, no     */}
         {/* glow, no grid, no badge pill. Accent only on the category words. */}
         {/* =============================================================== */}
-        <section className="border-b border-[var(--cs-rule)]">
-          <div className="cs-wrap grid items-start gap-12 py-16 lg:grid-cols-[1.12fr_0.88fr] lg:gap-16 lg:py-24">
-            <div>
-              <p className="cs-label">{t("landingV2.hero.eyebrow")}</p>
-              {/* 58px was too large for this container. The accent clause needs
+        <Reveal>
+          <section className="border-b border-[var(--cs-rule)]">
+            <div className="cs-wrap grid items-start gap-12 py-16 lg:grid-cols-[1.12fr_0.88fr] lg:gap-16 lg:py-24">
+              <div>
+                <p className="cs-label">{t("landingV2.hero.eyebrow")}</p>
+                {/* 58px was too large for this container. The accent clause needs
                   roughly 660px at 58px, but the text column inside a 1140px
                   .cs-wrap is about 600px — so it wrapped to five lines and left a
                   gap under the headline. 52px fits it in four. */}
-              <h1 className="mt-4 text-[36px] font-semibold leading-[1.08] tracking-[-0.022em] sm:text-[46px] lg:text-[52px]">
-                {t("landingV2.hero.h1Lead")}{" "}
-                <span className="text-[var(--cs-accent)]">
-                  {t("landingV2.hero.h1Accent")}
-                </span>
-              </h1>
-              <p className="mt-6 max-w-xl text-[17px] leading-[1.65] text-[var(--cs-body)]">
-                {t("landingV2.hero.body")}
-              </p>
+                <h1 className="mt-4 text-[36px] font-semibold leading-[1.08] tracking-[-0.022em] sm:text-[46px] lg:text-[52px]">
+                  {t("landingV2.hero.h1Lead")}{" "}
+                  <span className="text-[var(--cs-accent)]">
+                    {t("landingV2.hero.h1Accent")}
+                  </span>
+                </h1>
+                <p className="mt-6 max-w-xl text-[17px] leading-[1.65] text-[var(--cs-body)]">
+                  {t("landingV2.hero.body")}
+                </p>
 
-              <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-3">
-                <Link href={signedIn ? `/${locale}` : demoHref}>
-                  <Button className="h-auto rounded-[6px] bg-[var(--cs-ink)] px-5 py-3 text-[15px] font-medium text-white hover:bg-black">
-                    {t("landingV2.hero.cta")}
-                  </Button>
-                </Link>
-                <Link href={REPO_URL} target="_blank" rel="noopener noreferrer">
-                  <Button
-                    variant="outline"
-                    className="h-auto rounded-[6px] border-[var(--cs-rule-2)] bg-white px-5 py-3 text-[15px] font-medium text-[var(--cs-ink)] hover:bg-[#f7f7f8]"
+                <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-3">
+                  <Link href={signedIn ? `/${locale}` : demoHref}>
+                    <Button className="h-auto rounded-[6px] bg-[var(--cs-ink)] px-5 py-3 text-[15px] font-medium text-white hover:bg-black">
+                      {t("landingV2.hero.cta")}
+                    </Button>
+                  </Link>
+                  <Link
+                    href={REPO_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    {t("landingV2.hero.secondary")}
-                  </Button>
-                </Link>
-              </div>
-
-              <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-[13.5px] text-[var(--cs-body)]">
-                {(
-                  ["hero.assure1", "hero.assure2", "hero.assure3"] as const
-                ).map((k) => (
-                  <li key={k} className="flex items-center gap-2">
-                    <span
-                      aria-hidden="true"
-                      className="text-[var(--cs-accent)]"
+                    <Button
+                      variant="outline"
+                      className="h-auto rounded-[6px] border-[var(--cs-rule-2)] bg-white px-5 py-3 text-[15px] font-medium text-[var(--cs-ink)] hover:bg-[#f7f7f8]"
                     >
-                      ✓
-                    </span>
-                    {t(`landingV2.${k}`)}
-                  </li>
-                ))}
-              </ul>
-            </div>
+                      {t("landingV2.hero.secondary")}
+                    </Button>
+                  </Link>
+                </div>
 
-            {/* min-w-0 + overflow-hidden so a missing file cannot blow out the grid */}
-            <div className="min-w-0 overflow-hidden rounded-[8px] border border-[var(--cs-rule-2)] bg-[#fbfbfc]">
-              {heroShot.available ? (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img
-                  src={SHOT_PATH[heroShot.key]}
-                  alt={t(`landingV2.screens.${heroShot.key}Alt`)}
-                  width={1512}
-                  height={860}
-                  className="block w-full"
-                />
-              ) : (
-                <ScreenshotSlot src={SHOT_PATH[heroShot.key]} />
-              )}
-              <div className="border-t border-[var(--cs-rule)] px-3.5 py-2.5">
-                <span className="cs-mono text-[12px] text-[var(--cs-mid)]">
-                  {heroShot.chrome}
-                </span>
+                <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-[13.5px] text-[var(--cs-body)]">
+                  {(
+                    ["hero.assure1", "hero.assure2", "hero.assure3"] as const
+                  ).map((k) => (
+                    <li key={k} className="flex items-center gap-2">
+                      <span
+                        aria-hidden="true"
+                        className="text-[var(--cs-accent)]"
+                      >
+                        ✓
+                      </span>
+                      {t(`landingV2.${k}`)}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* min-w-0 + overflow-hidden so a missing file cannot blow out the grid */}
+              <div className="min-w-0 overflow-hidden rounded-[8px] border border-[var(--cs-rule-2)] bg-[#fbfbfc]">
+                {heroShot.available ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={SHOT_PATH[heroShot.key]}
+                    alt={t(`landingV2.screens.${heroShot.key}Alt`)}
+                    width={1512}
+                    height={860}
+                    className="block w-full transition-transform duration-500 ease-out hover:scale-[1.02]"
+                  />
+                ) : (
+                  <ScreenshotSlot src={SHOT_PATH[heroShot.key]} />
+                )}
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </Reveal>
 
         {/* =============================================================== */}
         {/* METRICS — the three numbers that are true. Operational, not      */}
         {/* vanity. Replaces the deleted 10K+ / 500+ / $2M+ wall.            */}
         {/* =============================================================== */}
-        <section className="border-b border-[var(--cs-rule)] bg-[var(--cs-band)]">
-          <div className="cs-wrap grid gap-8 py-10 sm:grid-cols-3">
-            {METRICS.map((m, i) => (
-              <div
-                key={m}
-                className={
-                  i === 1
-                    ? "border-[var(--cs-rule-2)] sm:border-x sm:border-[var(--cs-rule-2)] sm:px-8"
-                    : undefined
-                }
-              >
-                <div className="text-[38px] font-semibold leading-none tracking-[-0.03em]">
-                  {t(`landingV2.metrics.${m}Value`)}
+        <Reveal>
+          <section className="border-b border-[var(--cs-rule)] bg-[var(--cs-band)]">
+            <div className="cs-wrap grid gap-8 py-10 sm:grid-cols-3">
+              {METRICS.map((m, i) => (
+                <div
+                  key={m}
+                  className={
+                    i === 1
+                      ? "border-[var(--cs-rule-2)] sm:border-x sm:border-[var(--cs-rule-2)] sm:px-8"
+                      : undefined
+                  }
+                >
+                  <div className="text-[38px] font-semibold leading-none tracking-[-0.03em]">
+                    {t(`landingV2.metrics.${m}Value`)}
+                  </div>
+                  <div className="mt-2.5 text-[14px] leading-[1.6] text-[var(--cs-body)]">
+                    {t(`landingV2.metrics.${m}Body`)}
+                  </div>
                 </div>
-                <div className="mt-2.5 text-[14px] leading-[1.6] text-[var(--cs-body)]">
-                  {t(`landingV2.metrics.${m}Body`)}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        </Reveal>
 
         {/* =============================================================== */}
         {/* PROBLEM — three numbered blocks with a heavy top rule.           */}
         {/* =============================================================== */}
-        <section className="border-b border-[var(--cs-rule)]">
-          <div className="cs-wrap py-16 lg:py-20">
-            <h2 className="max-w-3xl text-[30px] font-semibold tracking-[-0.022em] sm:text-[34px]">
-              {t("landingV2.problem.h2")}
-            </h2>
+        <Reveal>
+          <section className="border-b border-[var(--cs-rule)]">
+            <div className="cs-wrap py-16 lg:py-20">
+              <h2 className="max-w-3xl text-[30px] font-semibold tracking-[-0.022em] sm:text-[34px]">
+                {t("landingV2.problem.h2")}
+              </h2>
 
-            <div className="mt-12 grid gap-x-10 gap-y-10 md:grid-cols-3">
-              {(["pain1", "pain2", "pain3"] as const).map((pain, i) => (
-                <div
-                  key={pain}
-                  className="border-t-2 border-[var(--cs-ink)] pt-5"
-                >
-                  <div className="cs-mono text-[13px] font-semibold">
-                    {String(i + 1).padStart(2, "0")}
+              <div className="mt-12 grid gap-x-10 gap-y-10 md:grid-cols-3">
+                {(["pain1", "pain2", "pain3"] as const).map((pain, i) => (
+                  <div
+                    key={pain}
+                    className="border-t-2 border-[var(--cs-ink)] pt-5"
+                  >
+                    <div className="cs-mono text-[13px] font-semibold">
+                      {String(i + 1).padStart(2, "0")}
+                    </div>
+                    <h3 className="mt-3 text-[17px] font-semibold">
+                      {t(`landingV2.problem.${pain}Title`)}
+                    </h3>
+                    <p className="mt-2.5 text-[14.5px] leading-[1.65] text-[var(--cs-body)]">
+                      {t(`landingV2.problem.${pain}Body`)}
+                    </p>
                   </div>
-                  <h3 className="mt-3 text-[17px] font-semibold">
-                    {t(`landingV2.problem.${pain}Title`)}
-                  </h3>
-                  <p className="mt-2.5 text-[14.5px] leading-[1.65] text-[var(--cs-body)]">
-                    {t(`landingV2.problem.${pain}Body`)}
-                  </p>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </Reveal>
 
         {/* =============================================================== */}
         {/* PRODUCT — icon + title + body, two per row. No tinted icon chips. */}
         {/* =============================================================== */}
-        <section id="product" className="border-b border-[var(--cs-rule)]">
-          <div className="cs-wrap py-16 lg:py-20">
-            <div className="max-w-3xl">
-              <p className="cs-label">{t("landingV2.features.eyebrow")}</p>
-              <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.022em] sm:text-[34px]">
-                {t("landingV2.features.heading")}
-              </h2>
-              <p className="mt-4 text-[16.5px] leading-[1.65] text-[var(--cs-body)]">
-                {t("landingV2.features.subheading")}
-              </p>
-            </div>
+        <Reveal>
+          <section id="product" className="border-b border-[var(--cs-rule)]">
+            <div className="cs-wrap py-16 lg:py-20">
+              <div className="max-w-3xl">
+                <p className="cs-label">{t("landingV2.features.eyebrow")}</p>
+                <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.022em] sm:text-[34px]">
+                  {t("landingV2.features.heading")}
+                </h2>
+                <p className="mt-4 text-[16.5px] leading-[1.65] text-[var(--cs-body)]">
+                  {t("landingV2.features.subheading")}
+                </p>
+              </div>
 
-            <div className="mt-12 grid gap-x-12 gap-y-10 md:grid-cols-2">
-              {FEATURE_KEYS.map((f) => (
-                <div key={f} className="flex gap-4">
-                  <span
-                    aria-hidden="true"
-                    className="mt-0.5 shrink-0 text-[15px] text-[var(--cs-accent)]"
-                  >
-                    ◆
-                  </span>
-                  <div>
-                    <h3 className="text-[16.5px] font-semibold">
-                      {t(`landingV2.features.${f}`)}
-                    </h3>
-                    <p className="mt-2 text-[14.5px] leading-[1.65] text-[var(--cs-body)]">
-                      {t(`landingV2.features.${f}Desc`)}
-                    </p>
+              <div className="mt-12 grid gap-x-12 gap-y-10 md:grid-cols-2">
+                {FEATURE_KEYS.map((f) => (
+                  <div key={f} className="flex gap-4">
+                    <span
+                      aria-hidden="true"
+                      className="mt-0.5 shrink-0 text-[15px] text-[var(--cs-accent)]"
+                    >
+                      ◆
+                    </span>
+                    <div>
+                      <h3 className="text-[16.5px] font-semibold">
+                        {t(`landingV2.features.${f}`)}
+                      </h3>
+                      <p className="mt-2 text-[14.5px] leading-[1.65] text-[var(--cs-body)]">
+                        {t(`landingV2.features.${f}Desc`)}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
 
-            {/* ============================================================
+              {/* ============================================================
                 PROTECTED COPY — DO NOT REMOVE.
 
                 "Not in the build: automatic licence-key issuance, SSO/SAML,
@@ -343,122 +356,121 @@ export default async function LandingPage({
                 If a future edit is tempted to delete this "because the page
                 sounds incomplete without it", delete something else instead.
                 ============================================================ */}
-            <p className="mt-10 text-[13.5px] text-[var(--cs-faint)]">
-              {t("landingV2.features.notInBuild")}
-            </p>
-          </div>
-        </section>
+              <p className="mt-10 text-[13.5px] text-[var(--cs-faint)]">
+                {t("landingV2.features.notInBuild")}
+              </p>
+            </div>
+          </section>
+        </Reveal>
 
         {/* =============================================================== */}
         {/* HOW IT WORKS — four real screens, alternating.                   */}
         {/* =============================================================== */}
-        <section
-          id="how"
-          className="border-b border-[var(--cs-rule)] bg-[var(--cs-band)]"
-        >
-          <div className="cs-wrap py-16 lg:py-20">
-            <div className="max-w-3xl">
-              <p className="cs-label">{t("landingV2.how.eyebrow")}</p>
-              <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.022em] sm:text-[34px]">
-                {t("landingV2.how.h2")}
-              </h2>
-              <p className="mt-4 text-[16.5px] leading-[1.65] text-[var(--cs-body)]">
-                {t("landingV2.how.subhead")}
-              </p>
-            </div>
+        <Reveal>
+          <section
+            id="how"
+            className="border-b border-[var(--cs-rule)] bg-[var(--cs-band)]"
+          >
+            <div className="cs-wrap py-16 lg:py-20">
+              <div className="max-w-3xl">
+                <p className="cs-label">{t("landingV2.how.eyebrow")}</p>
+                <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.022em] sm:text-[34px]">
+                  {t("landingV2.how.h2")}
+                </h2>
+                <p className="mt-4 text-[16.5px] leading-[1.65] text-[var(--cs-body)]">
+                  {t("landingV2.how.subhead")}
+                </p>
+              </div>
 
-            <div className="mt-12 space-y-14">
-              {visibleShots.map((shot, i) => {
-                const imageFirst = i % 2 === 0;
-                return (
-                  <figure
-                    key={shot.key}
-                    className="grid items-center gap-8 lg:grid-cols-[1.25fr_1fr] lg:gap-14"
-                  >
-                    <div
-                      className={`min-w-0 overflow-hidden rounded-[8px] border border-[var(--cs-rule-2)] bg-white ${
-                        imageFirst
-                          ? "lg:col-start-1 lg:row-start-1"
-                          : "lg:col-start-2 lg:row-start-1"
-                      }`}
+              <div className="mt-12 space-y-14">
+                {visibleShots.map((shot, i) => {
+                  const imageFirst = i % 2 === 0;
+                  return (
+                    <figure
+                      key={shot.key}
+                      className="grid items-center gap-8 lg:grid-cols-[1.25fr_1fr] lg:gap-14"
                     >
-                      {shot.available ? (
-                        /* eslint-disable-next-line @next/next/no-img-element */
-                        <img
-                          src={SHOT_PATH[shot.key]}
-                          alt={t(`landingV2.screens.${shot.key}Alt`)}
-                          width={1512}
-                          height={860}
-                          loading={i === 0 ? "eager" : "lazy"}
-                          decoding="async"
-                          className="block w-full"
-                        />
-                      ) : (
-                        <ScreenshotSlot src={SHOT_PATH[shot.key]} />
-                      )}
-                      <div className="border-t border-[var(--cs-rule)] px-3.5 py-2.5">
-                        <span className="cs-mono text-[12px] text-[var(--cs-mid)]">
-                          {shot.chrome}
-                        </span>
+                      <div
+                        className={`min-w-0 overflow-hidden rounded-[8px] border border-[var(--cs-rule-2)] bg-white ${
+                          imageFirst
+                            ? "lg:col-start-1 lg:row-start-1"
+                            : "lg:col-start-2 lg:row-start-1"
+                        }`}
+                      >
+                        {shot.available ? (
+                          /* eslint-disable-next-line @next/next/no-img-element */
+                          <img
+                            src={SHOT_PATH[shot.key]}
+                            alt={t(`landingV2.screens.${shot.key}Alt`)}
+                            width={1512}
+                            height={860}
+                            loading={i === 0 ? "eager" : "lazy"}
+                            decoding="async"
+                            className="block w-full transition-transform duration-500 ease-out hover:scale-[1.02]"
+                          />
+                        ) : (
+                          <ScreenshotSlot src={SHOT_PATH[shot.key]} />
+                        )}
                       </div>
-                    </div>
-                    <figcaption
-                      className={
-                        imageFirst
-                          ? "lg:col-start-2 lg:row-start-1"
-                          : "lg:col-start-1 lg:row-start-1"
-                      }
-                    >
-                      <div className="cs-mono text-[13px] font-semibold">
-                        {String(i + 1).padStart(2, "0")}
-                      </div>
-                      <h3 className="mt-2.5 text-[19px] font-semibold">
-                        {t(`landingV2.screens.${shot.key}Caption`)}
-                      </h3>
-                      <p className="mt-2.5 text-[14.5px] leading-[1.65] text-[var(--cs-body)]">
-                        {t(`landingV2.screens.${shot.key}Body`)}
-                      </p>
-                    </figcaption>
-                  </figure>
-                );
-              })}
+                      <figcaption
+                        className={
+                          imageFirst
+                            ? "lg:col-start-2 lg:row-start-1"
+                            : "lg:col-start-1 lg:row-start-1"
+                        }
+                      >
+                        <div className="cs-mono text-[13px] font-semibold">
+                          {String(i + 1).padStart(2, "0")}
+                        </div>
+                        <h3 className="mt-2.5 text-[19px] font-semibold">
+                          {t(`landingV2.screens.${shot.key}Caption`)}
+                        </h3>
+                        <p className="mt-2.5 text-[14.5px] leading-[1.65] text-[var(--cs-body)]">
+                          {t(`landingV2.screens.${shot.key}Body`)}
+                        </p>
+                      </figcaption>
+                    </figure>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </Reveal>
 
         {/* =============================================================== */}
         {/* DEPLOY — the install block. Commands stay in English: translating */}
         {/* a shell command would be worse than useless.                     */}
         {/* =============================================================== */}
-        <section id="deploy" className="border-b border-[var(--cs-rule)]">
-          <div className="cs-wrap grid gap-12 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:py-20">
-            <div>
-              <p className="cs-label">{t("landingV2.deploy.eyebrow")}</p>
-              <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.022em] sm:text-[34px]">
-                {t("landingV2.deploy.h2")}
-              </h2>
-              <p className="mt-4 text-[16.5px] leading-[1.65] text-[var(--cs-body)]">
-                {t("landingV2.deploy.body")}
-              </p>
-              <dl className="mt-8 text-[14.5px]">
-                {SPEC_KEYS.map((k) => (
-                  <div
-                    key={k}
-                    className="flex justify-between border-t border-[var(--cs-rule)] py-3 last:border-b"
-                  >
-                    <dt className="text-[var(--cs-body)]">
-                      {t(`landingV2.deploy.spec.${k}Label`)}
-                    </dt>
-                    <dd className="cs-mono text-[13px]">
-                      {t(`landingV2.deploy.spec.${k}Value`)}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-            <div className="min-w-0">
-              <pre className="overflow-x-auto rounded-[8px] border border-[var(--cs-rule)] bg-[#f8f9fa] p-4 text-[13px] leading-[1.7] text-[#1f2937]">
-                <code>{`git clone ${REPO_URL}
+        <Reveal>
+          <section id="deploy" className="border-b border-[var(--cs-rule)]">
+            <div className="cs-wrap grid gap-12 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:py-20">
+              <div>
+                <p className="cs-label">{t("landingV2.deploy.eyebrow")}</p>
+                <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.022em] sm:text-[34px]">
+                  {t("landingV2.deploy.h2")}
+                </h2>
+                <p className="mt-4 text-[16.5px] leading-[1.65] text-[var(--cs-body)]">
+                  {t("landingV2.deploy.body")}
+                </p>
+                <dl className="mt-8 text-[14.5px]">
+                  {SPEC_KEYS.map((k) => (
+                    <div
+                      key={k}
+                      className="flex justify-between border-t border-[var(--cs-rule)] py-3 last:border-b"
+                    >
+                      <dt className="text-[var(--cs-body)]">
+                        {t(`landingV2.deploy.spec.${k}Label`)}
+                      </dt>
+                      <dd className="cs-mono text-[13px]">
+                        {t(`landingV2.deploy.spec.${k}Value`)}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+              <div className="min-w-0">
+                <pre className="overflow-x-auto rounded-[8px] border border-[var(--cs-rule)] bg-[#f8f9fa] p-4 text-[13px] leading-[1.7] text-[#1f2937]">
+                  <code>{`git clone ${REPO_URL}
 cd codestoreglobal && npm install
 
 # .env
@@ -467,218 +479,225 @@ JWT_SECRET="$(openssl rand -hex 32)"
 
 npx prisma migrate deploy
 npm run build && npm start`}</code>
-              </pre>
-              <p className="mt-3 text-[13px] text-[var(--cs-faint)]">
-                {t("landingV2.deploy.note")}
-              </p>
+                </pre>
+                <p className="mt-3 text-[13px] text-[var(--cs-faint)]">
+                  {t("landingV2.deploy.note")}
+                </p>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </Reveal>
 
         {/* =============================================================== */}
         {/* PROOF — late on purpose: with no customer logos to show, the      */}
         {/* honest v2.0 statement earns its place after the product.         */}
         {/* =============================================================== */}
-        <section className="border-b border-[var(--cs-rule)] bg-[var(--cs-band)]">
-          <div className="cs-wrap py-16 lg:py-20">
-            <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-              <div>
-                <p className="cs-label">{t("landingV2.proof.eyebrow")}</p>
-                <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.022em] sm:text-[34px]">
-                  {t("landingV2.proof.h2")}
-                </h2>
-                <p className="mt-4 text-[16.5px] leading-[1.65] text-[var(--cs-body)]">
-                  {t("landingV2.proof.body")}
-                </p>
-
-                <div className="mt-8 border-l-2 border-[var(--cs-ink)] pl-5">
-                  <p className="text-[15px] leading-[1.65]">
-                    {t("landingV2.proof.note")}
+        <Reveal>
+          <section className="border-b border-[var(--cs-rule)] bg-[var(--cs-band)]">
+            <div className="cs-wrap py-16 lg:py-20">
+              <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+                <div>
+                  <p className="cs-label">{t("landingV2.proof.eyebrow")}</p>
+                  <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.022em] sm:text-[34px]">
+                    {t("landingV2.proof.h2")}
+                  </h2>
+                  <p className="mt-4 text-[16.5px] leading-[1.65] text-[var(--cs-body)]">
+                    {t("landingV2.proof.body")}
                   </p>
-                  <Link href={demoHref}>
-                    <Button className="mt-4 h-auto rounded-[6px] bg-[var(--cs-ink)] px-4 py-2.5 text-[14.5px] font-medium text-white hover:bg-black">
-                      {t("landingV2.proof.cta")}
-                    </Button>
-                  </Link>
-                </div>
-              </div>
 
-              <div>
-                <div className="cs-label">
-                  {t("landingV2.proof.changelogHeading")}
+                  <div className="mt-8 border-l-2 border-[var(--cs-ink)] pl-5">
+                    <p className="text-[15px] leading-[1.65]">
+                      {t("landingV2.proof.note")}
+                    </p>
+                    <Link href={demoHref}>
+                      <Button className="mt-4 h-auto rounded-[6px] bg-[var(--cs-ink)] px-4 py-2.5 text-[14.5px] font-medium text-white hover:bg-black">
+                        {t("landingV2.proof.cta")}
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
-                <table className="mt-4 w-full text-left text-[14.5px]">
-                  <tbody>
-                    {CHANGELOG.map((entry) => (
-                      <tr
-                        key={entry.version}
-                        className="border-t border-[var(--cs-rule)] last:border-b"
-                      >
-                        <th
-                          scope="row"
-                          className="cs-mono w-16 py-3 align-top text-[13px] font-normal"
+
+                <div>
+                  <div className="cs-label">
+                    {t("landingV2.proof.changelogHeading")}
+                  </div>
+                  <table className="mt-4 w-full text-left text-[14.5px]">
+                    <tbody>
+                      {CHANGELOG.map((entry) => (
+                        <tr
+                          key={entry.version}
+                          className="border-t border-[var(--cs-rule)] last:border-b"
                         >
-                          {entry.version}
-                        </th>
-                        <td className="py-3 text-[var(--cs-body)]">
-                          {entry.body}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <p className="mt-4 text-[14px]">
-                  <a
-                    href={REPO_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[var(--cs-accent)] underline-offset-4 hover:underline"
-                  >
-                    {t("landingV2.proof.repoLink")}
-                  </a>
-                  {CHANGELOG_URL && (
-                    <>
-                      {" · "}
-                      <a
-                        href={CHANGELOG_URL}
-                        className="text-[var(--cs-accent)] underline-offset-4 hover:underline"
-                      >
-                        {t("landingV2.proof.changelogLink")}
-                      </a>
-                    </>
-                  )}
-                  {DOCS_URL && (
-                    <>
-                      {" · "}
-                      <a
-                        href={DOCS_URL}
-                        className="text-[var(--cs-accent)] underline-offset-4 hover:underline"
-                      >
-                        {t("landingV2.proof.docsLink")}
-                      </a>
-                    </>
-                  )}
-                  {" · "}
-                  <a
-                    href="mailto:support@codestore.global"
-                    className="text-[var(--cs-accent)] underline-offset-4 hover:underline"
-                  >
-                    support@codestore.global
-                  </a>
-                </p>
+                          <th
+                            scope="row"
+                            className="cs-mono w-16 py-3 align-top text-[13px] font-normal"
+                          >
+                            {entry.version}
+                          </th>
+                          <td className="py-3 text-[var(--cs-body)]">
+                            {entry.body}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <p className="mt-4 text-[14px]">
+                    <a
+                      href={REPO_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[var(--cs-accent)] underline-offset-4 hover:underline"
+                    >
+                      {t("landingV2.proof.repoLink")}
+                    </a>
+                    {CHANGELOG_URL && (
+                      <>
+                        {" · "}
+                        <a
+                          href={CHANGELOG_URL}
+                          className="text-[var(--cs-accent)] underline-offset-4 hover:underline"
+                        >
+                          {t("landingV2.proof.changelogLink")}
+                        </a>
+                      </>
+                    )}
+                    {DOCS_URL && (
+                      <>
+                        {" · "}
+                        <a
+                          href={DOCS_URL}
+                          className="text-[var(--cs-accent)] underline-offset-4 hover:underline"
+                        >
+                          {t("landingV2.proof.docsLink")}
+                        </a>
+                      </>
+                    )}
+                    {" · "}
+                    <a
+                      href="mailto:support@codestore.global"
+                      className="text-[var(--cs-accent)] underline-offset-4 hover:underline"
+                    >
+                      support@codestore.global
+                    </a>
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </Reveal>
 
         {/* =============================================================== */}
         {/* PRICING — one plan, as a bordered block with a spec table.       */}
         {/* =============================================================== */}
-        <section id="pricing" className="border-b border-[var(--cs-rule)]">
-          <div className="cs-wrap py-16 lg:py-20">
-            <div className="max-w-3xl">
-              <p className="cs-label">{t("landingV2.pricing.eyebrow")}</p>
-              <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.022em] sm:text-[34px]">
-                {t("landingV2.pricing.h2")}
-              </h2>
-              <p className="mt-4 text-[16.5px] leading-[1.65] text-[var(--cs-body)]">
-                {t("landingV2.pricing.body")}
-              </p>
-            </div>
-
-            <div className="mt-12 grid gap-10 rounded-[10px] border border-[var(--cs-rule-2)] p-8 sm:p-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
-              <div>
-                <h3 className="text-[17px] font-semibold">
-                  {t("landingV2.pricing.planName")}
-                </h3>
-                <p className="mt-4 flex items-baseline gap-2">
-                  <span className="text-[46px] font-semibold leading-none tracking-[-0.03em]">
-                    ${PRICE_PER_WORKSPACE_MONTH}
-                  </span>
-                  <span className="text-[14px] text-[var(--cs-mid)]">
-                    {t("landingV2.pricing.priceSuffix")}
-                  </span>
-                </p>
-                <dl className="mt-6 text-[14px]">
-                  {PRICE_ROWS.map((k) => (
-                    <div
-                      key={k}
-                      className="flex justify-between border-t border-[var(--cs-rule)] py-2.5 last:border-b"
-                    >
-                      <dt className="text-[var(--cs-body)]">
-                        {t(`landingV2.pricing.row.${k}Label`)}
-                      </dt>
-                      <dd>{t(`landingV2.pricing.row.${k}Value`)}</dd>
-                    </div>
-                  ))}
-                </dl>
-                <Link href={demoHref} className="mt-7 block">
-                  <Button className="h-auto w-full rounded-[6px] bg-[var(--cs-ink)] px-5 py-3 text-[15px] font-medium text-white hover:bg-black">
-                    {t("landingV2.pricing.cta")}
-                  </Button>
-                </Link>
-                <p className="mt-3 text-[12.5px] text-[var(--cs-faint)]">
-                  {t("landingV2.pricing.provisionNote")}
+        <Reveal>
+          <section id="pricing" className="border-b border-[var(--cs-rule)]">
+            <div className="cs-wrap py-16 lg:py-20">
+              <div className="max-w-3xl">
+                <p className="cs-label">{t("landingV2.pricing.eyebrow")}</p>
+                <h2 className="mt-4 text-[30px] font-semibold tracking-[-0.022em] sm:text-[34px]">
+                  {t("landingV2.pricing.h2")}
+                </h2>
+                <p className="mt-4 text-[16.5px] leading-[1.65] text-[var(--cs-body)]">
+                  {t("landingV2.pricing.body")}
                 </p>
               </div>
 
-              <div>
-                <div className="cs-label">
-                  {t("landingV2.pricing.includedHeading")}
-                </div>
-                <ul className="mt-5 grid gap-2.5 text-[14.5px] sm:grid-cols-2">
-                  {INCLUDED_KEYS.map((k) => (
-                    <li key={k} className="flex gap-2.5">
-                      <span
-                        aria-hidden="true"
-                        className="shrink-0 text-[var(--cs-accent)]"
+              <div className="mt-12 grid gap-10 rounded-[10px] border border-[var(--cs-rule-2)] p-8 sm:p-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+                <div>
+                  <h3 className="text-[17px] font-semibold">
+                    {t("landingV2.pricing.planName")}
+                  </h3>
+                  <p className="mt-4 flex items-baseline gap-2">
+                    <span className="text-[46px] font-semibold leading-none tracking-[-0.03em]">
+                      ${PRICE_PER_WORKSPACE_MONTH}
+                    </span>
+                    <span className="text-[14px] text-[var(--cs-mid)]">
+                      {t("landingV2.pricing.priceSuffix")}
+                    </span>
+                  </p>
+                  <dl className="mt-6 text-[14px]">
+                    {PRICE_ROWS.map((k) => (
+                      <div
+                        key={k}
+                        className="flex justify-between border-t border-[var(--cs-rule)] py-2.5 last:border-b"
                       >
-                        ✓
-                      </span>
-                      <span className="text-[var(--cs-body)]">
-                        {t(`landingV2.included.${k}`)}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-6 text-[13px] text-[var(--cs-faint)]">
-                  {t("landingV2.pricing.footnote")}
-                </p>
+                        <dt className="text-[var(--cs-body)]">
+                          {t(`landingV2.pricing.row.${k}Label`)}
+                        </dt>
+                        <dd>{t(`landingV2.pricing.row.${k}Value`)}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                  <Link href={demoHref} className="mt-7 block">
+                    <Button className="h-auto w-full rounded-[6px] bg-[var(--cs-ink)] px-5 py-3 text-[15px] font-medium text-white hover:bg-black">
+                      {t("landingV2.pricing.cta")}
+                    </Button>
+                  </Link>
+                  <p className="mt-3 text-[12.5px] text-[var(--cs-faint)]">
+                    {t("landingV2.pricing.provisionNote")}
+                  </p>
+                </div>
+
+                <div>
+                  <div className="cs-label">
+                    {t("landingV2.pricing.includedHeading")}
+                  </div>
+                  <ul className="mt-5 grid gap-2.5 text-[14.5px] sm:grid-cols-2">
+                    {INCLUDED_KEYS.map((k) => (
+                      <li key={k} className="flex gap-2.5">
+                        <span
+                          aria-hidden="true"
+                          className="shrink-0 text-[var(--cs-accent)]"
+                        >
+                          ✓
+                        </span>
+                        <span className="text-[var(--cs-body)]">
+                          {t(`landingV2.included.${k}`)}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-6 text-[13px] text-[var(--cs-faint)]">
+                    {t("landingV2.pricing.footnote")}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </Reveal>
 
         {/* =============================================================== */}
         {/* FINAL CTA — a bordered band, not a gradient slab.                */}
         {/* =============================================================== */}
-        <section className="bg-[var(--cs-band)]">
-          <div className="cs-wrap grid items-center gap-8 py-14 lg:grid-cols-[1.4fr_0.6fr]">
-            <div>
-              <h2 className="text-[26px] font-semibold tracking-[-0.022em] sm:text-[30px]">
-                {t("landingV2.finalcta.heading")}
-              </h2>
-              <p className="mt-3 max-w-2xl text-[15.5px] leading-[1.65] text-[var(--cs-body)]">
-                {t("landingV2.finalcta.subheading")}
-              </p>
+        <Reveal>
+          <section className="bg-[var(--cs-band)]">
+            <div className="cs-wrap grid items-center gap-8 py-14 lg:grid-cols-[1.4fr_0.6fr]">
+              <div>
+                <h2 className="text-[26px] font-semibold tracking-[-0.022em] sm:text-[30px]">
+                  {t("landingV2.finalcta.heading")}
+                </h2>
+                <p className="mt-3 max-w-2xl text-[15.5px] leading-[1.65] text-[var(--cs-body)]">
+                  {t("landingV2.finalcta.subheading")}
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-3 lg:justify-end">
+                <Link href={demoHref}>
+                  <Button className="h-auto rounded-[6px] bg-[var(--cs-ink)] px-5 py-3 text-[15px] font-medium text-white hover:bg-black">
+                    {t("landingV2.finalcta.primary")}
+                  </Button>
+                </Link>
+                <Link href={REPO_URL} target="_blank" rel="noopener noreferrer">
+                  <Button
+                    variant="outline"
+                    className="h-auto rounded-[6px] border-[var(--cs-rule-2)] bg-transparent px-5 py-3 text-[15px] font-medium text-[var(--cs-ink)] hover:bg-white"
+                  >
+                    {t("landingV2.finalcta.secondary")}
+                  </Button>
+                </Link>
+              </div>
             </div>
-            <div className="flex flex-wrap gap-3 lg:justify-end">
-              <Link href={demoHref}>
-                <Button className="h-auto rounded-[6px] bg-[var(--cs-ink)] px-5 py-3 text-[15px] font-medium text-white hover:bg-black">
-                  {t("landingV2.finalcta.primary")}
-                </Button>
-              </Link>
-              <Link href={REPO_URL} target="_blank" rel="noopener noreferrer">
-                <Button
-                  variant="outline"
-                  className="h-auto rounded-[6px] border-[var(--cs-rule-2)] bg-transparent px-5 py-3 text-[15px] font-medium text-[var(--cs-ink)] hover:bg-white"
-                >
-                  {t("landingV2.finalcta.secondary")}
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </section>
+          </section>
+        </Reveal>
       </main>
     </div>
   );

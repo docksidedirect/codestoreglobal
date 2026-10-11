@@ -51,13 +51,18 @@ export function LandingStructuredData({
     description:
       "A private component store for dev teams: a workspace-gated storefront for internal components and licensed third-party kits, with per-workspace licensing and purchase records.",
     email: "support@codestore.global", // TODO: confirm this mailbox is monitored.
-    // TODO: keep only profiles that are real and active. A dead social link is
-    // a template signal, and sameAs to a nonexistent account is worse.
-    sameAs: [
-      repoUrl,
-      "https://twitter.com/codestoreglobal",
-      "https://linkedin.com/company/codestoreglobal",
-    ],
+    /*
+     * sameAs must list profiles that actually resolve.
+     *
+     * Removed: https://linkedin.com/company/codestoreglobal — verified HTTP 404.
+     * Removed: https://twitter.com/codestoreglobal — the handle redirects to x.com
+     *          and was never confirmed to exist.
+     *
+     * Declaring social profiles that 404 is worse than declaring none: Google
+     * treats sameAs as an identity claim, and a human who clicks it finds nothing.
+     * Add real, active profiles back here when they exist.
+     */
+    sameAs: [repoUrl],
   };
 
   const software = {

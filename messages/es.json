@@ -268,9 +268,9 @@
       "s3Caption": "Invitación por correo, con rol y caducidad",
       "s3Body": "Se usa una vez y muere. Ningún acceso para quien adivine una URL.",
       "s3Alt": "Página de miembros del equipo con campo de invitación por correo y lista de invitaciones pendientes",
-      "s4Caption": "La compra escribe el registro",
-      "s4Body": "Id de pedido, id de captura, comisión de la plataforma, pago al vendedor. Esta es la tabla que termina la conversación de abril con finanzas.",
-      "s4Alt": "Vista de ingresos de administración con transacciones, ids de pedido, comisiones y pagos a vendedores"
+      "s4Caption": "Todos los espacios de trabajo en una sola pantalla",
+      "s4Body": "El administrador de la plataforma ve todos los espacios de trabajo, su estado y su plan — incluidos los que siguen pendientes de aprobación — además de todos los usuarios y su rol. El acceso a los datos es por espacio de trabajo, y nada de esto es visible para un inquilino.",
+      "s4Alt": "Vista general de administración con todos los espacios de trabajo, su estado y plan, y todos los usuarios con sus roles"
     },
     "how": {
       "eyebrow": "Cómo funciona",

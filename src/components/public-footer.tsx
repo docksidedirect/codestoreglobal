@@ -10,7 +10,7 @@ import { usePathname } from "next/navigation";
  *                             not rendered. A dead legal link reads as a template.
  *   DOCS_URL / CHANGELOG_URL — real pages; also null until they exist.
  */
-const SUPPORT_EMAIL = "support@codestore.global";
+const SUPPORT_EMAIL = "hesho66@icloud.com";
 const SECURITY_EMAIL = "security@codestore.global";
 const LEGAL_NAME = "CODESTORE GLOBAL";
 const COMPANY_NUMBER: string | null = null;
@@ -87,14 +87,20 @@ export function PublicFooter() {
             <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
               {DOCS_URL && (
                 <li>
-                  <a href={DOCS_URL} className="hover:text-slate-950 dark:hover:text-white transition-colors">
+                  <a
+                    href={DOCS_URL}
+                    className="hover:text-slate-950 dark:hover:text-white transition-colors"
+                  >
                     Documentation
                   </a>
                 </li>
               )}
               {CHANGELOG_URL && (
                 <li>
-                  <a href={CHANGELOG_URL} className="hover:text-slate-950 dark:hover:text-white transition-colors">
+                  <a
+                    href={CHANGELOG_URL}
+                    className="hover:text-slate-950 dark:hover:text-white transition-colors"
+                  >
                     Changelog
                   </a>
                 </li>
@@ -132,14 +138,20 @@ export function PublicFooter() {
               </li>
               {PRIVACY_URL && (
                 <li>
-                  <a href={PRIVACY_URL} className="hover:text-slate-950 dark:hover:text-white transition-colors">
+                  <a
+                    href={PRIVACY_URL}
+                    className="hover:text-slate-950 dark:hover:text-white transition-colors"
+                  >
                     Privacy
                   </a>
                 </li>
               )}
               {TERMS_URL && (
                 <li>
-                  <a href={TERMS_URL} className="hover:text-slate-950 dark:hover:text-white transition-colors">
+                  <a
+                    href={TERMS_URL}
+                    className="hover:text-slate-950 dark:hover:text-white transition-colors"
+                  >
                     Terms
                   </a>
                 </li>

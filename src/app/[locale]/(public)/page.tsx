@@ -53,7 +53,9 @@ const SHOT_PATH: Record<string, string> = {
   s1: "/screenshots/01-workspace-products.png",
   s2: "/screenshots/02-product-version-changelog.png",
   s3: "/screenshots/03-invite-members.png",
-  s4: "/screenshots/04-purchase-record.png",
+  // Was 04-purchase-record.png. Renamed because platform_transactions is empty,
+  // so there is no purchase record to show; this step is the admin Overview.
+  s4: "/screenshots/04-admin-workspaces.png",
 };
 
 const METRICS = ["m1", "m2", "m3"] as const;
@@ -110,7 +112,7 @@ export async function generateMetadata({
       title,
       description,
       images: [`${SITE}/og-codestore.png`],
-      creator: "@codestoreglobal", // TODO: delete if this handle is not real.
+      // No `creator`: there is no X/Twitter account for this product.
     },
   };
 }
@@ -141,10 +143,14 @@ export default async function LandingPage({
         {/* glow, no grid, no badge pill. Accent only on the category words. */}
         {/* =============================================================== */}
         <section className="border-b border-[var(--cs-rule)]">
-          <div className="cs-wrap grid items-center gap-12 py-16 lg:grid-cols-[1.02fr_0.98fr] lg:py-24">
+          <div className="cs-wrap grid items-start gap-12 py-16 lg:grid-cols-[1.12fr_0.88fr] lg:gap-16 lg:py-24">
             <div>
               <p className="cs-label">{t("landingV2.hero.eyebrow")}</p>
-              <h1 className="mt-4 text-[36px] font-semibold leading-[1.08] tracking-[-0.022em] sm:text-[46px] lg:text-[58px]">
+              {/* 58px was too large for this container. The accent clause needs
+                  roughly 660px at 58px, but the text column inside a 1140px
+                  .cs-wrap is about 600px — so it wrapped to five lines and left a
+                  gap under the headline. 52px fits it in four. */}
+              <h1 className="mt-4 text-[36px] font-semibold leading-[1.08] tracking-[-0.022em] sm:text-[46px] lg:text-[52px]">
                 {t("landingV2.hero.h1Lead")}{" "}
                 <span className="text-[var(--cs-accent)]">{t("landingV2.hero.h1Accent")}</span>
               </h1>

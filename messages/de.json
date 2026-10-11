@@ -268,9 +268,9 @@
       "s3Caption": "Einladung per E-Mail, mit Rolle und Ablaufdatum",
       "s3Body": "Einmal genutzt, dann tot. Kein Weg hinein für jemanden, der eine URL errät.",
       "s3Alt": "Teamseite mit E-Mail-Einladungsfeld und Liste offener Einladungen",
-      "s4Caption": "Der Kauf schreibt das Register",
-      "s4Body": "Order-ID, Capture-ID, Plattformgebühr, Verkäuferauszahlung. Das ist die Tabelle, die das April-Gespräch mit der Buchhaltung beendet.",
-      "s4Alt": "Admin-Einnahmenansicht mit Plattformtransaktionen, Order-IDs, Gebühren und Verkäuferauszahlungen"
+      "s4Caption": "Alle Workspaces auf einem Bildschirm",
+      "s4Body": "Der Plattform-Admin sieht alle Workspaces, ihren Status und ihren Tarif — auch die, die noch auf Freigabe warten — sowie alle Benutzer und ihre Rolle. Der Datenzugriff erfolgt pro Workspace, und nichts davon ist für einen Tenant sichtbar.",
+      "s4Alt": "Admin-Übersicht mit allen Workspaces samt Status und Tarif sowie allen Benutzern mit ihren Rollen"
     },
     "how": {
       "eyebrow": "So funktioniert es",

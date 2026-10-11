@@ -268,9 +268,9 @@
       "s3Caption": "Invitation par e-mail, avec un rôle et une expiration",
       "s3Body": "Utilisée une fois, puis morte. Aucun accès pour qui devine une URL.",
       "s3Alt": "Page des membres de l'équipe avec un champ d'invitation par e-mail et une liste d'invitations en attente",
-      "s4Caption": "L'achat écrit le registre",
-      "s4Body": "Identifiant de commande, identifiant de capture, commission, reversement vendeur. C'est le tableau qui met fin à la conversation d'avril avec la finance.",
-      "s4Alt": "Vue des revenus administrateur listant les transactions avec identifiants, commissions et reversements vendeurs"
+      "s4Caption": "Tous les espaces de travail sur un seul écran",
+      "s4Body": "L'administrateur de la plateforme voit tous les espaces de travail, leur statut et leur offre — y compris ceux encore en attente d'approbation — ainsi que tous les utilisateurs et leur rôle. L'accès aux données se fait par espace de travail, et rien de tout cela n'est visible pour un locataire.",
+      "s4Alt": "Vue d'ensemble administrateur listant tous les espaces de travail avec statut et offre, et tous les utilisateurs avec leurs rôles"
     },
     "how": {
       "eyebrow": "Comment ça marche",

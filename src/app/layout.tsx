@@ -62,7 +62,9 @@ export const metadata: Metadata = {
     title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
     images: [`${SITE}/og-codestore.png`],
-    creator: "@codestoreglobal", // TODO: delete if this handle is not real.
+    // No `creator` or `site`: there is no X/Twitter account for this product.
+    // Pointing at a handle that does not exist is the same class of error as a
+    // fake statistic — it asserts something untrue and a reader can check it.
   },
   alternates: {
     canonical: `${SITE}/en`,

@@ -52,11 +52,13 @@ export function ScreenshotSlot({
       <span
         className={[
           "cs-mono text-[12px] leading-none",
-          dark ? "text-[#6b7280]" : "text-[var(--cs-faint)]",
+          dark ? "text-[#6b7280]" : "text-[var(--cs-mid)]",
         ].join(" ")}
       >
         {filename}
       </span>
+      {/* Neutral grey, deliberately not the accent colour: on a light band the
+          accent reads as text-selection highlight rather than a caption. */}
       <span
         className={[
           "cs-label leading-none",
@@ -66,7 +68,7 @@ export function ScreenshotSlot({
           .join(" ")}
         style={{ textTransform: "none", letterSpacing: "0.02em" }}
       >
-        screenshot pending · 1512×860
+        screenshot pending · {1512}×{860}
       </span>
     </div>
   );

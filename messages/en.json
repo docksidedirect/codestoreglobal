@@ -268,9 +268,9 @@
       "s3Caption": "Invite by email, with a role and an expiry",
       "s3Body": "Used once, then dead. No path in for anyone who guesses a URL.",
       "s3Alt": "Team members page with an email invite field and a list of pending invitations",
-      "s4Caption": "The purchase writes the record",
-      "s4Body": "Order id, capture id, platform fee, seller payout. This is the table that ends the April conversation with finance.",
-      "s4Alt": "Admin earnings view listing platform transactions with order ids, platform fees and seller payouts"
+      "s4Caption": "Every workspace on one screen",
+      "s4Body": "The platform admin sees all workspaces, their status and their plan — including the ones still sitting in pending approval — plus every user and their role. Row-level access is per workspace, and none of it is visible to a tenant.",
+      "s4Alt": "Admin overview listing all workspaces with status and plan, and all users with their roles"
     },
     "how": {
       "eyebrow": "How it works",

@@ -46,7 +46,8 @@ export function generateOpenGraph(config: OpenGraphConfig): Metadata {
       title,
       description,
       images: image ? [image] : ["https://codestore.global/og-default.jpg"],
-      creator: "@codestoreglobal",
+      // No `creator`: there is no X/Twitter account for this product. Every page
+      // using this helper was advertising a handle that does not exist.
     },
     alternates: {
       canonical: url,

@@ -27,7 +27,7 @@ import {
   getCategoryBySlug,
 } from "@/lib/marketplace-categories";
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 interface Params {
   params: { locale: string; slug: string };

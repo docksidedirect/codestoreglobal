@@ -8,7 +8,7 @@ import { generateOpenGraph } from "@/components/seo/open-graph";
 import { BreadcrumbSchema, StructuredData } from "@/components/seo/structured-data";
 import { getCategoryBySlug, MARKETPLACE_CATEGORIES } from "@/lib/marketplace-categories";
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 interface Params {
   params: { locale: string; category: string };

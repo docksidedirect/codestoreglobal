@@ -6,7 +6,7 @@ import Link from "next/link";
 import { generateOpenGraph } from "@/components/seo/open-graph";
 import { BreadcrumbSchema, StructuredData } from "@/components/seo/structured-data";
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 const locales = ["en", "ar", "fr", "de", "es"];
 

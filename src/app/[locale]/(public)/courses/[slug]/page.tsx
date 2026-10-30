@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 import { generateOpenGraph } from "@/components/seo/open-graph";
 import { BreadcrumbSchema, StructuredData } from "@/components/seo/structured-data";
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }: { params: { locale: string; slug: string } }) {
   const { locale, slug } = params;

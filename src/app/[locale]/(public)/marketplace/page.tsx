@@ -7,7 +7,7 @@ import { generateOpenGraph } from "@/components/seo/open-graph";
 import { MARKETPLACE_CATEGORIES } from "@/lib/marketplace-categories";
 import { BreadcrumbSchema } from "@/components/seo/structured-data";
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export async function generateMetadata({
   params,

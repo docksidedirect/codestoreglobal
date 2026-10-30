@@ -77,7 +77,8 @@ export default function EditProductPage({ params }: { params: { locale: string; 
       const compressed = await Promise.all(
         Array.from(files).map((f) => fileToDataUrl(f))
       );
-      setForm((prev) => ({ ...prev, imageUrls: [...prev.imageUrls, ...compressed] }));
+      const uploaded = await uploadAll(compressed);
+      setForm((prev) => ({ ...prev, imageUrls: [...prev.imageUrls, ...uploaded] }));
     } catch {
       setError("Failed to process one or more images. Please try different files.");
     }
@@ -142,5 +143,25 @@ export default function EditProductPage({ params }: { params: { locale: string; 
         </CardContent>
       </Card>
     </div>
+  );
+}
+async function uploadAll(dataUrls: string[]): Promise<string[]> {
+  return Promise.all(
+    dataUrls.map(async (dataUrl) => {
+      const res = await fetch("/api/images", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ dataUrl }),
+      });
+      const text = await res.text();
+      let json: any = {};
+      try {
+        json = JSON.parse(text);
+      } catch {
+        throw new Error(`Upload failed (${res.status})`);
+      }
+      if (!res.ok || !json?.url) throw new Error(json?.error || "Upload failed");
+      return json.url as string;
+    }),
   );
 }
